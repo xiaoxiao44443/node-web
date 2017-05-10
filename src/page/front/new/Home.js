@@ -4,8 +4,13 @@
 import React, { Component } from 'react';
 import Header from '../../../component/front/new/common/Header';
 import './home.css';
+import http from '../../../tool/http';
+import { withRouter }  from 'react-router-dom';
 
 class Home extends Component {
+    componentDidMount(){
+
+    }
     render(){
         const backGroundImg = '/static/images/new/main-banner.jpg';
         return (
@@ -28,4 +33,4 @@ class Home extends Component {
         );
     }
 }
-export default Home;
+export default withRouter(Home);

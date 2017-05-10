@@ -102,7 +102,7 @@ const insert_user_group = {
         (3, '访客', 'vistor', '');`
 };
 const websiteConfig = {
-    site_name: {name: '站点名称', value: ''},
+    site_name: {name: '站点名称', value: '洛哩哩~'},
     site_url: {name: '站点网址', value: ''},
     author: {name: '作者', value: '、  这不科学'},
     application_name: {name: 'application-name', value: ''},

@@ -19,9 +19,12 @@ let exec = function (cmd, cb) {
 console.log('starting server...');
 let child_process = require("child_process");
 
-let proc_server = child_process.spawn('nodemon', [], { stdio: "inherit" });
+let nodemonCmd = (process.platform == 'win32') ? 'node_modules\\.bin\\nodemon.cmd' : 'nodemon';
+let proc_server = child_process.spawn(nodemonCmd, [], { stdio: "inherit" });
+
 proc_server.on("exit", function (code, signal) {
     process.on("exit", function () {
+        console.log(11);
         if (signal) {
             process.kill(process.pid, signal);
         } else {
@@ -31,7 +34,8 @@ proc_server.on("exit", function (code, signal) {
 });
 
 console.log('building for dev...');
-let proc_client = child_process.spawn('npm', ['run','build-client-watch'], { stdio: "inherit" });
+let npmCmd = (process.platform == 'win32') ? 'npm.cmd' : 'nodemon';
+let proc_client = child_process.spawn(npmCmd, ['run','build-client-watch'], { stdio: "inherit" });
 proc_client.on("exit", function (code, signal) {
     process.on("exit", function () {
         if (signal) {

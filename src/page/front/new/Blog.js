@@ -1,45 +1,81 @@
 /**
  * Created by xiao on 2017/5/8.
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Header from '../../../component/front/new/common/Header';
 import './blog.css';
 
+import { store } from '../../../tool/store';
+import { withRouter }  from 'react-router-dom';
 import Footer from '../../../component/front/new/common/Footer';
-
 import BackTop from '../../../component/common/tool/BackTop';
+import moment from 'moment';
+import http from '../../../tool/http';
 
-const Article = () => (
-    <li className="article-item">
-        <article>
-            <div className="article-info">
-                <div className="article-title">
-                    <h3><a href="javascript:void(0);">【序章】Lolili Blog 更新中...</a></h3>
-                </div>
-                <div className="article-dateline">
-                    发表于 2017-05-09 | 暂无分类
-                </div>
-                <div className="article-img">
-                    <img src="/static/images/new/article-img.jpg"/>
-                </div>
-                <div className="article-summary">
-                    <a href="javascript:void(0);">
-                        <p>2017年05月09日更新 总算是把列表页大致做好了，好好做个页面对我半路子出家的我真是难啊，参考了一些别人的博客，也研究了下网页自适应，总算有了这个雏形。后边会继续完善我这第一个博客，四点了，该睡觉了zZ ...</p>
-                    </a>
-                </div>
-            </div>
-            <div className="article-oper">
-                <span>阅读(1)</span>
-                <span>评论(2)</span>
-                <span><a href="javascript:void(0);">阅读全文>></a></span>
-            </div>
-        </article>
-    </li>
-);
+class Article extends Component {
+    render(){
+        const { data:article } = this.props;
+        const publishTime = moment(article.create_time*1000).format('YYYY-MM-DD HH:mm');
+        return (
+            <li className="article-item">
+                <article>
+                    <div className="article-info">
+                        <div className="article-title">
+                            <h3><a href="javascript:void(0);">{article.title}</a></h3>
+                        </div>
+                        <div className="article-dateline">
+                            发表于 {publishTime} | 暂无分类
+                        </div>
+                        <div className="article-img">
+                            <img src={`/api/pic${article.main_img}`}/>
+                        </div>
+                        <div className="article-summary">
+                            <a href="javascript:void(0);">
+                                <p>{article.summary}</p>
+                            </a>
+                        </div>
+                    </div>
+                    <div className="article-oper">
+                        <span>阅读({article.views})</span>
+                        <span>评论({article.comments})</span>
+                        <span><a href="javascript:void(0);">阅读全文>></a></span>
+                    </div>
+                </article>
+            </li>
+        );
+    }
+}
+Article.propTypes = {
+    data: PropTypes.object
+};
 
 class Blog extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            articles:  props.articles
+        }
+    }
+    componentDidMount(){
+        if(this.state.articles.length == 0){
+            let url = this.props.match.url;
+            http.apiGet(url+'?p=1').then((res) => {
+                document.title = res.title;
+                if(res.code == 0){
+                    this.setState({articles: res.data});
+                }else{
+                    alert('服务器返回异常');
+                }
+            });
+        }
+    }
     render(){
         const backGroundImg = '/static/images/new/blog-banner.jpg';
+        const { articles } = this.state;
+        const articleList = articles.map((val) => {
+            return <Article data={val} key={val.id}/>
+        });
         return (
             <div className="main-wrap blog">
                 <Header backGroundImg={backGroundImg} />
@@ -51,16 +87,7 @@ class Blog extends Component {
                 <section className="blog-wrap">
                     <div className="article-list bounceInUp animated">
                         <ul>
-                            <Article/>
-                            <Article/>
-                            <Article/>
-                            <Article/>
-                            <Article/>
-                            <Article/>
-                            <Article/>
-                            <Article/>
-                            <Article/>
-                            <Article/>
+                            {articleList}
                         </ul>
                     </div>
                     <div className="blog-group bounceInRight animated">
@@ -116,7 +143,7 @@ class Blog extends Component {
                                         </p>
                                     </div>
                                     <span className="recommend-item-more">
-                                        超有爱の
+                                        超有爱
                                     </span>
                                 </div>
                             </div>
@@ -129,4 +156,18 @@ class Blog extends Component {
         );
     }
 }
-export default Blog;
+
+//传递react-router 信息给该组件
+Blog = withRouter(Blog);
+
+Blog.propTypes = {
+    articles: PropTypes.array
+};
+
+Blog.defaultProps = {
+    articles: []
+};
+
+const map = ['articles'];
+
+export default store(Blog, map);

@@ -9,7 +9,24 @@ import Request, {
     returnErr
 } from '../../tool/Request';
 import defaultDbSql from '../../config/defaultDbSql';
+import { getPicPath } from '../../api/picture';
+import articleApi from '../../api/article';
+import configApi from '../../api/config';
 
+//api/pic
+router.get('/api/pic([0-9]+)', async(req, res, next) => {
+    const pic = req.params[0];
+    try {
+        let realPath = await getPicPath(pic);
+        if(realPath){
+            res.sendFile(realPath);
+        }else{
+            next();
+        }
+    }catch (ex){
+        next(ex);
+    }
+});
 
 router.get('/config', async(req, res, next) => {
     try {
@@ -39,15 +56,12 @@ router.get('/config', async(req, res, next) => {
 
 //index
 router.get('/', async(req, res, next) => {
-    //获取文章列表数据
     try {
-
-        let model = new Model;
-        let ret = await model.query("SELECT value FROM `lo_config` WHERE name='website'");
-        const xx = ret.results[0].value;
-        console.log(JSON.parse(xx));
+        //获取网站配置
+        const websiteConfig = await configApi.website();
+        const site_name = websiteConfig.site_name.value;
         if(Request.REQUEST_JSON){
-            next();
+            res.json(returnSuc({}, `${site_name}`));
         }else{
             const store  = {};
             const { app } = serverRender(req.url, store);
@@ -62,18 +76,21 @@ router.get('/', async(req, res, next) => {
 
 //blog
 router.get('/blog', async(req, res, next) => {
-    //获取文章列表数据
-    try {
-        const model = new Model;
-        const ret = await model.query('SELECT * FROM article LIMIT 0,20');
-        const articles = ret.results;
 
+    try {
+        //获取网站配置
+        const websiteConfig = await configApi.website();
+        const site_name = websiteConfig.site_name.value;
+        //获取文章列表数据
         if(Request.REQUEST_JSON){
-            res.json(returnSuc(articles));
+            const p  = req.query.p;
+            let articles = await articleApi.query_article({p});
+            res.json(returnSuc(articles, `${site_name}|博客`));
         }else{
+            let articles = await articleApi.query_article();
             const store = {articles: articles};
             const { app } = serverRender(req.url, store);
-            res.render('index', {title: '洛哩哩~|博客', app: app, init: JSON.stringify(store)});
+            res.render('index', {title: `${site_name}|博客`, app: app, init: JSON.stringify(store)});
         }
 
     }catch (ex){

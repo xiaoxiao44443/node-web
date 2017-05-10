@@ -5,7 +5,7 @@ import React from 'react';
 let stores = {};
 
 const store = (Component, map) => {
-    if(typeof window !== 'undefined' && typeof window.__data_init__ === 'object'){
+    if(typeof window !== 'undefined' && typeof window.__data_init__ === 'object' && map){
         return props => {
             let store = {};
             map.forEach((val) => {

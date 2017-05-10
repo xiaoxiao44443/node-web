@@ -12,6 +12,10 @@
     "dev-build": "npm run build-client-watch && npm run build-server",
     "start": "babel-node ./www/app"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaoxiao44443/node-web"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

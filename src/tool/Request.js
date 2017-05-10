@@ -18,7 +18,7 @@ class _Request {
 const _Router = new _Request;
 
 export const router = _Router.router;
-export const returnSuc = (data) => ({code:0, data});
-export const returnErr = (data) => ({code:-1, data});
+export const returnSuc = (data, title) => ({code:0, data, title});
+export const returnErr = (data, title) => ({code:-1, data, title});
 export default _Router;
 
