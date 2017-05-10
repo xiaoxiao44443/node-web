@@ -1,0 +1,48 @@
+@keyframes backTopFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(10em);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+@keyframes backTopFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(10em);
+    }
+}
+.backTop {
+    z-index: 1000;
+    position: fixed;
+    right: 1.2em;
+    bottom: 2.2em;
+    opacity: 0;
+    width: 36px;
+    height: 36px;
+    background: #e44c65;
+    color: #fff;
+    text-align: center;
+    line-height: 36px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all .3s;
+}
+.backTop.fadeIn{
+    opacity: 1;
+    -webkit-animation: backTopFadeIn .8s;
+    animation: backTopFadeIn .8s;
+}
+.backTop.fadeOut{
+    opacity: 0;
+    -webkit-animation: backTopFadeOut .8s;
+    animation: backTopFadeOut .8s;
+}

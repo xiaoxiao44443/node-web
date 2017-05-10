@@ -1,0 +1,36 @@
+/**
+ * Created by xiao on 2017/2/26.
+ */
+import fs from 'fs';
+import path from 'path';
+import { minify } from 'html-minifier';
+const minifyOptions = {
+    collapseWhitespace: true,
+    decodeEntities: true,
+    html5: true,
+    trimCustomFragments: true
+};
+const tpl = (filePath, options, callback) => {
+    fs.readFile(filePath, (err, content) => {
+        if(err) return callback(new Error(err));
+        options = options || {};
+        let rendered = content.toString();
+        const ignore = ['settings', '_locals', 'cache'];
+        for (let p in options){
+            if(ignore.indexOf(p)!==-1) continue;
+
+            rendered = rendered.replace(`#${p}#`, options[p]);
+        }
+        rendered = rendered.replace(/#[\S]*?#/g, '');
+        //html压缩
+        rendered = minify(rendered, minifyOptions);
+        return callback(null, rendered);
+    });
+};
+
+export default (app) => {
+    app.engine('html', tpl);
+    app.set('views', path.resolve(__dirname,'../view'));
+    app.set('view engine', 'html');
+    app.set('view cache', true);
+}
