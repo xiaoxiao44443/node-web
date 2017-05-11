@@ -34,7 +34,7 @@ proc_server.on("exit", function (code, signal) {
 });
 
 console.log('building for dev...');
-let npmCmd = (process.platform == 'win32') ? 'npm.cmd' : 'nodemon';
+let npmCmd = (process.platform == 'win32') ? 'npm.cmd' : 'npm';
 let proc_client = child_process.spawn(npmCmd, ['run','build-client-watch'], { stdio: "inherit" });
 proc_client.on("exit", function (code, signal) {
     process.on("exit", function () {

@@ -53,17 +53,15 @@ Article.propTypes = {
 class Blog extends Component {
     constructor(props){
         super(props);
-        this.state = {
-            articles:  props.articles
-        }
     }
     componentDidMount(){
-        if(this.state.articles.length == 0){
+        if(this.props.articles.length == 0){
             let url = this.props.match.url;
             http.apiGet(url+'?p=1').then((res) => {
-                document.title = res.title;
+                this.props.history.replace(url, {title: res.title});
+                //document.title = res.title;
                 if(res.code == 0){
-                    this.setState({articles: res.data});
+                    this.props.$store.update({articles: res.data});
                 }else{
                     alert('服务器返回异常');
                 }
@@ -72,7 +70,7 @@ class Blog extends Component {
     }
     render(){
         const backGroundImg = '/static/images/new/blog-banner.jpg';
-        const { articles } = this.state;
+        const { articles } = this.props;
         const articleList = articles.map((val) => {
             return <Article data={val} key={val.id}/>
         });
@@ -85,10 +83,13 @@ class Blog extends Component {
                     <div className="bg-mask" />
                 </section>
                 <section className="blog-wrap">
-                    <div className="article-list bounceInUp animated">
-                        <ul>
-                            {articleList}
-                        </ul>
+                    <div className="article-list">
+                        {
+                            articleList.length == 0 ? null :
+                            <ul className="bounceInUp animated">
+                                {articleList}
+                            </ul>
+                        }
                     </div>
                     <div className="blog-group bounceInRight animated">
                         <div className="recommend-item">
