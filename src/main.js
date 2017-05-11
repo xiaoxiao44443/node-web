@@ -18,9 +18,9 @@ class Root extends Component {
         this.state = {
             isError: !!props.error
         };
-
-        this.unlisten = props.history.listen((location, action) => {
+        this.unlisten = this.props.history.listen((location, action) => {
             if(action === "PUSH"){
+                this.props.$store.update({error: false}, true);
                 window.scrollTo(0,0); //滚动条回到顶部
             }
             if(action === 'REPLACE' && location.state){
@@ -29,21 +29,16 @@ class Root extends Component {
             }
             if(action === 'POP' && location.state){
                 const state = location.state;
+                this.props.$store.update({error: false}, true);
                 if(state.title) document.title = state.title;
             }
-        })
-    }
-    componentDidMount(){
-        this.props.$store.update({error: false}, false);
-    }
-    componentWillReceiveProps(){
-        this.setState({isError: false});
+        });
     }
     componentWillUnmount(){
         this.unlisten();
     }
     render(){
-        return Routes(this.state.isError);
+        return Routes(this.props.error);
     }
 }
 Root.propTypes = {

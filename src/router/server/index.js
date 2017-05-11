@@ -60,6 +60,9 @@ router.get('/', async(req, res, next) => {
         //获取网站配置
         const websiteConfig = await configApi.website();
         const site_name = websiteConfig.site_name.value;
+
+        //初始化页面数据
+
         if(Request.REQUEST_JSON){
             res.json(returnSuc({}, `${site_name}`));
         }else{
@@ -81,13 +84,13 @@ router.get('/blog', async(req, res, next) => {
         //获取网站配置
         const websiteConfig = await configApi.website();
         const site_name = websiteConfig.site_name.value;
-        //获取文章列表数据
+
+        //初始化页面数据 获取文章列表数据
+        let articles = await articleApi.query_article();
+
         if(Request.REQUEST_JSON){
-            const p  = req.query.p;
-            let articles = await articleApi.query_article({p});
             res.json(returnSuc(articles, `${site_name}|博客`));
         }else{
-            let articles = await articleApi.query_article();
             const store = {articles: articles};
             const { app } = serverRender(req.url, store);
             res.render('index', {title: `${site_name}|博客`, app: app, init: JSON.stringify(store)});
@@ -96,6 +99,10 @@ router.get('/blog', async(req, res, next) => {
     }catch (ex){
         next(ex);
     }
+});
+
+router.post('/blog', async(req, res, next) => {
+
 });
 
 

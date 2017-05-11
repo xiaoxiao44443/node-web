@@ -7,11 +7,11 @@ import Header from '../../../component/front/new/common/Header';
 import './blog.css';
 
 import { store } from '../../../tool/store';
-import { withRouter }  from 'react-router-dom';
 import Footer from '../../../component/front/new/common/Footer';
 import BackTop from '../../../component/common/tool/BackTop';
 import moment from 'moment';
 import http from '../../../tool/http';
+import PageComponent from '../../../component/common/base/PageComponent';
 
 class Article extends Component {
     render(){
@@ -50,23 +50,12 @@ Article.propTypes = {
     data: PropTypes.object
 };
 
-class Blog extends Component {
+class Blog extends PageComponent {
     constructor(props){
         super(props);
     }
     componentDidMount(){
-        if(this.props.articles.length == 0){
-            let url = this.props.match.url;
-            http.apiGet(url+'?p=1').then((res) => {
-                this.props.history.replace(url, {title: res.title});
-                //document.title = res.title;
-                if(res.code == 0){
-                    this.props.$store.update({articles: res.data});
-                }else{
-                    alert('服务器返回异常');
-                }
-            });
-        }
+        this._pageInit();
     }
     render(){
         const backGroundImg = '/static/images/new/blog-banner.jpg';
@@ -157,9 +146,6 @@ class Blog extends Component {
         );
     }
 }
-
-//传递react-router 信息给该组件
-Blog = withRouter(Blog);
 
 Blog.propTypes = {
     articles: PropTypes.array
