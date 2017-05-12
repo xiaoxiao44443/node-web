@@ -28,6 +28,6 @@ Error.propTypes = {
     error: PropTypes.object
 };
 
-const map = ['error'];
+const map = state => ({ error: state.error });
 
 export default store(Error,map);

@@ -6,7 +6,7 @@ const getKeyInObject = (object,exp) => {
     let args = exp.split('.');
     let o = object;
     for(let val of args){
-        if(!o.hasOwnProperty(val)) return undefined;
+        if(typeof o === 'undefined' || !o.hasOwnProperty(val)) return undefined;
         o = o[val];
     }
     return o;

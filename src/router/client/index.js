@@ -26,8 +26,8 @@ const RoutePlus = withRouter(
 const Routes = (isError = false) => {
     return isError ? <Switch><RoutePlus component={Error} /></Switch> :
         <Switch>
-            <RoutePlus exact path="/" component={Home} />
-            <RoutePlus path="/Blog" component={Blog} />
+            <Route exact path="/" component={Home} />
+            <Route path="/Blog" component={Blog} />
             {/*<Route path="/article/ad*" component={Article} />*/}
             <RoutePlus component={NotFound} />
         </Switch>

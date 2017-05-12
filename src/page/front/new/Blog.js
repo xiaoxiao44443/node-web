@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import Header from '../../../component/front/new/common/Header';
 import './blog.css';
 
-import { store } from '../../../tool/store';
 import Footer from '../../../component/front/new/common/Footer';
 import BackTop from '../../../component/common/tool/BackTop';
 import moment from 'moment';
@@ -53,13 +52,16 @@ Article.propTypes = {
 class Blog extends PageComponent {
     constructor(props){
         super(props);
+        this.state = {
+            articles: []
+        }
     }
     componentDidMount(){
         this._pageInit();
     }
     render(){
         const backGroundImg = '/static/images/new/blog-banner.jpg';
-        const { articles } = this.props;
+        const { articles } = this.state;
         const articleList = articles.map((val) => {
             return <Article data={val} key={val.id}/>
         });
@@ -146,15 +148,4 @@ class Blog extends PageComponent {
         );
     }
 }
-
-Blog.propTypes = {
-    articles: PropTypes.array
-};
-
-Blog.defaultProps = {
-    articles: []
-};
-
-const map = ['articles'];
-
-export default store(Blog, map);
+export default PageComponent.withStore(Blog);

@@ -50,7 +50,8 @@ Root.propTypes = {
 Root.defaultProps = {
     error: false
 };
-const map = ['error'];
+const map = (state) => ({ error : state.error });
+
 Root = withRouter(store(Root, map));
 ReactDOM.render(
     <Provider>

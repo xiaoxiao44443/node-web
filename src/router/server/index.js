@@ -6,7 +6,8 @@ import Model from '../../tool/Model';
 import Request, {
     router,
     returnSuc,
-    returnErr
+    returnErr,
+    initPageState,
 } from '../../tool/Request';
 import defaultDbSql from '../../config/defaultDbSql';
 import { getPicPath } from '../../api/picture';
@@ -60,15 +61,18 @@ router.get('/', async(req, res, next) => {
         //获取网站配置
         const websiteConfig = await configApi.website();
         const site_name = websiteConfig.site_name.value;
+        const title = `${site_name}`;
 
         //初始化页面数据
+        const state = {};
 
         if(Request.REQUEST_JSON){
-            res.json(returnSuc({}, `${site_name}`));
+            res.json(returnSuc(state, title));
         }else{
-            const store  = {};
+            const _page = initPageState(req.url, state);
+            const store  = { _page };
             const { app } = serverRender(req.url, store);
-            res.render('index', {title: '洛哩哩~', app: app, init: JSON.stringify(store)});
+            res.render('index', {title: title, app: app, init: JSON.stringify(store)});
         }
 
     }catch (ex){
@@ -84,16 +88,19 @@ router.get('/blog', async(req, res, next) => {
         //获取网站配置
         const websiteConfig = await configApi.website();
         const site_name = websiteConfig.site_name.value;
+        const title = `${site_name}|博客`;
 
         //初始化页面数据 获取文章列表数据
         let articles = await articleApi.query_article();
+        const state  = { articles: articles };
 
         if(Request.REQUEST_JSON){
-            res.json(returnSuc(articles, `${site_name}|博客`));
+            res.json(returnSuc(state, title));
         }else{
-            const store = {articles: articles};
+            const _page = initPageState(req.url, state);
+            const store = { _page };
             const { app } = serverRender(req.url, store);
-            res.render('index', {title: `${site_name}|博客`, app: app, init: JSON.stringify(store)});
+            res.render('index', {title: title, app: app, init: JSON.stringify(store)});
         }
 
     }catch (ex){

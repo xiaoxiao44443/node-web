@@ -5,11 +5,11 @@ import React, { Component } from 'react';
 import Header from '../../../component/front/new/common/Header';
 import './home.css';
 import http from '../../../tool/http';
-import { withRouter }  from 'react-router-dom';
+import PageComponent from '../../../component/common/base/PageComponent';
 
-class Home extends Component {
+class Home extends PageComponent{
     componentDidMount(){
-
+        this._pageInit();
     }
     render(){
         const backGroundImg = '/static/images/new/main-banner.jpg';
@@ -33,4 +33,5 @@ class Home extends Component {
         );
     }
 }
-export default withRouter(Home);
+
+export default PageComponent.withStore(Home);
