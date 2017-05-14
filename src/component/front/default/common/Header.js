@@ -13,7 +13,7 @@ class Header extends Component {
             <header id="header">
                 <div className="nav">
                     <div className="nav-wrap">
-                        <h1 className="logo"><a href="#">LOLILI</a></h1>
+                        <h1 className="logo"><a href="https://lolili.cc">LOLILI</a></h1>
                         <nav id="nav">
                             <ul>
                                 <li><NavLink exact to="/" activeClassName="hover">首页</NavLink></li>

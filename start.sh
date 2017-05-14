@@ -1,0 +1,1 @@
+forever start -l lolili.cc.log -o out.log -e err.log -a ./build/prod.js

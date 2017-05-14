@@ -73,7 +73,8 @@ Request.get('/api/pic([0-9]+)', async(req, res, next) => {
     }
 });
 
-Request.get('/config', async(req, res, next) => {
+Request.router.get('/config', async(req, res, next) => {
+    next();
     try {
         const socket = function(msg){console.log(msg)};
         const { createTable, insert }  = defaultDbSql;

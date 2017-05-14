@@ -16,7 +16,7 @@ let database = {
     user            : 'root',
     password        : '1',
     port            : '3306',
-    socketPath      : process.platform !== 'win32' ? '/Applications/MAMP/tmp/mysql/mysql.sock' : '',
+    socketPath      : process.platform === 'darwin' ? '/Applications/MAMP/tmp/mysql/mysql.sock' : '',
     database        : 'node_web',
 };
 

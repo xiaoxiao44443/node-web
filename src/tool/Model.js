@@ -25,7 +25,7 @@ const Model = function(autoEnd = true) {
     //startTrans
     this.startTrans = async function () {
         return  new Promise((resolve, reject) => {
-            this.pool.getConnection((err, connection) => {
+            _pool.getConnection((err, connection) => {
                 if(err){
                     _error = err;
                     reject(err);

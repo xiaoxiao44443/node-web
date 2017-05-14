@@ -24,7 +24,6 @@ let proc_server = child_process.spawn(nodemonCmd, [], { stdio: "inherit" });
 
 proc_server.on("exit", function (code, signal) {
     process.on("exit", function () {
-        console.log(11);
         if (signal) {
             process.kill(process.pid, signal);
         } else {

@@ -45,7 +45,6 @@ app.use((err, req, res, next) => {
     }
 });
 
-
 let server = app.listen(3000, () => {
     let host = server.address().address;
     let port = server.address().port;

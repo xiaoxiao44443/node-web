@@ -31,8 +31,13 @@ let config = {
     externals: nodeModules, //不打包其他库
     module:{
         loaders: [
-            {test: /\.js$/, exclude: /node_modules/, loader:'babel-loader'}
+            {test: /\.js$/, exclude: /node_modules/, loader:'babel-loader'},
+            {
+                loader: ignoredLoader,
+                test: /\.css$/
+            }
         ]
+
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
