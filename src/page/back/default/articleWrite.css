@@ -1,0 +1,170 @@
+.admin-article-edit{
+    width: 100%;
+    overflow: hidden;
+}
+.admin-article-edit .editor-wrap{
+    width: 80%;
+    float: left;
+    overflow: hidden;
+    padding: 10px;
+}
+.admin-article-edit .editor-tool-bar{
+    width: 20%;
+    float: left;
+    overflow: hidden;
+    padding: 10px;
+}
+.admin-article-edit .tool-wrap{
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+.admin-article-edit  .tool-title{
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
+    font-weight: normal;
+    border-bottom: 1px solid #ccc;
+}
+.admin-article-edit  .tool-content{
+    padding: 8px 12px;
+}
+.admin-article-edit .btn{
+    border-radius: 3px;
+    transition: all .2s ease;
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+}
+.admin-article-edit .btn.cancel{
+    background: white;
+    border: 1px solid #ccc;
+
+}
+.admin-article-edit .btn.cancel:hover{
+    background: #e44c65;
+    color: white;
+    border-color: #e44c65
+}
+.admin-article-edit .btn.confirm{
+    background: #e44c65;
+    color: white;
+    border: 1px solid #e44c65;
+}
+.admin-article-edit .btn.confirm:hover{
+    background: #e41526;
+}
+.admin-article-edit .edit-title input{
+    width: 100%;
+    font-size: 20px;
+    padding: 5px;
+    font-weight: 300;
+    margin-bottom: 1em;
+}
+.admin-article-edit .edit-title .summary{
+    width: 100%;
+    font-size: 13px;
+    font-weight: 300;
+    height: 120px;
+    resize: none;
+    border: 1px solid #ccc;
+    padding: 5px;
+    overflow-y: auto;
+}
+.admin-article-edit .editor{
+    width: 100%;
+    overflow: hidden;
+    padding: 10px 0;
+}
+.admin-article-edit .editor .tools{
+    width: 100%;
+    overflow: hidden;
+}
+.admin-article-edit .editor .tools a{
+    padding: 5px 10px;
+    transition: .2s ease;
+    border: 1px solid #ccc;
+    border-left: none;
+    display: inline-block;
+    margin: 10px 0;
+}
+.admin-article-edit .editor .tools a:first-child{
+    border-left: 1px solid #ccc;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.admin-article-edit .editor .tools a:last-child{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.admin-article-edit .editor .tools a.select{
+    background: #e44c65;
+    color: white;
+    border-color: #e44c65;
+}
+.admin-article-edit .editor .tools a:hover{
+    background: #e44c65;
+    color: white;
+    border-color: #e44c65;
+}
+.admin-article-edit .edit-area{
+    width: 100%;
+    height: calc(100vh - 150px);
+    margin-top: 10px;
+    font-weight: normal;
+}
+.admin-article-edit .edit-area > textarea{
+    width: 49.5%;
+    height: 100%;
+    resize: none;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 13px;
+    overflow: auto;
+    font-weight: 300;
+    float: left;
+}
+.admin-article-edit .editor .result-html{
+    font-weight: 300;
+    width: 49.5%;
+    height: 100%;
+    border: 1px solid #ccc;
+    float: left;
+    font-size: 13px;
+    padding: 5px;
+    overflow: auto;
+    background-color: #fff;
+}
+.admin-article-edit .editor .result-html >p{
+    text-indent: 2em;
+}
+.admin-article-edit .editor .result-html img {
+    max-width: 100%;
+}
+.admin-article-edit .editor .result-html pre{
+    background: #2d2d2d;
+    white-space: pre-wrap;
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+.admin-article-edit .editor .result-html code{
+    color: #cc99cd;
+}
+.admin-article-edit pre.result-src{
+    background: white!important;
+}
+.admin-article-edit pre.result-src code{
+    color: inherit!important;
+}
+.admin-article-edit .result-src-content{
+    height: 100%;
+}

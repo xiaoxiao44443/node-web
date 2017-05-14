@@ -59,8 +59,18 @@ html, body{
 body{
     margin: 0;
 }
+
+.text-right{
+    text-align: right;
+}
+.text-center{
+    text-align: center;
+}
+
 .main-wrap{
-    background: #f3f3f3;
+    background: white;
+    overflow: hidden;
+    width: 100%;
 }
 #error{
     background: #393f77;

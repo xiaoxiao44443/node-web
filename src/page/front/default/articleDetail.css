@@ -1,0 +1,109 @@
+.article-detail .article-detail-wrap{
+    overflow: hidden;
+    padding: 5em 0;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.article-detail .blog-group{
+    display: none;
+}
+.article-detail-wrap .notFound{
+    text-align: center;
+}
+.article-detail-wrap .article-oper {
+    width: 100%;
+    text-align: right;
+    padding: .2em 0;
+}
+.article-detail-wrap .article-oper >span {
+    display: inline-block;
+    padding: .3em .5em;
+}
+
+.article-detail-wrap .article-content{
+    width: 100%;
+    margin: 3.5em 0;
+}
+.article-detail-wrap .article-content pre{
+    border-radius: 4px;
+    background: #2d2d2d;
+    white-space: pre-wrap;
+    display: block;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+.article-detail-wrap .article-content p{
+    text-indent: 2em;
+}
+.article-detail-wrap .article-content{
+    line-height: 2em;
+}
+.article-detail-wrap .article-content img{
+    vertical-align: top;
+    border: none;
+    max-width: 100%;
+}
+.article-detail-wrap .article-content a{
+    color: #e44c65;
+    text-decoration: underline;
+}
+
+
+@media screen and (max-width: 1000px){
+    .article-detail-wrap{
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 736px){
+    .article-detail .article-detail-wrap{
+        width: 100%;;
+        overflow: hidden;
+        padding: 2em 1em;
+    }
+    。article-detail-wrap .article-info .article-title span {
+        color: inherit;
+        display: inline-block;
+        padding: .3em .5em;
+    }
+    .article-detail-wrap .notFound>a{
+        font-size: 1em;
+        text-decoration: underline;
+    }
+    .article-detail-wrap .notFound>h1{
+        text-align: center;
+        font-size: 1.25em;
+    }
+    .article-detail-wrap .article-oper {
+        font-size: .75em;
+        text-align: left;
+        padding: .1em 0;
+    }
+    .article-detail-wrap .article-oper >span {
+        display: inline-block;
+        padding: 0;
+        margin-right: 1em;
+        color: #999;
+    }
+    .article-detail-wrap .article-info .article-title {
+        text-align: left;
+        margin-bottom: 1em;
+    }
+    .article-detail-wrap .article-dateline {
+        text-align: left;
+        padding: .1em 0;
+    }
+    .article-detail-wrap .article-content {
+        margin: 1.5em 0;
+    }
+    .article-detail-wrap .article-content p{
+        font-size: .85em;
+        text-indent: 1.7em;
+        line-height: 1.8em;
+    }
+}

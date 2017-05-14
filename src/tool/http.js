@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 import nprogress from 'nprogress';
-axios.defaults.timeout = 1000 * 15;
+axios.defaults.timeout = 15000;
 axios.defaults.headers['Content-Type'] = 'application/json';
 axios.defaults.headers['If-Modified-Since'] = '0';
 
@@ -13,6 +13,7 @@ const apiMethods = {
         return new Promise((resolve, reject) => {
             axios.get(url, data).then((response) => {
                 nprogress.done();
+                this.handelRedirect(response.data);
                 resolve(response.data);
             }, (response) => {
                 nprogress.done();
@@ -35,6 +36,12 @@ const apiMethods = {
                 this.handelResponse(response);
             })
         })
+    },
+    handelRedirect(res) {
+        if(res.code == -1 && res.url && res.url!=''){
+            alert(res.data);
+            window.location.href = res.url;
+        }
     },
     handelResponse(res) {
         if(res.response){

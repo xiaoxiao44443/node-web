@@ -1,0 +1,104 @@
+.admin-article-list{
+    width: 100%;
+    overflow: hidden;
+}
+.admin-article-list .article-item{
+    border: 1px solid #ddd;
+    width: 100%;
+    padding: 0;
+}
+.admin-article-list .article-item-head{
+    background: #f5f5f5;
+    padding: 10px 15px;
+}
+.admin-article-list .article-other-info{
+    padding: 10px 15px;
+}
+.admin-article-list .article-other-info span {
+    display: inline-block;
+    margin-right: 5px;
+}
+.admin-article-list .article-other-info span a {
+    margin: 2px 5px 2px 0;
+    font-size: 14px;
+    display: inline-block;
+}
+.admin-article-list .article-other-info span a::before {
+    font-family: FontAwesome;
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    margin: 0 5px 0 0;
+    background-color: #666;
+    -webkit-background-size: 18px;
+    -moz-background-size: 18px;
+    background-size: 18px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 100px;
+    -webkit-transition: .2s ease all;
+    -moz-transition: .2s ease all;
+    -ms-transition: .2s ease all;
+    transition: .2s ease all;
+    cursor: pointer;
+    color: #fff;
+}
+.admin-article-list .article-other-info span a:hover::before {
+    background-color: #DADADA;
+    color: #232425;
+}
+.admin-article-list .article-other-info span .article-author::before {
+    content: '\f007';
+}
+.admin-article-list .admin-article-list .article-other-info span .article-view-num::before {
+    content: '\f06e';
+}
+.admin-article-list .article-other-info span .article-date::before {
+    content: '\f133';
+}
+.admin-article-list .article-other-info span .article-edit::before {
+    content: '\f044';
+}
+.admin-article-list .article-other-info span .article-delete::before {
+    content: "\f014";
+}
+.admin-article-list .article-stick{
+    background: white;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: all .2s ease;
+}
+.admin-article-list .article-stick:hover{
+    background: #e44c65;
+    color: white;
+    border-color: #e44c65;
+}
+.admin-article-list .article-stick-false{
+    background: #e44c65;
+    color: white;
+    border: 1px solid #e44c65;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: all .2s ease;
+}
+.admin-article-list .article-stick-false:hover{
+    background: #e41526;
+}
+.admin-article-list .load-more{
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+.admin-article-list .load-more >a{
+    padding: .3em .5em;
+    display: inline-block;
+    transition: background-color ease .5s;
+}
+.admin-article-list .load-more >a:hover{
+    background: #e44c65;
+    color: white;
+    animation: links .1s 3;
+}

@@ -3,12 +3,17 @@
  */
 import React from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-// import Home from '../../page/front/Home';
-import Home from '../../page/front/new/Home';
 
-import Blog from '../../page/front/new/Blog';
-import Error from '../../page/front/new/Error';
+//前台页面
+import Home from '../../page/front/default/Home';
+import Blog from '../../page/front/default/Blog';
+import ArticleDetail from '../../page/front/default/ArticleDetail';
+import Error from '../../page/front/default/Error';
 import NotFound from '../../component/common/Status/NotFound';
+
+//后台页面
+import Admin from '../../page/back/default/Admin';
+import Login from '../../page/back/default/Login';
 
 const RoutePlus = withRouter(
     class extends React.Component {
@@ -27,8 +32,10 @@ const Routes = (isError = false) => {
     return isError ? <Switch><RoutePlus component={Error} /></Switch> :
         <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/Blog" component={Blog} />
-            {/*<Route path="/article/ad*" component={Article} />*/}
+            <Route exact path="/blog" component={Blog} />
+            <Route exact path="/blog/ad([0-9]+)" component={ArticleDetail} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/admin*" component={Admin} />
             <RoutePlus component={NotFound} />
         </Switch>
 };

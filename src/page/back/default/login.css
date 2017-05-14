@@ -1,0 +1,17 @@
+.admin-login >.welcome{
+    margin: 0;
+}
+.admin-login-group{
+    width: 300px;
+}
+.admin-login-btn{
+    padding: 5px 10px;
+    background: #e44c65;
+    transition: .3s ease;
+    color: white;
+    border-radius: 4px;
+}
+.admin-login-btn:hover{
+    background: #e41526;
+    color: white;
+}

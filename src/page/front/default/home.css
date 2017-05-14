@@ -1,0 +1,78 @@
+#main-banner{
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+#main-banner >.layer{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+}
+#main-banner >.bg-mask{
+    position: absolute;
+    top: 0;
+    z-index: 5;
+    background: rgba(0,0,0,0.1);
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#main-banner .motto{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 10em;
+    right: 1.25em;
+    color: white;
+}
+#main-banner .motto .wrap{
+    background: rgba(0,0,0,0.4);
+    padding: 1.25em;
+}
+@media screen and (max-width: 736px){
+    #main-banner .motto{
+        width: 100%;
+        left: 0;
+        bottom: 6em;
+
+    }
+}
+#main-banner .motto h2 + p {
+    color: white;
+    margin: 0.5em 0 0 0;
+    font-size: 0.75em;
+    margin-top: -1em;
+    line-height: 1.5em;
+}
+.goto-next {
+    border: 0;
+    bottom: 0;
+    display: block;
+    height: 5em;
+    left: 50%;
+    margin: 0 0 0 -5em;
+    overflow: hidden;
+    position: absolute;
+    text-indent: 10em;
+    white-space: nowrap;
+    width: 10em;
+    z-index: 1;
+}
+.goto-next:before {
+    background-image: url(/static/images/new/arrow.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    content: '';
+    display: block;
+    height: 1.5em;
+    left: 50%;
+    margin: -0.75em 0 0 -1em;
+    position: absolute;
+    top: 50%;
+    width: 2em;
+    z-index: 1;
+}

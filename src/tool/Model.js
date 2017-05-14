@@ -4,27 +4,28 @@
 import mysql from 'mysql';
 import { database as DB } from '../config';
 
-
-const _Model = (function () {
+/**
+ * 实例化一次只能query一次，如果需要多次需要参数autoEnd = false;然后在使用完毕后调用end方法
+ * @param autoEnd
+ * @constructor
+ */
+const Model = function(autoEnd = true) {
     let _pool, _error, _autoEnd, _connection, _startTrans;
-
-    function Model(autoEnd = true) {
-        _pool = mysql.createPool(DB);
-        _error = null;
-        _autoEnd = autoEnd;
-        _connection = null;
-        _startTrans = false;
-        if(autoEnd){
-            _pool.on('release', async connection => {
-                await this.end();
-            });
-        }
+    _pool = mysql.createPool(DB);
+    _error = null;
+    _autoEnd = autoEnd;
+    _connection = null;
+    _startTrans = false;
+    if(autoEnd){
+        _pool.on('release', async connection => {
+            await this.end();
+        });
     }
 
     //startTrans
-    Model.prototype.startTrans = async function () {
+    this.startTrans = async function () {
         return  new Promise((resolve, reject) => {
-            _pool.getConnection((err, connection) => {
+            this.pool.getConnection((err, connection) => {
                 if(err){
                     _error = err;
                     reject(err);
@@ -54,7 +55,7 @@ const _Model = (function () {
     };
 
     //commit
-    Model.prototype.commit = async function () {
+    this.commit = async function () {
         return  new Promise((resolve, reject) => {
             if(!_startTrans){
                 reject(new Error('Transaction is not beginning!'));
@@ -75,7 +76,7 @@ const _Model = (function () {
     };
 
     //rollback
-    Model.prototype.rollback = async function () {
+    this.rollback = async function () {
         return  new Promise((resolve, reject) => {
             if(!_startTrans){
                 reject(new Error('Transaction is not beginning!'));
@@ -88,7 +89,7 @@ const _Model = (function () {
         });
     };
 
-    Model.prototype.query = async function (sql, values) {
+    this.query = async function (sql, values) {
         return new Promise((resolve, reject) => {
 
             //事务不断开连接[connection]
@@ -124,7 +125,7 @@ const _Model = (function () {
         });
     };
 
-    Model.prototype.end = async function () {
+    this.end = async function () {
         return new Promise((resolve, reject) => {
             _pool.end(err => {
                 if(err){
@@ -136,14 +137,11 @@ const _Model = (function () {
         });
     };
 
-    Model.prototype.getLastError = function () {
+    this.getLastError = function () {
         return _error;
     };
 
-    return Model;
-})();
-
-
+};
 
 
 async function test() {
@@ -159,4 +157,4 @@ async function test() {
 
 }
 
-export default _Model;
+export default Model;

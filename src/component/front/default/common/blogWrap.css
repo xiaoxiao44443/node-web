@@ -1,0 +1,232 @@
+@keyframes links {
+    0% {
+        transform: rotate(-2deg);
+    }
+
+    100% {
+        transform: rotate(2deg);
+    }
+}
+.blog #header .nav .nav-bg{
+    height: 32em;
+    overflow: hidden;
+}
+.blog-banner{
+    width: 100%;
+    height: 32em;
+    overflow: hidden;
+    position: relative;
+    box-shadow: rgba(0,0,0,0.2) 0 1px 5px;
+    border-bottom: 1px solid #e44c65;
+}
+.blog-banner >.layer{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+}
+.blog-banner >.bg-mask{
+    position: absolute;
+    top: 0;
+    z-index: 5;
+    background: rgba(0,0,0,0.1);
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.blog-wrap{
+    width: 100%;
+    min-height: 20vh;
+    background: #f3f3f3;
+    overflow: hidden;
+    padding: 4em 10em;
+    font-weight: 300;
+}
+.blog-wrap .blog-group{
+    width: 40%;
+    float: right;
+    padding: .5em;
+}
+.blog-group nav{
+    display: none;
+}
+.recommend-item{
+    width: 100%;
+    background: black;
+    border-radius: 4px;
+    padding: 2px;
+    transition: .5s;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 5em;
+}
+.recommend-item .recommend-item-inner{
+    width: 100%;
+    border-radius: 2px;
+    background: white;
+}
+.recommend-item .recommend-item-container{
+    padding: 15px 45px 15px 15px;
+}
+.recommend-item .recommend-item-more{
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    background: #333;
+    top: 2px;
+    width: 30px;
+    padding: 0 9px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 28px;
+    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.recommend-item .recommend-item-header{
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+}
+.recommend-item .recommend-item-header .name{
+    float: left;
+    padding-left: 1em;
+    font-size: 1.15em;
+    color: #666;
+}
+.recommend-item .recommend-item-header .story-intro {
+    float: left;
+    height: 17px;
+    min-height: 1.1em;
+    margin: 5px 0 0 20px;
+    color: #999;
+    font-size: 0.75em;
+    overflow: hidden;
+}
+.recommend-item .recommend-item-main{
+    width: 100%;
+    overflow: hidden;
+    line-height: 1.75em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 15em;
+}
+.main-wrap .main-mask{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1099;
+    top: 0;
+    left: 0;
+}
+@media screen and (max-width: 1200px){
+    .blog #header .nav .nav-bg{
+        height: 22em;
+    }
+    .blog-banner{
+        height: 22em;
+    }
+    .blog-wrap{
+        padding: 4em 3em;
+    }
+    .recommend-item .recommend-item-main {
+        min-height: 8em;
+    }
+
+
+}
+@media screen and (max-width: 1000px){
+    .blog #header .nav .nav-bg{
+        height: 18em;
+    }
+    .blog-banner{
+        height: 18em;
+    }
+    .blog-wrap{
+        padding: 0;
+    }
+    .blog-wrap .blog-group{
+        display: none;
+    }
+}
+@media screen and (max-width: 736px){
+    .blog #header .nav{
+        display: none;
+    }
+    .blog #header .nav .nav-bg{
+        height: 12em;
+    }
+    .blog-banner{
+        margin-top: 44px;
+        height: 12em;
+    }
+    .blog-wrap{
+        padding: 0;
+    }
+    .main-wrap.blog.group-panel-visible{
+        position: fixed;
+    }
+    .main-wrap.blog .blog-group{
+        z-index: 1999;
+        width: calc(100% - 5em);
+        background: #181920;
+        display: block;
+        right: calc(-100% + 5em);
+        transition: all .5s ease;
+        position: fixed;
+        top: 0;
+        overflow-y: auto;
+        height: 100%;
+        -webkit-overflow-scrolling: touch;
+    }
+    .main-wrap.blog.group-panel-visible .blog-group{
+        right: 0;
+        top: 0;
+    }
+    .blog-group nav{
+        display: block;
+    }
+    .blog-group nav ul{
+        margin: .5em 0;
+        overflow: hidden;
+    }
+    .blog-group nav ul li{
+        width: 50%;
+        float: left;
+    }
+    .blog-group nav a{
+        display: inline-block;
+        font-size: 1.5em;
+    }
+    .blog-group nav a{
+        color: white;
+    }
+    .blog-group nav a.hover{
+        color: #e44c65;
+        font-weight: 700;
+    }
+    .recommend-item{
+        margin-bottom: 1em;
+    }
+    .recommend-item .recommend-item-header{
+        padding-bottom: 10px;
+    }
+    .recommend-item .recommend-item-header .name{
+        font-size: 1em;
+    }
+    .recommend-item .recommend-item-header .story-intro{
+        font-size: .6em;
+        height: 12px;
+    }
+    .recommend-item .recommend-item-main{
+        min-height: 5em;
+    }
+    .recommend-item .recommend-item-main >p{
+        font-size: .85em;
+        line-height: 1.5em;
+    }
+}

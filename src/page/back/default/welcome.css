@@ -1,0 +1,12 @@
+.admin-welcome{
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.admin-welcome .welcome{
+    display: inline-block;
+    margin-left: -200px;
+}

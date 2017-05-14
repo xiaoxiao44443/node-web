@@ -19,8 +19,17 @@ const website = async () => {
         }
     });
 };
+const updateWebsite = async websiteConfig => {
+
+    let model = new Model;
+    let { results } = await model.query(`UPDATE ?? SET value = ? WHERE name = 'website'`, [prefix + 'config', JSON.stringify(websiteConfig)]);
+    return new Promise((resolve, reject) => {
+        resolve(results.affectedRows >=1);
+    });
+};
 
 const Api = {
-    website
+    website,
+    updateWebsite
 };
 export  default Api;

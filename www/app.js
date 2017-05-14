@@ -1,10 +1,12 @@
 import '../src/tool/ignore';
 import express from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import path from 'path';
 import tpl from '../src/tool/tpl';
 import router from '../src/router/server/index';
+import admin from '../src/router/server/admin';
 import serverRender from '../src/tool/server-render';
 import { returnErr } from '../src/tool/Request';
 
@@ -12,10 +14,12 @@ let app = express();
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(express.static(path.resolve(__dirname, '../public')));
 tpl(app);
 
 app.use('/', router);
+app.use('/admin', admin);
 
 //404页面处理
 app.use((req, res, next) => {

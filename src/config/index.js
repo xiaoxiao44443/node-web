@@ -20,8 +20,13 @@ let database = {
     database        : 'node_web',
 };
 
+const cookieConfig = {
+    maxAge: 3600*24*3 //3天
+};
+
 export {
     path,
     database,
-    dbConfig
+    dbConfig,
+    cookieConfig
 };

@@ -11,7 +11,7 @@ const article = {
     sql: `
     CREATE TABLE ${prefix}article (
         id int(11) NOT NULL AUTO_INCREMENT,
-        autor int(11) NOT NULL COMMENT '作者',
+        author int(11) NOT NULL COMMENT '作者',
         title varchar(128) NOT NULL COMMENT '文章标题',
         summary text NOT NULL COMMENT '文章摘要',
         text text NOT NULL COMMENT '文章内容',
@@ -78,6 +78,8 @@ const user = {
         email varchar(64) NOT NULL COMMENT '电子邮箱',
         sex tinyint(1) NOT NULL COMMENT '性别0,1,2 未知 女 男',
         group_id int(11) NOT NULL DEFAULT '3' COMMENT '用户组',
+        last_login_time int(11) NOT NULL COMMENT '上次登录时间',
+        login_token varchar(128) NOT NULL DEFAULT '' COMMENT '登录token',
         PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表'`
 };

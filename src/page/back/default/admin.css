@@ -1,0 +1,212 @@
+html.admin{
+    overflow-x: initial;
+}
+html.admin body{
+    overflow-x: initial;
+}
+.main-wrap.admin{
+    min-width: 1000px;
+    font-weight: 300;
+    position: relative;
+    min-height: 100%;
+}
+
+#admin-header{
+    width: 100%;
+    height: 60px;
+    position: relative;
+    background: white;
+    border-bottom: 1px solid #f1f2f7;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    z-index: 999;
+}
+#admin-header .sidebar-toggle-box {
+    display: inline-block;
+    padding-right: 15px;
+}
+#admin-header .sidebar-toggle-box .icon-reorder {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 20px;
+}
+#admin-header a.logo {
+    font-size: 21px;
+    color: #2e2e2e;
+    display: inline-block;
+}
+#admin-header a.logo span{
+    font-size: 12px;
+    padding-left: 5px;
+}
+#admin-header-nav{
+    position: absolute;
+    right: 20px;
+    height: 60px;
+    display: flex;
+    align-items: center
+}
+#admin-header-nav >.user{
+
+}
+#admin-header-nav >.user span.well{
+    color: #e44c65;
+}
+#admin-header-nav ul{
+    margin: 0;
+}
+#admin-header-nav ul li{
+    display: inline-block;
+}
+.admin-side-nav{
+    min-height: 100%;
+    position: absolute;
+    left: -180px;
+    top: 0;
+    width: 180px;
+    background: #2a3542;
+    padding-top: 60px;
+    transition: left .5s ease;
+}
+.admin.showSideNav .admin-side-nav{
+    left: 0;
+}
+.admin-side-nav ul{
+    margin: 0;
+    padding: 0;
+}
+.admin-side-nav ul.sidebar-menu li {
+    line-height: 20px!important;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 0;
+}
+.admin-side-nav ul.sidebar-menu {
+    margin: 15px 0 0 0;
+    padding: 0;
+}
+
+.admin-side-nav ul.sidebar-menu .menu-li.active >a, .admin-side-nav ul.sidebar-menu li a.active, .admin-side-nav ul.sidebar-menu li a:hover, .admin-side-nav ul.sidebar-menu li a:focus {
+    background: #35404d;
+    color: #fff;
+    display: block;
+    border-radius: 4px;
+    transition: all .3s ease;
+}
+.admin-side-nav ul.sidebar-menu li a {
+    color: #8b9199;
+    text-decoration: none;
+    display: block;
+    padding: 15px 0 15px 10px;
+    font-size: 14px;
+    outline: 0;
+    transition: all .3s ease;
+}
+.admin-side-nav ul.sidebar-menu li ul.sub-menu li a:hover {
+    color: #e44c65;
+}
+.admin-side-nav ul.sidebar-menu li ul.sub-menu li a.sub-active{
+    color: #e44c65;
+}
+.admin-side-nav ul.sidebar-menu li a i {
+    font-size: 18px;
+    padding-right: 6px;
+}
+.admin-side-nav ul.sidebar-menu li.active a i {
+    color: #e44c65;
+}
+.admin-side-nav ul.sidebar-menu li a i {
+    font-size: 18px;
+    padding-right: 6px;
+}
+.admin-side-nav>ul>li>a .arrow {
+    border-bottom: 4px solid transparent;
+    border-left: 4px solid #A0A0A0;
+    border-top: 4px solid transparent;
+    float: right;
+    height: 0;
+    margin-right: 10px;
+    margin-top: 6px;
+    width: 0;
+}
+.admin-side-nav>ul>li>a .arrow.open {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #A0A0A0;
+    float: right;
+    height: 0;
+    margin-right: 10px;
+    margin-top: 8px;
+    width: 0;
+}
+.admin-side-nav ul.sidebar-menu li ul.sub-menu li {
+    background: #35404D;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    cursor: pointer;
+}
+.admin-side-nav ul.sidebar-menu li ul.sub-menu li a {
+    font-size: 12px;
+    padding: 0 0 0 32px;
+    line-height: 35px;
+    height: 35px;
+    transition: all .3s ease;
+    color: #737B83;
+}
+.admin-main{
+    width: 100%;
+    padding: 20px 20px 20px 20px;
+    overflow: hidden;
+    min-height: calc(100vh - 60px);
+    transition: padding-left .5s ease;
+}
+.admin.showSideNav .admin-main{
+    padding-left: 200px;
+}
+
+/*common*/
+.admin-form-group{
+    width: 750px;
+    overflow: hidden;
+}
+.admin-form-input{
+    display: inline-block;
+    width: 100%;
+    font-size: 20px;
+    padding: 5px;
+    font-weight: 300;
+    margin-bottom: 1em;
+}
+
+.main-wrap.admin .btn{
+    border-radius: 3px;
+    transition: all .2s ease;
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+}
+.main-wrap.admin .btn:last-child{
+    margin-right: 0;
+}
+.main-wrap.admin .btn.btn-cancel{
+    background: white;
+    border: 1px solid #ccc;
+
+}
+.main-wrap.admin .btn.btn-cancel:hover{
+    background: #e44c65;
+    color: white;
+    border-color: #e44c65
+}
+.main-wrap.admin .btn.btn-confirm{
+    background: #e44c65;
+    color: white;
+    border: 1px solid #e44c65;
+}
+.main-wrap.admin .btn.btn-confirm:hover{
+    background: #e41526;
+}

@@ -3,19 +3,63 @@
  */
 import serverRender from '../../tool/server-render';
 import Model from '../../tool/Model';
-import Request, {
-    router,
+import RequestModel, {
     returnSuc,
     returnErr,
-    initPageState,
+    resRender,
 } from '../../tool/Request';
 import defaultDbSql from '../../config/defaultDbSql';
 import { getPicPath } from '../../api/picture';
 import articleApi from '../../api/article';
-import configApi from '../../api/config';
+const Request = new RequestModel;
+import { cookieConfig } from '../../config';
+
+import { createUserToken, userPassword } from '../../tool/userToken';
+import userApi from '../../api/user';
+
+//判断cookies登录
+Request.get('/login',async(req, res, next) => {
+    try {
+        const id = req.cookies.id || 0;
+        const token = req.cookies.token || '';
+        const ret = await userApi.tokenLogin(id, token);
+        if(ret){
+            res.redirect('/admin');
+        }else{
+            res.clearCookie('id').clearCookie('token');
+            next();
+        }
+    }catch (ex){
+        next(ex);
+    }
+
+});
+
+//logout
+Request.get('/logout',async(req, res, next) => {
+    try {
+        const id = req.cookies.id || 0;
+        const token = req.cookies.token || '';
+        const ret = await userApi.tokenLogin(id, token);
+
+        if(Request.REQUEST_JSON){
+            if(ret) res.clearCookie('id').clearCookie('token');
+            res.json(returnSuc('退出成功~', '', '/login'))
+        }else{
+            if(ret){
+                //登录才清理cookies
+                res.clearCookie('id').clearCookie('token');
+            }
+            res.redirect('/login');
+        }
+    }catch (ex){
+        next(ex);
+    }
+
+});
 
 //api/pic
-router.get('/api/pic([0-9]+)', async(req, res, next) => {
+Request.get('/api/pic([0-9]+)', async(req, res, next) => {
     const pic = req.params[0];
     try {
         let realPath = await getPicPath(pic);
@@ -29,7 +73,7 @@ router.get('/api/pic([0-9]+)', async(req, res, next) => {
     }
 });
 
-router.get('/config', async(req, res, next) => {
+Request.get('/config', async(req, res, next) => {
     try {
         const socket = function(msg){console.log(msg)};
         const { createTable, insert }  = defaultDbSql;
@@ -56,10 +100,10 @@ router.get('/config', async(req, res, next) => {
 
 
 //index
-router.get('/', async(req, res, next) => {
+Request.get('/', async(req, res, next) => {
     try {
         //获取网站配置
-        const websiteConfig = await configApi.website();
+        const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
         const title = `${site_name}`;
 
@@ -69,10 +113,7 @@ router.get('/', async(req, res, next) => {
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
         }else{
-            const _page = initPageState(req.url, state);
-            const store  = { _page };
-            const { app } = serverRender(req.url, store);
-            res.render('index', {title: title, app: app, init: JSON.stringify(store)});
+            resRender(req, res, title, state, 'index');
         }
 
     }catch (ex){
@@ -82,25 +123,22 @@ router.get('/', async(req, res, next) => {
 });
 
 //blog
-router.get('/blog', async(req, res, next) => {
+Request.get('/blog', async(req, res, next) => {
 
     try {
         //获取网站配置
-        const websiteConfig = await configApi.website();
+        const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
         const title = `${site_name}|博客`;
 
         //初始化页面数据 获取文章列表数据
-        let articles = await articleApi.query_article();
+        let articles = await articleApi.queryArticle();
         const state  = { articles: articles };
 
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
         }else{
-            const _page = initPageState(req.url, state);
-            const store = { _page };
-            const { app } = serverRender(req.url, store);
-            res.render('index', {title: title, app: app, init: JSON.stringify(store)});
+            resRender(req, res, title, state, 'index');
         }
 
     }catch (ex){
@@ -108,35 +146,108 @@ router.get('/blog', async(req, res, next) => {
     }
 });
 
-router.post('/blog', async(req, res, next) => {
+//get more article
+Request.post('/blog', async(req, res, next) => {
 
+    try{
+        //获取网站配置
+
+        if(Request.REQUEST_JSON){
+            //初始化数据
+            const p = req.body.p;
+
+            let articles = await articleApi.queryArticle({p});
+            res.json(returnSuc(articles));
+        }
+
+    }catch (ex){
+        next(ex);
+    }
 });
 
 
 //article
-router.get('/blog/ad([0-9]+)', async(req, res, next) => {
-    const ad = req.params[0];
+Request.get('/blog/ad([0-9]+)', async(req, res, next) => {
 
-    //获取指定文章
     try {
-        const model = new Model;
-        const ret = await model.query('SELECT * FROM article WHERE id = ' + ad);
-        const article = ret.results[0];
-        if(typeof article === 'undefined'){
-            return next(new Error('没有该文章'));
-        }
+        const ad = req.params[0];
+
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+
+        //初始化页面数据 获取文章数据
+        let article = await articleApi.getArticle(ad);
+        const state  = { article: article };
+        if(!article) return next();
+
+        //网站标题是文章标题
+        const title = `${site_name}|${article.title}`;
         if(Request.REQUEST_JSON){
-            res.json(returnSuc(article));
+            res.json(returnSuc(state, title));
         }else{
-            const store = {article_detail: article};
-            const { app } = serverRender(req.url, store);
-            res.render('index', {title: article.title, app: app, init: JSON.stringify(store)});
+            resRender(req, res, title, state, 'index');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//login页面
+Request.get('/login', async(req, res, next) => {
+
+    try {
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name}|主人登录~`;
+
+        //初始化页面数据
+        const state  = {};
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'index');
         }
     }catch (ex){
         next(ex);
     }
+});
 
+//login post登录
+Request.post('/login', async(req, res, next) => {
+
+    try {
+
+        if(Request.REQUEST_JSON){
+
+            const account = req.body.account;
+            const password = req.body.password;
+
+            const userInfo = await userApi.userLogin(account, password);
+
+            if(userInfo){
+
+                //是否创建token
+                const cookiesOption = {
+                    maxAge: cookieConfig.maxAge //3天,
+                };
+                res.cookie('id',userInfo.id, cookiesOption).cookie('token', userInfo.login_token, cookiesOption);
+
+                res.json(returnSuc('登录成功'));
+            }else{
+                res.clearCookie('id').clearCookie('token');
+                res.json(returnErr('登录失败'));
+            }
+
+
+        }
+    }catch (ex){
+        next(ex);
+    }
 });
 
 
-export default router;
+export default Request.router;

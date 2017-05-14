@@ -12,6 +12,10 @@
   animation-duration: 1s;
   animation-fill-mode: both;
 }
+.animated-fast {
+  animation-duration: .5s;
+  animation-fill-mode: both;
+}
 
 .animated.infinite {
   animation-iteration-count: infinite;
