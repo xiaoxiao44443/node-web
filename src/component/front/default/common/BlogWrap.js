@@ -42,7 +42,7 @@ class BlogWrap extends Component {
     }
     render(){
         const maxWidth = typeof window === 'undefined' ? false : window.screen.width;
-        const backGroundImg = this.props.backGroundImg || '/static/images/new/blog-banner.jpg';
+        const backGroundImg = this.props.backGroundImg || '/static/images/default/blog-banner.jpg';
         const className = this.props.className || '';
 
         const { groupPanelVisible } = this.state;

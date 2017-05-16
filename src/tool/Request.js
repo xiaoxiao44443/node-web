@@ -9,6 +9,7 @@ class _Request {
     constructor(){
         this.REQUEST_JSON = false;
         this.router = express.Router();
+        this.USER = {};
 
         let RequestBefore = async(req, res, next) => {
             try {
@@ -55,8 +56,18 @@ class _Request {
     }
 }
 
-export const returnSuc = (data, title, url = '') => (title ? {code:0, data, title, url} : {code:0, data, url});
-export const returnErr = (data, title, url = '') => (title ? {code:-1, data, title, url} : {code:-1, data, url});
+export const returnSuc = (data, title, url) =>{
+    let ret = {code:0, data};
+    if(title) ret.title = title;
+    if(url) ret.url = url;
+    return ret;
+};
+export const returnErr = (data, title, url) =>{
+    let ret = {code:-1, data};
+    if(title) ret.title = title;
+    if(url) ret.url = url;
+    return ret;
+};
 export const initPageState = (url, state) => ({url, state});
 export const resRender = (req, res, title, state, template) => {
     const _page = initPageState(req.originalUrl, state);

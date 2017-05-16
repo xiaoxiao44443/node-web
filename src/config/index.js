@@ -21,7 +21,7 @@ let database = {
 };
 
 const cookieConfig = {
-    maxAge: 3600*24*3 //3天
+    maxAge: 1000*3600*24*3 //3天
 };
 
 export {

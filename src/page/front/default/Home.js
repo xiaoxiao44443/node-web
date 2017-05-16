@@ -9,7 +9,7 @@ import PageComponent from '../../../component/common/base/PageComponent';
 
 class Home extends PageComponent{
     render(){
-        const backGroundImg = '/static/images/new/main-banner.jpg';
+        const backGroundImg = '/static/images/default/main-banner.jpg';
         return (
             <div className="main-wrap home">
                 <Header backGroundImg={backGroundImg} />

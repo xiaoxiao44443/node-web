@@ -37,6 +37,22 @@ const apiMethods = {
             })
         })
     },
+    apiFile(url, data) {
+        nprogress.start();
+        return new Promise((resolve, reject) => {
+            axios.post(url, data,{
+                method: 'post',
+                headers: {'Content-Type': 'multipart/form-data'}
+            }).then((response) => {
+                nprogress.done();
+                resolve(response.data);
+            }).catch((response) => {
+                nprogress.done();
+                reject(response);
+                this.handelResponse(response);
+            })
+        })
+    },
     handelRedirect(res) {
         if(res.code == -1 && res.url && res.url!=''){
             alert(res.data);

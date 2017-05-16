@@ -16,12 +16,9 @@ const tpl = (filePath, options, callback) => {
         options = options || {};
         let rendered = content.toString();
         const ignore = ['settings', '_locals', 'cache'];
-        for (let p in options){
-            if(ignore.indexOf(p)!==-1) continue;
-
-            rendered = rendered.replace(`#${p}#`, options[p]);
-        }
-        rendered = rendered.replace(/#[\S]*?#/g, '');
+        rendered = rendered.replace(/#([\S]*?)#/g, ($0, $1) =>{
+            return $1 in options ? options[$1] : '';
+        });
         //html压缩
         rendered = minify(rendered, minifyOptions);
         return callback(null, rendered);

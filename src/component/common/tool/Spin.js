@@ -29,7 +29,7 @@ class Spin extends Component {
     }
     componentWillReceiveProps(nextProps){
         if(!this.state.show && nextProps.loading){
-            const delay = parseInt(nextProps.delay) >= 0 || 1000;
+            const delay = parseInt(nextProps.delay) >= 0 ? parseInt(nextProps.delay) : 1000;
             if(delay == 0){
                 this.setState({show: true});
             }else{
@@ -39,6 +39,12 @@ class Spin extends Component {
                     this.setState({show: true});
                 }, delay)
             }
+        }
+        else
+        if(!nextProps.loading){
+            this.setState({
+                show: false
+            });
         }
     }
     componentWillUnmount(){

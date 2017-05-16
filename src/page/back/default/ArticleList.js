@@ -75,6 +75,7 @@ class ArticleList extends PageComponent {
         alert('暂未实现哦');
     }
     loadMoreArticle(){
+        if(this.state.loadingMoreArticle) return;
         this.setState({
             loadingMoreArticle: true
         });

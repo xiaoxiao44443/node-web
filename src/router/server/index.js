@@ -9,11 +9,10 @@ import RequestModel, {
     resRender,
 } from '../../tool/Request';
 import defaultDbSql from '../../config/defaultDbSql';
-import { getPicPath } from '../../api/picture';
+import pictureApi from '../../api/picture';
 import articleApi from '../../api/article';
 const Request = new RequestModel;
 import { cookieConfig } from '../../config';
-
 import { createUserToken, userPassword } from '../../tool/userToken';
 import userApi from '../../api/user';
 
@@ -62,7 +61,7 @@ Request.get('/logout',async(req, res, next) => {
 Request.get('/api/pic([0-9]+)', async(req, res, next) => {
     const pic = req.params[0];
     try {
-        let realPath = await getPicPath(pic);
+        let realPath = await pictureApi.getPicPath(pic);
         if(realPath){
             res.sendFile(realPath);
         }else{
@@ -249,6 +248,5 @@ Request.post('/login', async(req, res, next) => {
         next(ex);
     }
 });
-
 
 export default Request.router;

@@ -2,6 +2,7 @@
     width: 100%;
     overflow: hidden;
 }
+
 .admin-article-edit .editor-wrap{
     width: 80%;
     float: left;
@@ -71,6 +72,7 @@
     border: 1px solid #ccc;
     padding: 5px;
     overflow-y: auto;
+    margin-bottom: 1em;
 }
 .admin-article-edit .editor{
     width: 100%;
@@ -134,30 +136,9 @@
     font-size: 13px;
     padding: 5px;
     overflow: auto;
-    background-color: #fff;
 }
-.admin-article-edit .editor .result-html >p{
-    text-indent: 2em;
-}
-.admin-article-edit .editor .result-html img {
-    max-width: 100%;
-}
-.admin-article-edit .editor .result-html pre{
-    background: #2d2d2d;
-    white-space: pre-wrap;
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 13px;
-    line-height: 1.42857143;
-    color: #333;
-    word-break: break-all;
-    word-wrap: break-word;
-    border-radius: 4px;
-    overflow-x: auto;
-}
-.admin-article-edit .editor .result-html code{
-    color: #cc99cd;
+.admin-article-edit .editor .result-html.grey{
+    background-color: #f3f3f3;
 }
 .admin-article-edit pre.result-src{
     background: white!important;
@@ -167,4 +148,136 @@
 }
 .admin-article-edit .result-src-content{
     height: 100%;
+}
+.admin-article-edit .result-src-content pre code{
+    font-weight: 300;
+}
+.admin-article-edit .main-img-wrap{
+    max-width: 100%;
+    min-width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #eee;
+    margin-bottom: 1em;
+    position: relative;
+}
+.admin-article-edit .main-img-wrap .mask{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    z-index: 1;
+    transition: backgroud-color .3s ease;
+    cursor: pointer;
+}
+.admin-article-edit .main-img-wrap .mask:hover{
+    background-color: rgba(228,76,101,0.1);
+}
+.admin-article-edit .main-img-wrap >img{
+    max-height: 100%;
+    max-width: 100%;
+}
+.admin-pic-select{
+    width: 850px;
+    height: 560px;
+    background-color: white;
+    margin: 0 auto;
+    overflow: hidden;
+    font-weight: 300;
+}
+
+.admin-pic-select .upload-button {
+    overflow: hidden;
+    position: relative;
+    padding: 5px 10px;
+    background-color: #e44c65;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: .3s ease;
+    display: inline-block;
+}
+.admin-pic-select .upload-button:hover{
+    background-color: #e41526;
+}
+.admin-pic-select .upload-button input {
+    position: absolute;
+    left: -50%;
+    top: -50%;
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+    cursor: pointer;
+}
+.admin-pic-select .thumbs-box{
+    width: 100%;
+    height: 150px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    margin: 15px 0;
+}
+.admin-pic-select .thumbs-box ul{
+    padding: 5px 0;
+    overflow: hidden;
+    margin: 0;
+}
+.admin-pic-select .thumbs-box li{
+    float: left;
+    height: 110px;
+    width: 110px;
+    text-align: center;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    transition: .3s ease;
+    margin: 10px;
+}
+.admin-pic-select .thumbs-box li:nth-of-type(6n - 5){
+    margin-left: 30px;
+}
+.admin-pic-select .thumbs-box li img{
+    max-width: 100px;
+    max-height: 100px;
+}
+.admin-pic-select .thumbs-box li.select{
+    border-color: #e44c65;
+}
+.admin-pic-select .thumbs-box li:hover{
+    border-color: #e44c65;
+}
+.admin-pic-select .btn{
+    border-radius: 3px;
+    transition: all .2s ease;
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+}
+.admin-pic-select .btn:last-child{
+    margin-right: 0;
+}
+.admin-pic-select .btn.btn-cancel{
+    background: white;
+    border: 1px solid #ccc;
+
+}
+.admin-pic-select .btn.btn-cancel:hover{
+    background: #e44c65;
+    color: white;
+    border-color: #e44c65
+}
+.admin-pic-select .btn.btn-confirm{
+    background: #e44c65;
+    color: white;
+    border: 1px solid #e44c65;
+}
+.admin-pic-select .btn.btn-confirm:hover{
+    background: #e41526;
 }

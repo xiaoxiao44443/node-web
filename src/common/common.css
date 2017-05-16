@@ -89,3 +89,153 @@ body{
         overflow-x: hidden;
     }
 }
+
+.article-html blockquote {
+    padding: .6em 1.2em;
+    margin: 0 0 1.2em;
+    font-size: 1em;
+    line-height: 1;
+    border-left: .3em solid #eee;
+}
+.article-html blockquote p{
+    margin: 0 0 .6em;
+}
+.article-html h1{
+    font-size: 1.8em;
+}
+.article-html h2{
+    font-size: 1.5em;
+}
+.article-html h3{
+    font-size: 1.17em;
+}
+.article-html h4{
+    font-size: 1em;
+}
+.article-html h5{
+    font-size: .85em;
+}
+.article-html h6{
+    font-size: .67em;
+}
+.article-html h1, .article-html h2, .article-html h3, .article-html h4, .article-html h5, .article-html h6 {
+    font-weight: 500;
+    line-height: 1em;
+    margin: 1.2em 0 1em 0;
+}
+.article-html hr {
+    margin-top: 1.2em;
+    margin-bottom: 1.2em;
+    border: 0;
+    border-top: 1px solid #bbb;
+}
+.article-html ul {
+    margin: 0 0 1em 0;
+    padding-left: 2em;
+    list-style-type: disc;
+}
+.article-html ul li {
+    padding-left: 0;
+    list-style: disc;
+}
+.article-html ol{
+    list-style-type: decimal;
+}
+.article-html ol p, .article-html li p {
+    margin: 0 0 .6em;
+}
+.article-html >p {
+    line-height: 2em;
+}
+.article-html pre{
+    line-height: 2em;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    word-spacing: normal;
+    hyphens: none;
+    font-size: 90%;
+    color: #c7254e;
+    border-radius: 4px;
+    background-color: #2d2d2d;
+    overflow: auto;
+    padding: .3em .6em;
+}
+.article-html code {
+    line-height: 2em;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    word-spacing: normal;
+    hyphens: none;
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    border-radius: 4px;
+    background-color: #2d2d2d;
+}
+.article-html pre >code{
+    font-size: .85em;
+}
+
+.article-html table{
+    border: 1px solid #ddd;
+    width: 100%;
+    border-collapse: collapse;
+}
+.article-html table>caption+thead>tr:first-child>td, .article-html table>caption+thead>tr:first-child>th, .article-html table>colgroup+thead>tr:first-child>td, .article-html table>colgroup+thead>tr:first-child>th, .article-html table>thead:first-child>tr:first-child>td, .article-html table>thead:first-child>tr:first-child>th {
+    border-top: 0;
+}
+.article-html table>tbody>tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+.article-html table>tbody>tr:nth-of-type(even) {
+    background-color: #edf7f7;
+}
+.article-html table>tbody>tr>td, .article-html table>tbody>tr>th, .article-html table>tfoot>tr>td, .article-html table>tfoot>tr>th, .article-html table>thead>tr>td, .article-html table>thead>tr>th {
+    border: 1px solid #ddd;
+}
+.article-html table>thead>tr>th {
+    border-bottom-width: 2px;
+}
+.table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+}
+.article-html table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+}
+.article-html th {
+    text-align: left;
+}
+.article-html td, th {
+    padding: 0;
+}
+.article-html table>tbody>tr>td, .article-html table>tbody>tr>th, .article-html table>tfoot>tr>td, .article-html table>tfoot>tr>th, .article-html table>thead>tr>td, .article-html table>thead>tr>th {
+    padding: .5em;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+.article-html a{
+    color: #e44c65;
+    transition: color ease .2s;
+    font-weight: 400;
+}
+.article-html a:hover{
+    color: #cc4861;
+    text-decoration: underline;
+}
+.article-html img{
+    max-width: 100%;
+    vertical-align: middle;
+    border: 0;
+}
+@media screen and (max-width: 736px){
+    .article-html pre {
+        -webkit-overflow-scrolling: touch;
+        line-height: 1.5em;
+        font-size: .85em;
+    }
+    .article-html >p{
+        font-size: .85em;
+        line-height: 1.8em;
+    }
+}

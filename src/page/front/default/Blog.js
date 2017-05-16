@@ -64,6 +64,7 @@ class Blog extends PageComponent {
         this.loadMoreArticle = this.loadMoreArticle.bind(this);
     }
     loadMoreArticle(){
+        if(this.state.loadingMoreArticle) return;
         this.setState({
             loadingMoreArticle: true
         });
@@ -106,7 +107,7 @@ class Blog extends PageComponent {
     }
     render(){
         const maxWidth = typeof window === 'undefined' ? false : window.screen.width;
-        const backGroundImg = '/static/images/new/blog-banner.jpg';
+        const backGroundImg = '/static/images/default/blog-banner.jpg';
         const { articles } = this.state;
         const articleList = articles.map((val) => {
             return <Article data={val} key={val.id}/>

@@ -13,6 +13,8 @@ import articleApi from '../../api/article';
 import configApi from '../../api/config';
 const Request = new RequestModel;
 import userApi from '../../api/user';
+import uploader from '../../tool/uploader';
+import pictureApi from '../../api/picture';
 
 //验证登录
 Request.use(async(req, res, next) => {
@@ -27,6 +29,7 @@ Request.use(async(req, res, next) => {
         }else if(req.method == 'POST'){
             if(!ret) return res.json(returnErr('请先登录~', '请先登录~', '/login'));
         }
+        Request.USER.id = id;
         next();
     }catch (ex){
         next(ex);
@@ -246,6 +249,56 @@ Request.post('/site-config', async(req, res, next) => {
             }
         }
 
+    }catch (ex){
+        next(ex);
+    }
+});
+
+Request.post('/article/edit/upload-img', async(req, res, next) => {
+
+    try{
+        (new uploader.blogImgUpload)(req, res, async err => {
+            if(err){
+                next(err);
+            }else{
+                const files = req.files;
+
+                if(files){
+                    const filesPath = files.map(val => {
+                        return val.path;
+                    });
+                    try {
+                        const ret = await pictureApi.savePic(filesPath, 1, Request.USER.id);
+                        if(ret){
+                            res.json(returnSuc('上传成功'));
+                        }else{
+                            res.json(returnErr('上传失败'));
+                        }
+                    }catch (ex){
+                        return next(ex);
+                    }
+                }else{
+                    res.json(returnErr('上传失败'));
+                }
+            }
+        });
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//获取已上传的文章图片列表 50张
+Request.post('/article/edit/uploaded-pics', async(req, res, next) => {
+
+    try {
+        //获取网站配置
+        if(Request.REQUEST_JSON){
+            //初始化数据
+            const p = req.body.p;
+
+            let pics = await pictureApi.getPicsByType(1, Request.USER.id,{p});
+            res.json(returnSuc(pics));
+        }
     }catch (ex){
         next(ex);
     }

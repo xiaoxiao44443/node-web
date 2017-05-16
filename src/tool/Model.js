@@ -6,12 +6,18 @@ import { database as DB } from '../config';
 
 /**
  * 实例化一次只能query一次，如果需要多次需要参数autoEnd = false;然后在使用完毕后调用end方法
+ * multipleStatements 开启允许多条sql
  * @param autoEnd
+ * @param multipleStatements
  * @constructor
  */
-const Model = function(autoEnd = true) {
+const Model = function(autoEnd = true, multipleStatements = false) {
     let _pool, _error, _autoEnd, _connection, _startTrans;
-    _pool = mysql.createPool(DB);
+    if(multipleStatements) {
+        _pool = mysql.createPool({...DB, multipleStatements: true}); //开启允许多条sql
+    }else{
+        _pool = mysql.createPool(DB);
+    }
     _error = null;
     _autoEnd = autoEnd;
     _connection = null;

@@ -61,6 +61,11 @@
 .article-info .article-img{
     width: 100%;
     margin: .5em 0;
+    max-height: 30em;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .article-info .article-img img{
     width: 100%;

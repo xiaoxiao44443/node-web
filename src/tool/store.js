@@ -31,6 +31,7 @@ class Provider extends React.Component {
         super(props, context);
         if(typeof window !== 'undefined' && typeof window.__data_init__ === 'object'){
             stores = window.__data_init__;
+
             delete window.__data_init__;
         }
         this.state = {

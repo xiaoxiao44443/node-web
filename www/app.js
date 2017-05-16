@@ -36,7 +36,7 @@ app.use((err, req, res, next) => {
         let accept = req.header('accept');
         let REQUEST_JSON = accept.indexOf('application/json')!==-1;
         if(REQUEST_JSON){
-            res.status(500).json(returnErr(err));
+            res.status(500).json(returnErr(err.message));
         }else{
             const store = {error: {message: err.message, stack: err.stack}};
             const { app } = serverRender(req.url, store);

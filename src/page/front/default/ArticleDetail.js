@@ -29,7 +29,7 @@ class ArticleDetail extends PageComponent {
             const article_detail = markdown.render(article.text);
             const publishTime = moment(article.create_time*1000).format('YYYY-MM-DD HH:mm');
             articleContent =
-                <article className={ maxWidth > maxWidthPoint.medium ? 'bounceInUp animated' : ''}>
+                <div className={ maxWidth > maxWidthPoint.medium ? 'bounceInUp animated' : ''}>
                     <div className="article-info">
                         <div className="article-title">
                             <h3><span>{article.title}</span></h3>
@@ -42,8 +42,8 @@ class ArticleDetail extends PageComponent {
                         <span>阅读({article.views})</span>
                         <span>评论({article.comments})</span>
                     </div>
-                    <div className="article-content" dangerouslySetInnerHTML={{__html: article_detail}} />
-                </article>
+                    <div className="article-content article-html" dangerouslySetInnerHTML={{__html: article_detail}} />
+                </div>
         }
         return (
             <BlogWrap className="article-detail">

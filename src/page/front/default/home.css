@@ -62,7 +62,7 @@
     z-index: 1;
 }
 .goto-next:before {
-    background-image: url(/static/images/new/arrow.png);
+    background-image: url(/static/images/default/arrow.png);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
