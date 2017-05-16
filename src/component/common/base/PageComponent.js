@@ -26,13 +26,14 @@ class PageComponent extends Component {
                 _pageLoadOver: true
             };
         }else{
-            const init = getKeyInObject(props, 'history.location.state.init');
-            if(init){
-                this.state = {
-                    ...init,
-                    _pageLoadOver: true
-                };
-            }
+            //变成在componentWillReceiveProps中获取
+            // const init = getKeyInObject(props, 'history.location.state.init');
+            // if(init){
+            //     this.state = {
+            //         ...init,
+            //         _pageLoadOver: true
+            //     };
+            // }
         }
 
     }

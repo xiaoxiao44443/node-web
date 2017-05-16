@@ -23,10 +23,11 @@ class PicSelector extends Component {
             loadingUploadedPics: false,
             uploading: false,
             picSelectorConfirm: false
-        }
+        };
     }
     componentDidMount(){
         this.getUploadedPics(true);
+        this._isMounted = true;
     }
     selectPicFileChange = (files, event) => {
         const newPicList = this.state.preUploadPics.concat(files);
@@ -110,6 +111,7 @@ class PicSelector extends Component {
             p: p + 1
         };
         http.apiPost('/admin/article/edit/uploaded-pics', data).then(res => {
+            if(!this._isMounted) return;
             this.setState({
                 loadingUploadedPics: false
             });

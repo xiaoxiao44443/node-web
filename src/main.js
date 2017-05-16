@@ -21,6 +21,25 @@ class Root extends Component {
             isError: !!props.error
         };
         this.unlisten = this.props.history.listen((location, action) => {
+
+            //判断viewport
+            if(location.pathname.indexOf('/admin') == 0){
+                //后台固定宽度
+                let viewport = document.querySelector("meta[name=viewport]");
+                if(viewport){
+                    document.getElementsByTagName('head')[0].removeChild(viewport);
+                }
+            }else{
+                //前台其他页面自适应
+                let viewport = document.querySelector("meta[name=viewport]");
+                if(viewport === null){
+                    let meta = document.createElement('meta');
+                    meta.setAttribute('name', 'viewport');
+                    meta.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0');
+                    document.getElementsByTagName('head')[0].appendChild(meta);
+                }
+            }
+
             if(action === 'POP' || action == 'PUSH'){
                 this.props.$store.update({_history: {action: action, url: location.pathname}});
             }

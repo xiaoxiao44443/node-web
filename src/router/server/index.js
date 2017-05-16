@@ -63,6 +63,7 @@ Request.get('/api/pic([0-9]+)', async(req, res, next) => {
     try {
         let realPath = await pictureApi.getPicPath(pic);
         if(realPath){
+            res.setHeader('Cache-Control', 'public, max-age=1d');
             res.sendFile(realPath);
         }else{
             next();

@@ -15,11 +15,23 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.resolve(__dirname, '../public')));
+
+const setImageCacheControl = (res, path) => {
+    const mime = express.static.mime.lookup(path);
+    if(mime && mime.indexOf('image')!==-1){
+        res.setHeader('Cache-Control', 'public, max-age=1d');
+    }
+};
+
+app.use(express.static(path.resolve(__dirname, '../public'), {
+    setHeaders: setImageCacheControl
+}));
+
 tpl(app);
 
 app.use('/', router);
 app.use('/admin', admin);
+
 
 //404页面处理
 app.use((req, res, next) => {
