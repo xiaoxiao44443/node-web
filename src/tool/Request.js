@@ -4,6 +4,8 @@
 import express from 'express';
 import configApi from '../api/config';
 import serverRender from './server-render';
+import userApi from '../api/user';
+import serverHttp from './server-http';
 
 class _Request {
     constructor(){
@@ -17,6 +19,42 @@ class _Request {
                 this.REQUEST_JSON = accept.indexOf('application/json') !== -1;
                 //获取网站配置
                 this.websiteConfig = await configApi.website();
+
+                //用户是否登录
+                const id = req.cookies.id || 0;
+                const token = req.cookies.token || '';
+                const userInfo = await userApi.tokenLogin(id, token);
+                if(userInfo){
+                    this.USER = {
+                        id: userInfo.id,
+                        group_id: userInfo.group_id,
+                        head: userInfo.head,
+                        nickname: userInfo.nickname,
+                        profile_url: userInfo.profile_url
+                    };
+                    if(userInfo.account_type == 100){
+                        //获取微博用户信息
+                        try {
+                            let result = await serverHttp.apiGet(`https://api.weibo.com/2/users/show.json?access_token=${userInfo.weibo_access_token}&uid=${userInfo.weibo_uid}`);
+                            const user_info = {
+                                weibo_uid: result.id,
+                                nickname: result.name,
+                                head: result.avatar_large,
+                                sex: {m:1 ,f: 0, n: 2}[result.gender],
+                                profile_url: result.profile_url,
+                                weibo_access_token: userInfo.weibo_access_token,
+
+                            };
+                            await userApi.updateWbUser(user_info);
+                        }catch (err){
+                            //失败 清除cookies
+                            this.USER = {};
+                            res.clearCookie('id').clearCookie('token');
+                        }
+                    }
+                }else{
+                    this.USER = {};
+                }
                 next();
             } catch (ex) {
                 next(ex);
@@ -69,9 +107,9 @@ export const returnErr = (data, title, url) =>{
     return ret;
 };
 export const initPageState = (url, state) => ({url, state});
-export const resRender = (req, res, title, state, template) => {
+export const resRender = (req, res, title, state, template, otherStore) => {
     const _page = initPageState(req.originalUrl, state);
-    const store = { _page };
+    const store = { ...otherStore, _page };
     const { app } = serverRender(req.originalUrl, store);
     res.render(template, {title: title, app: app, init: JSON.stringify(store)});
 };

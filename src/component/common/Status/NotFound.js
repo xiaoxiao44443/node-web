@@ -9,9 +9,17 @@ class NotFound extends Component {
         document.title = '404 Not Found';
     }
     render(){
+        const st = {
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        };
         return (
             <Status code={404}>
-                <div>
+                <div style={st}>
                     <h1>Sorry, can’t find that.</h1>
                 </div>
             </Status>

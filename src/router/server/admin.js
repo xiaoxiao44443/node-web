@@ -1,8 +1,6 @@
 /**
  * Created by xiao on 2017/5/13.
  */
-import serverRender from '../../tool/server-render';
-import Model from '../../tool/Model';
 import RequestModel, {
     returnSuc,
     returnErr,
@@ -12,24 +10,19 @@ import RequestModel, {
 import articleApi from '../../api/article';
 import configApi from '../../api/config';
 const Request = new RequestModel;
-import userApi from '../../api/user';
 import uploader from '../../tool/uploader';
 import pictureApi from '../../api/picture';
+import mottoApi from '../../api/motto';
 
 //验证登录
 Request.use(async(req, res, next) => {
 
     try {
-        const id = req.cookies.id || 0;
-        const token = req.cookies.token || '';
-        const ret = await userApi.tokenLogin(id, token);
-
         if(req.method == 'GET'){
-            if(!ret) return res.redirect('/login');
+            if(!Request.USER.id || Request.USER.group_id !== 1) return res.redirect('/login');
         }else if(req.method == 'POST'){
-            if(!ret) return res.json(returnErr('请先登录~', '请先登录~', '/login'));
+            if(!Request.USER.id || Request.USER.group_id !== 1) return res.json(returnErr('请先登录~', '请先登录~', '/login'));
         }
-        Request.USER.id = id;
         next();
     }catch (ex){
         next(ex);
@@ -41,7 +34,7 @@ Request.get('/article/list', async(req, res, next) =>{
         //获取网站配置
         const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
-        const title = `${site_name}|后台管理`;
+        const title = `${site_name} | 后台管理`;
 
         //初始化页面数据 获取50条文章列表
         let articles = await articleApi.queryArticleAdmin();
@@ -85,7 +78,7 @@ Request.get('/article/edit/ad([0-9]+)', async(req, res, next) =>{
         //获取网站配置
         const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
-        const title = `${site_name}|后台管理`;
+        const title = `${site_name} | 后台管理`;
 
         //初始化页面数据 获取文章数据
         let article = await articleApi.getArticle(ad);
@@ -162,7 +155,7 @@ Request.get('/article/write', async(req, res, next) =>{
         //获取网站配置
         const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
-        const title = `${site_name}|后台管理`;
+        const title = `${site_name} | 后台管理`;
 
         //初始化页面数据 获取文章数据
         let article = {
@@ -198,7 +191,7 @@ Request.get('/site-config', async(req, res, next) => {
         //获取网站配置
         const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
-        const title = `${site_name}|后台管理`;
+        const title = `${site_name} | 后台管理`;
 
         //初始化页面数据
         const _websiteConfig = {
@@ -304,13 +297,64 @@ Request.post('/article/edit/uploaded-pics', async(req, res, next) => {
     }
 });
 
+//admin/recommend
+Request.get('/recommend', async(req, res, next) => {
+    try {
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name} | 后台管理`;
+
+        //初始化页面数据
+        let ret = await mottoApi.todayMotto();
+        const recommend = {
+            motto: ret.text
+        };
+        const state = { recommend: recommend };
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'admin');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//admin/recommend
+Request.post('/recommend', async(req, res, next) => {
+    try {
+
+        if(Request.REQUEST_JSON){
+
+            const recommend = req.body.recommend;
+
+            let motto = recommend.motto;
+
+            //更新今日格言
+            let ret = await mottoApi.editTodayMotto(motto);
+
+            if(ret){
+                res.json(returnSuc('保存成功~'));
+            }else{
+                res.json(returnErr('保存失败!'));
+            }
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
 //admin
 Request.use(async(req, res, next) => {
     try {
         //获取网站配置
         const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
-        const title = `${site_name}|后台管理`;
+        const title = `${site_name} | 后台管理`;
 
         //初始化页面数据
         const state = {};

@@ -28,6 +28,14 @@ class Spin extends Component {
         }
     }
     componentWillReceiveProps(nextProps){
+        if(!nextProps.loading){
+            this.setState({
+                show: false
+            });
+            if(this.timer) clearTimeout(this.timer);
+            this.timer = false;
+            return;
+        }
         if(!this.state.show && nextProps.loading){
             const delay = parseInt(nextProps.delay) >= 0 ? parseInt(nextProps.delay) : 1000;
             if(delay == 0){
@@ -39,12 +47,6 @@ class Spin extends Component {
                     this.setState({show: true});
                 }, delay)
             }
-        }
-        else
-        if(!nextProps.loading){
-            this.setState({
-                show: false
-            });
         }
     }
     componentWillUnmount(){
@@ -74,7 +76,7 @@ class Spin extends Component {
                 </div>
             );
         }else{
-            return this.props.children;
+            return <div>{this.props.children}</div>;
         }
     }
 }

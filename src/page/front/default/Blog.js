@@ -106,17 +106,17 @@ class Blog extends PageComponent {
 
     }
     render(){
-        const maxWidth = typeof window === 'undefined' ? false : window.screen.width;
+        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
         const backGroundImg = '/static/images/default/blog-banner.jpg';
         const { articles } = this.state;
         const articleList = articles.map((val) => {
             return <Article data={val} key={val.id}/>
         });
-        const { loadingMoreArticle, noMoreArticle } = this.state;
+        const { loadingMoreArticle, noMoreArticle, newComments, motto } = this.state;
         const loadingMoreArticleTip = !loadingMoreArticle ? (!noMoreArticle ? '加载更多' :'已经到底了//~~') : '努力加载中//~~';
         const loadMore = <div className="load-more"><a href="javascript:void(0);" onClick={this.loadMoreArticle}>{loadingMoreArticleTip}</a></div>;
         return (
-            <BlogWrap backGroundImg={backGroundImg}>
+            <BlogWrap backGroundImg={backGroundImg} newComments={newComments} motto={motto}>
                 <div className="article-list">
                     {
                         articleList.length == 0 ? loadMore :

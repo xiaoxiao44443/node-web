@@ -2,9 +2,7 @@
  * Created by xiao on 2017/5/11.
  */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { store } from '../../../tool/store';
-import { withRouter }  from 'react-router-dom';
 import { getKeyInObject }  from '../../../tool/utils/object';
 
 import http from '../../../tool/http';
@@ -26,14 +24,13 @@ class PageComponent extends Component {
                 _pageLoadOver: true
             };
         }else{
-            //变成在componentWillReceiveProps中获取
-            // const init = getKeyInObject(props, 'history.location.state.init');
-            // if(init){
-            //     this.state = {
-            //         ...init,
-            //         _pageLoadOver: true
-            //     };
-            // }
+            //还是要有的，为了保证后退的流畅
+            const init = getKeyInObject(props, 'history.location.state.init');
+            if(init){
+                this.state = {
+                    ...init
+                };
+            }
         }
 
     }
@@ -49,7 +46,7 @@ class PageComponent extends Component {
             ...this._defaultState, ...this.state
         }
     }
-    _pageInit(nextProps, initState = false){
+    _pageInit(nextProps, initState){
         if(initState) {
             this.state = this._defaultState;
         }
@@ -57,22 +54,22 @@ class PageComponent extends Component {
         const url = props.match.url;
         if(!initState && props._page && props._page && props._page.url === url){
             const _page = props._page;
-            props.history.replace(url, {title: document.title, init: _page.state});
+            props.history.replace(url + props.location.hash, {title: document.title, init: _page.state});
             props.$store.update({_page: false});
+
         }else{
 
             const init = getKeyInObject(props, 'history.location.state.init');
 
             if(!init){
                 this._pageUpdate();
-            }else if(initState){
+            }else{
                 this.setState({
                     ...init,
                     _pageLoadOver: true
                 })
             }
         }
-        props.$store.update({_history: {}});
     }
 
     //刷新本页数据
@@ -84,7 +81,7 @@ class PageComponent extends Component {
         const url = this.props.match.url;
 
         http.apiGet(url).then((res) => {
-            this.props.history.replace(url,
+            this.props.history.replace(url + this.props.location.hash,
                 {
                     title: res.title, init: res.data
                 });
@@ -108,18 +105,19 @@ class PageComponent extends Component {
                 newState[p] = state[p]
             }
         }
-        this.props.history.replace(url, { title: document.title, init: newState });
+        this.props.history.replace(url + this.props.location.hash, { title: document.title, init: newState });
     }
     componentWillReceiveProps(nextProps){
-        if(nextProps._history && (nextProps._history.action == 'PUSH' || nextProps._history.action == 'POP')){
+        if((nextProps.history.action == 'PUSH' || nextProps.history.action == 'POP') && nextProps.match.url!==this.props.match.url){
             this.setState({
                 _pageLoadOver: false
             });
+            //设置延时让组件render
             setTimeout(() => {this._pageInit(nextProps, true)}, 10);
         }
     }
     static withStore(WrappedComponent){
-        const map = (state) => ({ _page: state._page, _history: state._history });
+        const map = (state) => ({ _page: state._page });
         return store(WrappedComponent, map);
     }
 }

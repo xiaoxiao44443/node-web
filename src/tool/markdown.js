@@ -6,6 +6,7 @@
  */
 import React from 'react'
 import markdownIt from 'markdown-it';
+import emoji from 'markdown-it-emoji';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 
@@ -40,5 +41,15 @@ const markdown = markdownIt({
     typographer: true,
     highlight
 });
+
+markdown
+    .use(require('markdown-it-abbr'))
+    .use(emoji)
+    .use(require('markdown-it-sub'))
+    .use(require('markdown-it-sup'))
+    .use(require('markdown-it-ins'))
+    .use(require('markdown-it-mark'))
+    .use(require('markdown-it-footnote'))
+    .use(require('markdown-it-deflist'));
 
 export default markdown;   //markdown.render(xxx)

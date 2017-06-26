@@ -10,6 +10,7 @@ import Blog from '../../page/front/default/Blog';
 import ArticleDetail from '../../page/front/default/ArticleDetail';
 import Error from '../../page/front/default/Error';
 import NotFound from '../../component/common/Status/NotFound';
+import MessageJump from '../../page/front/default/MessageJump';
 
 //后台页面
 import Admin from '../../page/back/default/Admin';
@@ -36,6 +37,7 @@ const Routes = (isError = false) => {
             <Route exact path="/blog/ad([0-9]+)" component={ArticleDetail} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/admin*" component={Admin} />
+            <Route exact path="/login/*" component={MessageJump} />
             <RoutePlus component={NotFound} />
         </Switch>
 };

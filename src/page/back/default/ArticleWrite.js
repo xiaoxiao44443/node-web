@@ -330,7 +330,7 @@ class ArticleWrite extends PageComponent {
             title: article.title,
             summary: article.summary,
             text: article.text,
-            main_img: 1,  //主图先定死
+            main_img: article.main_img,
             tags: '',
             categroy: 0,
             stick:0

@@ -7,6 +7,8 @@ import path from 'path';
 import tpl from '../src/tool/tpl';
 import router from '../src/router/server/index';
 import admin from '../src/router/server/admin';
+import comment from '../src/router/server/comment';
+import user from '../src/router/server/user';
 import serverRender from '../src/tool/server-render';
 import { returnErr } from '../src/tool/Request';
 
@@ -31,6 +33,8 @@ tpl(app);
 
 app.use('/', router);
 app.use('/admin', admin);
+app.use('/comment', comment);
+app.use('/user', user);
 
 
 //404页面处理

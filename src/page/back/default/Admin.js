@@ -5,9 +5,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../../../component/back/default/common/Header';
 import './admin.css';
-import http from '../../../tool/http';
 import PageComponent from '../../../component/common/base/PageComponent';
-import { Link, NavLink, Switch, Route, withRouter } from 'react-router-dom';
+import { NavLink, Switch, Route, withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 
 import AdminConfig from './Config';
@@ -15,6 +14,7 @@ import AdminArticleList from './ArticleList';
 import AdminArticleWrite from './ArticleWrite';
 import Welcome from './Welcome';
 import NotFound from '../../../component/common/Status/NotFound';
+import AdminRecommend from './Recommend';
 
 const navData = [
     {
@@ -195,6 +195,7 @@ class Admin extends PageComponent{
                         <Route path="/admin/article/edit/ad([0-9]+)" component={AdminArticleWrite}/>
                         <Route path="/admin/article/write" component={AdminArticleWrite}/>
                         <Route path="/admin/site-config" component={AdminConfig}/>
+                        <Route path="/admin/recommend" component={AdminRecommend}/>
                         <Route component={NotFound}/>
                     </Switch>
                 </div>

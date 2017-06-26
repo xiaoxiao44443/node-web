@@ -1,10 +1,9 @@
 /**
  * Created by xiao on 2017/5/13.
  */
-import React, { Component } from 'react';
+import React from 'react';
 import http from '../../../tool/http';
 import PageComponent from '../../../component/common/base/PageComponent';
-import { Link } from 'react-router-dom';
 import Spin from '../../../component/common/tool/Spin';
 
 const FormInput = props => {
@@ -73,7 +72,7 @@ class Config extends PageComponent {
         const formInputOnChange = this.formInputOnChange;
 
         return (
-            <div className="admin-config">
+            <div className="admin-config slideInUp animated-fast">
                 <div className="admin-form-group">
                     <h2>站点设置~~</h2>
                     <h5>【站点名称】</h5>

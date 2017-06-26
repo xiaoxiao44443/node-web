@@ -12,22 +12,27 @@
     float: left;
     width: 60%;
     overflow: hidden;
-    padding: 1em;
+    padding: .5em;
+    padding-right: 1em;
 }
 .article-list .article-list-wrap{
     width: 100%;
     overflow: hidden;
 }
-.article-list>ul{
-    width: 100%;
-    overflow: hidden;
-    margin: 0 0 1em 0;
+.article-list ul{
+   padding-right: 2px;
 }
 .article-list .article-item{
     width: 100%;
     overflow: hidden;
     display: block;
-    padding: 2em 0 4em 0;
+    padding: 2em 0;
+    margin-bottom: 2em;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.article-list .article-item:last-child{
+    margin-bottom: 0;
 }
 .article-list .article-item .article-info{
     width: 100%;
@@ -70,6 +75,22 @@
 .article-info .article-img img{
     width: 100%;
     max-height: 60em;
+}
+@media screen and (min-width: 736px){
+    .article-list .article-item{
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .article-list .article-info .article-img img{
+        transition: transform .5s ease-out;
+        transform-origin: center;
+    }
+    .article-list .article-info .article-img img:hover{
+        transform: scale(1.2,1.2);
+    }
+    .article-info .article-title, .article-info .article-dateline, .article-info .article-summary, .article-item .article-oper.article-oper{
+        padding: 0 1em;
+    }
 }
 .article-info .article-summary{
     width: 100%;
@@ -131,6 +152,7 @@
         width: 90%;
         margin: 0 auto;
         float: none;
+        padding: 2em .5em;
     }
 
 }
@@ -139,8 +161,21 @@
         width: 100%;
     }
     .blog-wrap .article-list ul{
-        padding-left: 0;
+        padding: 0;
     }
+    .blog-wrap .article-list{
+        padding: 1em .5em 1.5em .5em;
+    }
+    .article-list .article-item{
+        margin-bottom: 1em;
+    }
+    .article-list .article-item:last-child{
+        margin-bottom: 0;
+    }
+    .article-info .article-title, .article-info .article-dateline, .article-info .article-summary, .article-item .article-oper.article-oper{
+        padding: 0 .5em;
+    }
+
     .article-info .article-title{
         text-align: center;
     }

@@ -180,6 +180,15 @@ html.admin body{
     font-weight: 300;
     margin-bottom: 1em;
 }
+.admin-form-textarea{
+    display: inline-block;
+    width: 100%;
+    font-size: 15px;
+    padding: 5px;
+    font-weight: 300;
+    margin-bottom: 1em;
+    min-height: 80px;
+}
 
 .main-wrap.admin .btn{
     border-radius: 3px;

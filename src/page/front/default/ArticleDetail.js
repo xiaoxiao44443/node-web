@@ -9,6 +9,8 @@ import moment from 'moment';
 import PageComponent from '../../../component/common/base/PageComponent';
 import { maxWidthPoint } from '../../../enum';
 import markdown from '../../../tool/markdown';
+import ArticleComment from '../../../component/front/default/common/ArticleComment';
+
 
 class ArticleDetail extends PageComponent {
     constructor(props){
@@ -19,10 +21,9 @@ class ArticleDetail extends PageComponent {
         };
         this._setDefaultState(state);
     }
-
     render(){
-        const { article } = this.state;
-        const maxWidth = typeof window === 'undefined' ? false : window.screen.width;
+        const { article, newComments, motto } = this.state;
+        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
 
         let articleContent;
         if(article){
@@ -46,7 +47,7 @@ class ArticleDetail extends PageComponent {
                 </div>
         }
         return (
-            <BlogWrap className="article-detail">
+            <BlogWrap className="article-detail" newComments={newComments} motto={motto}>
                 <div className="article-detail-wrap">
                     {article === null ?
                     <div className="notFound">
@@ -62,6 +63,7 @@ class ArticleDetail extends PageComponent {
                             : articleContent
                     )}
                 </div>
+                { article === null || <ArticleComment type="article" type_key={article.id} /> }
             </BlogWrap>
         );
     }

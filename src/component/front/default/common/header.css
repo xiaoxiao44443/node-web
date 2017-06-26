@@ -59,7 +59,7 @@
     border-radius: 3px;
     transition: background-color ease .2s;
 }
-#header .nav .nav-wrap>nav a:hover, #header .nav .nav-wrap>nav a:focus{
+#header .nav .nav-wrap>nav ul a:hover, #header .nav .nav-wrap>nav ul a:focus{
     background: #e44c65;
 }
 #header .nav .nav-wrap>nav a.hover{

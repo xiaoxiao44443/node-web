@@ -18,14 +18,14 @@ const article = {
         main_img int(11) NOT NULL COMMENT '文章主图',
         tags varchar(256) NOT NULL COMMENT '文章标签',
         views int(11) NOT NULL COMMENT '阅读次数',
-        comments int(11) NOT NULL COMMENT '评论册数',
+        comments int(11) NOT NULL COMMENT '评论次数',
         categroy int(11) NOT NULL COMMENT '文章分类',
-        create_time int(11) NOT NULL COMMENT '创建时间',
-        edit_time int(11) NOT NULL COMMENT '编辑时间',
+        create_time bigint(11) NOT NULL COMMENT '创建时间',
+        edit_time bigint(11) NOT NULL COMMENT '编辑时间',
         status tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态 0整除 -1删除',
         stick tinyint(1) NOT NULL DEFAULT '0' COMMENT '置顶',
         PRIMARY KEY (id)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章表'`
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章表'`
 };
 const comment = {
     desc: '评论表',
@@ -34,14 +34,15 @@ const comment = {
         id int(11) NOT NULL AUTO_INCREMENT,
         content text NOT NULL COMMENT '评论内容',
         user_id int(11) NOT NULL COMMENT '用户id',
-        user_head varchar(256) NOT NULL COMMENT '头像地址',
-        article_id int(11) NOT NULL COMMENT '文章id',
-        comment_id int(11) NOT NULL COMMENT '评论id',
-        create_time int(11) NOT NULL COMMENT '评论时间',
+        type varchar(20) NOT NULL DEFAULT '' COMMENT '评论类型[article]',
+        type_key varchar(30) NOT NULL DEFAULT '' COMMENT '评论类型key',
+        comment_id int(11) NOT NULL DEFAULT '0' COMMENT '评论id',
+        reply_id int(11) NOT NULL DEFAULT '0' COMMENT '回复评论id',
+        create_time bigint(11) NOT NULL COMMENT '评论时间',
         status tinyint(1) NOT NULL COMMENT '状态 0 -1',
         stick tinyint(1) NOT NULL DEFAULT '0' COMMENT '置顶',
         PRIMARY KEY (id)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论表'`
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='评论表'`
 };
 const config = {
     desc: '配置表',
@@ -62,7 +63,7 @@ const image = {
         type int(4) NOT NULL COMMENT '类型',
         author int(11) NOT NULL COMMENT '作者',
         md5 char(32) NOT NULL COMMENT '图片md5',
-        create_time int(11) NOT NULL COMMENT '创建时间',
+        create_time bigint(11) NOT NULL COMMENT '创建时间',
         PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图片表'`
 };
@@ -73,12 +74,17 @@ const user = {
         id int(11) NOT NULL AUTO_INCREMENT,
         account varchar(20) NOT NULL COMMENT '用户名',
         nickname varchar(15) NOT NULL COMMENT '用户昵称',
+        head varchar(256) DEFAULT NULL COMMENT '头像地址',
         password char(32) NOT NULL COMMENT '密码',
-        create_time int(11) NOT NULL COMMENT '注册时间',
+        create_time bigint(11) NOT NULL COMMENT '注册时间',
         email varchar(64) NOT NULL COMMENT '电子邮箱',
+        profile_url varchar(256) NOT NULL DEFAULT '' COMMENT '微博网址',
         sex tinyint(1) NOT NULL COMMENT '性别0,1,2 未知 女 男',
         group_id int(11) NOT NULL DEFAULT '3' COMMENT '用户组',
-        last_login_time int(11) NOT NULL COMMENT '上次登录时间',
+        account_type int(4) NOT NULL DEFAULT '0' COMMENT '用户类型0默认 100微博',
+        weibo_access_token varchar(64) NOT NULL DEFAULT '' COMMENT '微博access_token',
+        weibo_uid varchar(20) NOT NULL DEFAULT '',
+        last_login_time bigint(11) NOT NULL COMMENT '上次登录时间',
         login_token varchar(128) NOT NULL DEFAULT '' COMMENT '登录token',
         PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表'`
@@ -93,6 +99,36 @@ const user_group = {
         group_desc varchar(256) NOT NULL COMMENT '描述',
         PRIMARY KEY (id)
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='用户组表'`
+};
+const friend = {
+    desc: '友情链接表',
+    sql: `
+    CREATE TABLE lo_friend (
+        id int(11) NOT NULL AUTO_INCREMENT,
+        friend_name varchar(64) NOT NULL COMMENT '博主名字',
+        blog_name varchar(64) NOT NULL COMMENT '博客名称',
+        blog_url varchar(128) NOT NULL COMMENT '博客地址',
+        firend_head varchar(256) NOT NULL COMMENT '博主头像',
+        blog_motto varchar(128) NOT NULL DEFAULT '' COMMENT '博主格言',
+        create_time bigint(11) NOT NULL,
+        update_time bigint(11) NOT NULL,
+        status tinyint(1) NOT NULL COMMENT '0正常 -1删除',
+        display_order int(11) NOT NULL COMMENT '数字越大越靠前',
+        PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='友情链接表'`
+};
+const motto = {
+    desc: '格言表',
+    sql: `
+    CREATE TABLE lo_motto (
+        id int(11) NOT NULL AUTO_INCREMENT,
+        text varchar(256) NOT NULL DEFAULT '' COMMENT '格言内容',
+        create_time bigint(11) NOT NULL,
+        update_time bigint(11) NOT NULL,
+        status tinyint(1) NOT NULL COMMENT '0正常 -1已删除',
+        used tinyint(1) NOT NULL COMMENT '当前是否正在使用0,1',
+        PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='格言表'`
 };
 //插入数据
 const insert_user_group = {
@@ -117,6 +153,13 @@ const insert_website_config = {
     INSERT INTO ${prefix}config (id, name, value) VALUES
         (1, 'website', ${sqlString.escape(JSON.stringify(websiteConfig))})`
 };
+const NOW_TIME = parseInt(Date.now() / 1000);
+const insert_motto = {
+    desc: '默认格言数据',
+    sql: `
+    INSERT INTO ${prefix}motto (id, text, create_time, update_time, status, used) VALUES 
+    (1, '“只要你能幸福，我是谁，又有什么关系？\r\n记不记得住，又有什么关系啊！”', '${NOW_TIME}', '${NOW_TIME}', '0', '1');`
+};
 
 const createTable = [
     article,
@@ -124,12 +167,15 @@ const createTable = [
     config,
     image,
     user,
-    user_group
+    user_group,
+    friend,
+    motto
 ];
 
 const insert = [
     insert_user_group,
-    insert_website_config
+    insert_website_config,
+    insert_motto
 ];
 
 export default {

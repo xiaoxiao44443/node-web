@@ -109,11 +109,15 @@
 .recommend-item .recommend-item-main{
     width: 100%;
     overflow: hidden;
-    line-height: 1.75em;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 15em;
+}
+.recommend-item .recommend-item-main p{
+    overflow: hidden;
+    line-height: 1.75em;
+    max-height: 3.5em;
 }
 .main-wrap .main-mask{
     width: 100%;
@@ -220,13 +224,15 @@
     }
     .recommend-item .recommend-item-header .story-intro{
         font-size: .6em;
-        height: 12px;
+        height: 14px;
     }
     .recommend-item .recommend-item-main{
         min-height: 5em;
     }
-    .recommend-item .recommend-item-main >p{
+    .recommend-item .recommend-item-main p{
         font-size: .85em;
         line-height: 1.5em;
+        overflow: hidden;
+        max-height: 3em;
     }
 }
