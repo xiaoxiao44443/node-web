@@ -59,7 +59,7 @@ class BlogWrap extends Component {
         }
         const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
         if(this.refs.blogGroup){
-            this.refs.blogGroup.className = 'blog-group' + (maxWidth > maxWidthPoint.large ? ' bounceInRight animated' : '');
+            this.refs.blogGroup.className = 'blog-group' + (maxWidth > maxWidthPoint.medium ? ' bounceInRight animated' : '');
         }
 
     }

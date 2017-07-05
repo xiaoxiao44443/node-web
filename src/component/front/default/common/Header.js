@@ -21,8 +21,12 @@ class Header extends Component {
                             </ul>
                         </nav>
                     </div>
-                    <div className="nav-bg" style={{background: `url(${backGroundImg}) no-repeat center top`,
-                        backgroundSize: "cover"}}/>
+                    {
+                        backGroundImg ? <div className="nav-bg" style={{background: `url(${backGroundImg}) no-repeat center top`,
+                        backgroundSize: "cover"}}/>:
+                        <div className="nav-bg"/>
+                    }
+
                 </div>
                 {this.props.children}
             </header>
