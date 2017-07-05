@@ -340,7 +340,8 @@ Request.get('/login/weibo', async(req, res, next) => {
             const cookiesOption = {
                 maxAge: cookieConfig.maxAge //3天,
             };
-            res.cookie('id',userInfo.id, cookiesOption).cookie('token', userInfo.login_token, cookiesOption);
+            const login_token = await userApi.addLoginToken(userInfo.id);
+            res.cookie('id',userInfo.id, cookiesOption).cookie('token', login_token, cookiesOption);
         }
 
         //成功
@@ -426,7 +427,8 @@ Request.get('/login/zslm', async(req, res, next) => {
             const cookiesOption = {
                 maxAge: cookieConfig.maxAge //3天,
             };
-            res.cookie('id',userInfo.id, cookiesOption).cookie('token', userInfo.login_token, cookiesOption);
+            const login_token = await userApi.addLoginToken(userInfo.id);
+            res.cookie('id',userInfo.id, cookiesOption).cookie('token', login_token, cookiesOption);
         }
 
         //成功

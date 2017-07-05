@@ -110,9 +110,9 @@
     width: 100%;
     overflow: hidden;
     display: flex;
-    justify-content: center;
     align-items: center;
     min-height: 15em;
+    padding: 0 5%;
 }
 .recommend-item .recommend-item-main p{
     overflow: hidden;

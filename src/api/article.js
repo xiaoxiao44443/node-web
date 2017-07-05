@@ -52,7 +52,7 @@ const getArticle = async id => {
     let model = new Model;
     let { results } = await model.query(`SELECT * FROM ?? WHERE id = ?`, [prefix + 'article', id]);
     return new Promise((resolve, reject) => {
-        resolve(results[0]);
+        resolve(results.length > 0 ? results[0] : false);
     });
 };
 
@@ -64,21 +64,21 @@ const saveArticle = async (id, article) => {
         text: article.text,
         summary: article.summary,
         main_img: article.main_img,
-        edit_time: Date.now() / 1000,
+        edit_time: Math.round(Date.now() / 1000),
         categroy: article.categroy,
         stick: article.stick,
         tags: article.tags
     };
     let { results } = await model.query(`UPDATE ?? SET ? WHERE id = ?`, [prefix + 'article', updates, id]);
     return new Promise((resolve, reject) => {
-        resolve(results.affectedRows >=0 );
+        resolve( results.affectedRows >=0);
     });
 };
 
 //发布文章
 const publishArticle = async article => {
     let model = new Model;
-    const NOW_TIME = Date.now() / 1000;
+    const NOW_TIME = Math.round(Date.now() / 1000);
     let insert = {
         author: article.author,
         title: article.title,
@@ -96,7 +96,7 @@ const publishArticle = async article => {
     };
     let { results } = await model.query(`INSERT INTO ?? SET ?`, [prefix + 'article', insert]);
     return new Promise((resolve, reject) => {
-        resolve(results.affectedRows >=0 );
+        resolve( results.affectedRows >=0);
     });
 };
 
@@ -105,7 +105,7 @@ const deleteArticle = async id => {
     let model = new Model;
     let { results } = await model.query(`UPDATE ?? SET status = -1 WHERE id = ?`, [prefix + 'article', id]);
     return new Promise((resolve, reject) => {
-        resolve(results.affectedRows >=1 );
+        resolve(results.affectedRows >=1);
     });
 };
 
@@ -115,7 +115,7 @@ const deleteArticleZ = id => {
         try {
             let model = new Model;
             let { results } = await model.query('DELETE FROM ?? WHERE id = ?',  [prefix + 'article', id]);
-            resolve(results.affectedRows >=1 );
+            resolve(results.affectedRows >=1);
         }catch (err){
             reject(err);
         }
@@ -128,7 +128,7 @@ const articleViewAdd = id => {
         try {
             let model = new Model;
             let { results } = await model.query(`UPDATE ?? SET views = views + 1 WHERE id = ?`, [prefix + 'article', id]);
-            resolve(results.affectedRows >=1 );
+            resolve(results.affectedRows >=1);
         }catch (err){
             reject(err);
         }
@@ -141,7 +141,7 @@ const articleCommentsAdd = id => {
         try {
             let model = new Model;
             let { results } = await model.query(`UPDATE ?? SET comments = comments + 1 WHERE id = ?`, [prefix + 'article', id]);
-            resolve(results.affectedRows >=1 );
+            resolve(results.affectedRows >=1);
         }catch (err){
             reject(err);
         }

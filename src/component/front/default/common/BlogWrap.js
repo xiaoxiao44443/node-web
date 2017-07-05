@@ -22,14 +22,52 @@ class BlogWrap extends Component {
         this.state = {
             groupPanelVisible: false,
             marginTop: 0,
+            newCommentList: this.getCommentList()
         };
         this.showGroupPanel = this.showGroupPanel.bind(this);
+    }
+    componentDidMount(){
+        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
+
+        //小屏幕只显示2条最新评论
+        let newCommentList = maxWidth < maxWidthPoint.medium ? this.getCommentList(2) : this.getCommentList();
+        this.setState({newCommentList});
+    }
+    getCommentList(count = false, props = false){
+        const { newComments } = props ? props : this.props;
+        let newCommentList = [];
+        newComments.forEach((val, index) => {
+            if(count && index > count - 1) return;
+            let link = 'javascript:void(0);';
+            switch (val.type){
+                case 'article':
+                    link = `/blog/ad${val.type_key}#comment-${val.id}`;
+                    break;
+            }
+            newCommentList.push(
+                <p style={{width: '100%'}} key={val.id}>
+                    <Link to={link} title={`${val.nickname}：${val.content}`} onClick={this.showGroupPanel}><span>{val.nickname}：</span><span>{val.content}</span></Link>
+                </p>
+            );
+        });
+        return newCommentList;
     }
     componentDidUpdate(prevProps, prevState){
         if(prevState.groupPanelVisible && !this.state.groupPanelVisible){
             //groupPanel关闭已渲染完毕
             window.scrollTo(0, - this.state.marginTop);
         }
+        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
+        if(this.refs.blogGroup){
+            this.refs.blogGroup.className = 'blog-group' + (maxWidth > maxWidthPoint.large ? ' bounceInRight animated' : '');
+        }
+
+    }
+    componentWillReceiveProps(nextProps){
+        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
+        //小屏幕只显示2条最新评论
+        let newCommentList = maxWidth < maxWidthPoint.medium ? this.getCommentList(2, nextProps) : this.getCommentList(false, nextProps);
+        this.setState({newCommentList});
     }
     showGroupPanel(){
         if(!this.state.groupPanelVisible){
@@ -43,13 +81,13 @@ class BlogWrap extends Component {
 
     }
     render(){
-        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
+
         const backGroundImg = this.props.backGroundImg || '/static/images/default/blog-banner.jpg';
         const className = this.props.className || '';
 
-        const { newComments, motto } = this.props;
+        const { motto } = this.props;
 
-        const { groupPanelVisible } = this.state;
+        const { groupPanelVisible, newCommentList } = this.state;
         const mainWrapClass = classNames({
             'main-wrap': true,
             blog: true,
@@ -58,27 +96,7 @@ class BlogWrap extends Component {
         });
 
         const blogGroupClass = classNames({
-            'blog-group': true,
-            'bounceInRight animated': maxWidth > maxWidthPoint.large
-        });
-
-        let newCommentList = [];
-        newComments.forEach((val, index) => {
-            if(maxWidth < maxWidthPoint.medium && index > 1){
-                //小屏幕只显示2条最新评论
-                return;
-            }
-            let link = 'javascript:void(0);';
-            switch (val.type){
-                case 'article':
-                    link = `/blog/ad${val.type_key}#comment-${val.id}`;
-                    break;
-            }
-            newCommentList.push(
-                <p key={val.id}>
-                    <Link to={link} title={`${val.nickname}：${val.content}`} onClick={this.showGroupPanel}><span>{val.nickname}：</span><span>{val.content}</span></Link>
-                </p>
-            );
+            'blog-group': true
         });
 
         return (
@@ -98,7 +116,7 @@ class BlogWrap extends Component {
                 </section>
                 <section className="blog-wrap">
                     {this.props.children}
-                    <div className={blogGroupClass}>
+                    <div className={blogGroupClass} ref="blogGroup">
                         <div className="blog-group-nav">
                             <nav>
                                 <ul>
@@ -131,7 +149,7 @@ class BlogWrap extends Component {
                                         <div className="story-intro">博主闪亮登场！</div>
                                     </div>
                                     <div className="recommend-item-main">
-                                        <div>{newCommentList}</div>
+                                        <div style={{width: '100%'}}>{newCommentList}</div>
                                     </div>
                                     <span className="recommend-item-more">
                                         超想看

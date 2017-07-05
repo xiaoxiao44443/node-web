@@ -85,7 +85,6 @@ const user = {
         weibo_access_token varchar(64) NOT NULL DEFAULT '' COMMENT '微博access_token',
         weibo_uid varchar(20) NOT NULL DEFAULT '',
         last_login_time bigint(11) NOT NULL COMMENT '上次登录时间',
-        login_token varchar(128) NOT NULL DEFAULT '' COMMENT '登录token',
         PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表'`
 };
@@ -108,7 +107,7 @@ const friend = {
         friend_name varchar(64) NOT NULL COMMENT '博主名字',
         blog_name varchar(64) NOT NULL COMMENT '博客名称',
         blog_url varchar(128) NOT NULL COMMENT '博客地址',
-        firend_head varchar(256) NOT NULL COMMENT '博主头像',
+        friend_head varchar(256) NOT NULL COMMENT '博主头像',
         blog_motto varchar(128) NOT NULL DEFAULT '' COMMENT '博主格言',
         create_time bigint(11) NOT NULL,
         update_time bigint(11) NOT NULL,
@@ -129,6 +128,17 @@ const motto = {
         used tinyint(1) NOT NULL COMMENT '当前是否正在使用0,1',
         PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='格言表'`
+};
+const user_login = {
+    desc: '用户登录表',
+    sql: `
+    CREATE TABLE lo_user_login (
+        id int(11) NOT NULL AUTO_INCREMENT,
+        user_id int(11) NOT NULL COMMENT '用户id',
+        login_time bigint(11) NOT NULL COMMENT '登录时间',
+        login_token varchar(128) NOT NULL COMMENT '登录token',
+        PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户登录表'`
 };
 //插入数据
 const insert_user_group = {
@@ -169,7 +179,8 @@ const createTable = [
     user,
     user_group,
     friend,
-    motto
+    motto,
+    user_login
 ];
 
 const insert = [

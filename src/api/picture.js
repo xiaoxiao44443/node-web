@@ -75,7 +75,7 @@ const savePic = (pathname, type, author) => {
                 }
                 let model = new Model(true, true);
                 let { results } = await model.query(inserts);
-                resolve(results.affectedRows >= 1);
+                resolve(results);
 
             }else{
                 //图片验证

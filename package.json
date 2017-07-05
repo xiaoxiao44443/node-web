@@ -24,7 +24,7 @@
     "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.1",
-    "html-minifier": "^3.4.3",
+    "html-minifier": "^3.5.2",
     "markdown-it": "^8.3.1",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-deflist": "^2.0.2",

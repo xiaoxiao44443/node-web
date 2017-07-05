@@ -262,6 +262,7 @@ Request.post('/article/edit/upload-img', async(req, res, next) => {
                     });
                     try {
                         const ret = await pictureApi.savePic(filesPath, 1, Request.USER.id);
+                        console.log(ret);
                         if(ret){
                             res.json(returnSuc('上传成功'));
                         }else{

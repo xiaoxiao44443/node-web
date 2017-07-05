@@ -21,16 +21,21 @@ class ArticleDetail extends PageComponent {
         };
         this._setDefaultState(state);
     }
+    componentDidUpdate(){
+        if(this.refs.articleWrap){
+            const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
+            this.refs.articleWrap.className = maxWidth > maxWidthPoint.medium ? 'bounceInUp animated' : '';
+        }
+    }
     render(){
         const { article, newComments, motto } = this.state;
-        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
 
         let articleContent;
         if(article){
             const article_detail = markdown.render(article.text);
             const publishTime = moment(article.create_time*1000).format('YYYY-MM-DD HH:mm');
             articleContent =
-                <div className={ maxWidth > maxWidthPoint.medium ? 'bounceInUp animated' : ''}>
+                <div ref="articleWrap">
                     <div className="article-info">
                         <div className="article-title">
                             <h3><span>{article.title}</span></h3>

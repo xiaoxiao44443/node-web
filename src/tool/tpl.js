@@ -13,14 +13,14 @@ const minifyOptions = {
 const tpl = (filePath, options, callback) => {
     fs.readFile(filePath, (err, content) => {
         if(err) return callback(new Error(err));
+        //html压缩
         options = options || {};
         let rendered = content.toString();
+        rendered = minify(rendered, minifyOptions);
         const ignore = ['settings', '_locals', 'cache'];
         rendered = rendered.replace(/#([\S]*?)#/g, ($0, $1) =>{
             return $1 in options ? options[$1] : '';
         });
-        //html压缩
-        rendered = minify(rendered, minifyOptions);
         return callback(null, rendered);
     });
 };

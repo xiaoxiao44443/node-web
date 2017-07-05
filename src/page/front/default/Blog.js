@@ -63,6 +63,14 @@ class Blog extends PageComponent {
         this._setDefaultState(state);
         this.loadMoreArticle = this.loadMoreArticle.bind(this);
     }
+    componentDidUpdate(){
+        if(this.refs.articleListWrap){
+            const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
+            if(maxWidth > maxWidthPoint.medium){
+                this.refs.articleListWrap.className = 'article-list-wrap bounceInUp animated';
+            }
+        }
+    }
     loadMoreArticle(){
         if(this.state.loadingMoreArticle) return;
         this.setState({
@@ -106,7 +114,6 @@ class Blog extends PageComponent {
 
     }
     render(){
-        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
         const backGroundImg = '/static/images/default/blog-banner.jpg';
         const { articles } = this.state;
         const articleList = articles.map((val) => {
@@ -120,7 +127,7 @@ class Blog extends PageComponent {
                 <div className="article-list">
                     {
                         articleList.length == 0 ? loadMore :
-                            <div className={'article-list-wrap' + (maxWidth > maxWidthPoint.medium ? ' bounceInUp animated' : '')}>
+                            <div ref="articleListWrap" className={'article-list-wrap'}>
                                 <ul>
                                     {articleList}
                                 </ul>

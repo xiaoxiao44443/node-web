@@ -29,8 +29,9 @@ const RoutePlus = withRouter(
 );
 
 
-const Routes = (isError = false) => {
+const Routes = (isError = false, is404 = false) => {
     return isError ? <Switch><RoutePlus component={Error} /></Switch> :
+        (is404 ? <Switch><RoutePlus component={NotFound} /></Switch> :
         <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/blog" component={Blog} />
@@ -39,7 +40,7 @@ const Routes = (isError = false) => {
             <Route exact path="/admin*" component={Admin} />
             <Route exact path="/login/*" component={MessageJump} />
             <RoutePlus component={NotFound} />
-        </Switch>
+        </Switch>)
 };
 
 export default Routes;

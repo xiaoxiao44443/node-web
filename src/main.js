@@ -18,9 +18,6 @@ import { maxWidthPoint } from './enum';
 class Root extends Component {
     constructor(props){
         super(props);
-        this.state = {
-            isError: !!props.error
-        };
         this.unlisten = this.props.history.listen((location, action) => {
             //判断viewport
             if(location.pathname.indexOf('/admin') == 0){
@@ -108,7 +105,7 @@ class Root extends Component {
         this.unlisten();
     }
     render(){
-        return Routes(this.props.error);
+        return Routes(this.props.error, this.props.notFound);
     }
 }
 Root.propTypes = {
@@ -120,7 +117,7 @@ Root.propTypes = {
 Root.defaultProps = {
     error: false
 };
-const map = (state) => ({ error : state.error });
+const map = (state) => ({ error : state.error, notFound: state.notFound });
 
 Root = withRouter(store(Root, map));
 ReactDOM.render(

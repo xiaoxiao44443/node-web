@@ -39,8 +39,8 @@ app.use('/user', user);
 
 //404页面处理
 app.use((req, res, next) => {
-    const store = {};
-    const { app } = serverRender(req.url, store);
+    const store = {notFound: true};
+    const { app } = serverRender('/404', store);
     res.status(404).render('index', {title: '404 Not Found', app, init: JSON.stringify(store)});
 });
 

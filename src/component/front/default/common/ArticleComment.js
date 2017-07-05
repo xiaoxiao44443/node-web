@@ -10,6 +10,11 @@ import http from '../../../../tool/http';
 import Spin from '../../../common/tool/Spin';
 import { scroll2ElementByClassName as scroll2Element } from '../../../../tool/dom-js';
 
+//移除http
+const removeHttp = (url) => {
+    return url.substring(0,7)== 'http://' ? url.substring(5) : url;
+};
+
 /**
  * 分页计算
  */
@@ -244,7 +249,7 @@ class CommentItem extends Component {
                     <div className="reply-user-head">
                         {reply.account_type == 100 ?
                             <a href={'http://weibo.com/' + reply.profile_url} target="_blank"><img src={reply.user_head}/></a>:
-                            <a href="javascript:void(0);"><img src={reply.user_head}/></a>
+                            <a href="javascript:void(0);"><img src={removeHttp(reply.user_head)}/></a>
                         }
                     </div>
                     <div className="reply-content-wrap">
@@ -273,8 +278,8 @@ class CommentItem extends Component {
             <li className="comment-item" id={`comment-${comment.id}`}>
                 <div className="user-head">
                     {comment.account_type == 100 ?
-                        <a href={'http://weibo.com/' + comment.profile_url} target="_blank"><img src={comment.user_head}/></a>:
-                        <a href="javascript:void(0);"><img src={comment.user_head}/></a>
+                        <a href={'http://weibo.com/' + comment.profile_url} target="_blank"><img src={removeHttp(comment.user_head)}/></a>:
+                        <a href="javascript:void(0);"><img src={removeHttp(comment.user_head)}/></a>
                     }
                 </div>
                 <div className="content-wrap">
@@ -308,7 +313,7 @@ class CommentItem extends Component {
                             <div className="comment-box-title"><span>最大字数：{commentContextInput.length}/{maxContentNum}</span></div>
                             <div className="comment-box-write">
                                 <div className="user-head">
-                                    <img src={user.head}/>
+                                    <img src={removeHttp(user.head)}/>
                                 </div>
                                 <div className="textarea-container">
                             <textarea className="comment-textarea" value={commentContextInput}
@@ -527,7 +532,7 @@ class ArticleComment extends Component {
                     {showCommentBox ?
                         <div className="comment-box-write">
                             <div className="user-head">
-                                <img src={user.head}/>
+                                <img src={removeHttp(user.head)}/>
                             </div>
                             <div className="textarea-container">
                             <textarea className="comment-textarea" value={commentContextInput}
