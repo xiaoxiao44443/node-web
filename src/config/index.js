@@ -35,8 +35,8 @@ const commentConfig = {
 };
 
 const wbApp = {
-    client_id: '3467888301',
-    client_secret: '14331fb21ae871869c31224c42c42457'
+    client_id: '',
+    client_secret: ''
 };
 
 export {

@@ -41,7 +41,7 @@ app.use('/user', user);
 app.use((req, res, next) => {
     const store = {notFound: true};
     const { app } = serverRender('/404', store);
-    res.status(404).render('index', {title: '404 Not Found', app, init: JSON.stringify(store)});
+    res.status(404).render('status', {title: '404 Not Found', app, init: JSON.stringify(store)});
 });
 
 //错误处理
@@ -56,7 +56,7 @@ app.use((err, req, res, next) => {
         }else{
             const store = {error: {message: err.message, stack: err.stack}};
             const { app } = serverRender(req.url, store);
-            res.status(500).render('index', {title: 'Error', app: app, init: JSON.stringify(store)});
+            res.status(500).render('status', {title: 'Error', app: app, init: JSON.stringify(store)});
         }
     }
 });
