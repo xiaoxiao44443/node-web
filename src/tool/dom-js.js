@@ -21,7 +21,7 @@ const scroll2Element = ($ele, offset, duration) => {
     top = window.document.body.offsetWidth <= maxWidthPoint.medium ? top - headerHeight : top;
 
     Easing.tween({
-        from: window.document.body.scrollTop,
+        from: getWindowScrollY(),
         to: top,
         ease: Easing.easeOutCubic,
         duration: duration,
@@ -29,6 +29,19 @@ const scroll2Element = ($ele, offset, duration) => {
             window.scrollTo(0, y)
         },
     });
+};
+
+const getWindowScrollY = () => {
+    let y;
+    if(window.pageYOffset){    // all except IE
+        y = window.pageYOffset;
+    }
+    else if(window.document.documentElement && window.document.documentElement.scrollTop){    // IE 6 Strict
+        y = window.document.documentElement.scrollTop;
+    } else if(document.body){    // all other IE
+        y = window.document.body.scrollTop;
+    }
+    return y;
 };
 
 const scroll2ElementByClassName = (className, offset = 0, duration = 450) => {

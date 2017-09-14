@@ -30,7 +30,7 @@ let config = {
     },
     externals: nodeModules, //不打包其他库
     module:{
-        loaders: [
+        rules: [
             {test: /\.js$/, exclude: /node_modules/, loader:'babel-loader'},
             {
                 loader: ignoredLoader,

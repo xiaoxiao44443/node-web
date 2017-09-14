@@ -4,11 +4,8 @@
 import Model from '../../tool/Model';
 import RequestModel, {
     returnSuc,
-    returnErr,
-    resRender,
+    returnErr
 } from '../../tool/Request';
-import defaultDbSql from '../../config/defaultDbSql';
-import pictureApi from '../../api/picture';
 import articleApi from '../../api/article';
 const Request = new RequestModel;
 import commentApi from '../../api/comment';

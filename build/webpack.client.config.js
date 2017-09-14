@@ -13,7 +13,7 @@ let config = {
     },
     devtool: 'source-map',
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
@@ -21,7 +21,10 @@ let config = {
             },
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: "css-loader"
+                })
             }
 
         ]

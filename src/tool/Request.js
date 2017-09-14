@@ -77,7 +77,7 @@ class _Request {
                         path = arg;
                     }
                     if (fns.length === 0) {
-                        throw new TypeError('Requset.use() requires middleware functions');
+                        throw new TypeError('Request.use() requires middleware functions');
                     }
 
                     fns.forEach(_fn => {
