@@ -202,7 +202,8 @@ class ArticleWrite extends PageComponent {
             article:{
                 title: '',
                 text: '',
-                summary: ''
+                summary: '',
+                main_img: 0,
             },
             article_title: '',
             article_html: '',
