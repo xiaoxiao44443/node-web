@@ -138,7 +138,7 @@
     overflow: auto;
 }
 .admin-article-edit .editor .result-html.grey{
-    background-color: #f3f3f3;
+    background-color: white;
 }
 .admin-article-edit pre.result-src{
     background: white!important;

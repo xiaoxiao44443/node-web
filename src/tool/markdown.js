@@ -44,6 +44,7 @@ const markdown = markdownIt({
 
 markdown
     .use(require('markdown-it-abbr'))
+    .use(require('markdown-it-container'), 'warning')
     .use(emoji)
     .use(require('markdown-it-sub'))
     .use(require('markdown-it-sup'))
