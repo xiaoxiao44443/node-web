@@ -9,11 +9,10 @@ import './blogWrap.css';
 
 import Footer from './Footer';
 import BackTop from '../../../common/tool/BackTop';
-import http from '../../../../tool/http';
-import PageComponent from '../../../common/base/PageComponent';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { maxWidthPoint } from '../../../../enum';
+import { getWindowScrollY } from '../../../../tool/dom-js';
 
 class BlogWrap extends Component {
     constructor(props){
@@ -72,7 +71,7 @@ class BlogWrap extends Component {
     showGroupPanel(){
         if(!this.state.groupPanelVisible){
             this.setState({
-                marginTop:  - window.document.body.scrollTop
+                marginTop:  - getWindowScrollY()
             });
         }
         this.setState({

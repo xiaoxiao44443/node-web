@@ -72,5 +72,6 @@ const scroll2EleByHashID = (hashID, offset = 0, timeout = 0, duration = 450) => 
 
 export {
     scroll2ElementByClassName,
-    scroll2EleByHashID
+    scroll2EleByHashID,
+    getWindowScrollY
 }
