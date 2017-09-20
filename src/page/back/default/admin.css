@@ -188,6 +188,7 @@ html.admin body{
     font-weight: 300;
     margin-bottom: 1em;
     min-height: 80px;
+    max-width: 100%;
 }
 
 .main-wrap.admin .btn{
