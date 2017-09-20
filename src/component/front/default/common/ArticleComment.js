@@ -214,6 +214,7 @@ class CommentItem extends Component {
                     commentContextInput: '',
                     lastCommentContextInput: commentContextInput
                 });
+                this.hideCommentBox();
                 alert('发表成功~');
                 this.queryReply();
             }else{
