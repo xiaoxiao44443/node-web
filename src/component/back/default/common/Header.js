@@ -35,7 +35,7 @@ class Header extends Component {
         });
     };
     render(){
-        const toggleSideNav = this.props.toggle;
+        const { toggleSideNav, user } = this.props;
         return (
             <header id="admin-header">
                 <div className="sidebar-toggle-box">
@@ -44,7 +44,7 @@ class Header extends Component {
                 <a href="/admin" className="logo">LOLILI<span>管理中心</span></a>
                 <nav id="admin-header-nav">
                     <div className="user">
-                        <span className="user-name">、  这不科学 <span className="well">欢迎你！</span></span>
+                        <span className="user-name">{user.nickname} <span className="well">欢迎你！</span></span>
                         <Link to="/admin/logout" onClick={this.logout}>退出</Link>
                     </div>
                     <ul>

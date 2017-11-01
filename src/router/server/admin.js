@@ -14,6 +14,17 @@ import uploader from '../../tool/uploader';
 import pictureApi from '../../api/picture';
 import mottoApi from '../../api/motto';
 
+//state添加用户信息
+const addUserInfo = state => {
+    state.user = { nickname: Request.USER.nickname };
+};
+
+//state信息过滤
+const stateFilter = (state = {}) => {
+    addUserInfo(state);
+    return state;
+};
+
 //验证登录
 Request.use(async(req, res, next) => {
 
@@ -39,7 +50,7 @@ Request.get('/article/list', async(req, res, next) =>{
         //初始化页面数据 获取50条文章列表
         let articles = await articleApi.queryArticleAdmin();
 
-        const state = {articles: articles};
+        let state = stateFilter({articles: articles});
 
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
@@ -82,7 +93,8 @@ Request.get('/article/edit/ad([0-9]+)', async(req, res, next) =>{
 
         //初始化页面数据 获取文章数据
         let article = await articleApi.getArticle(ad);
-        const state  = { article: article };
+        const state  = stateFilter({ article: article });
+
         if(!article) return next();
 
 
@@ -163,7 +175,8 @@ Request.get('/article/write', async(req, res, next) =>{
             text: '',
             summary: ''
         };
-        const state  = { article: article };
+        const state  = stateFilter({ article: article });
+
         if(!article) return next();
 
 
@@ -202,7 +215,7 @@ Request.get('/site-config', async(req, res, next) => {
             description: websiteConfig.description.value,
             keywords: websiteConfig.keywords.value
         };
-        const state = { websiteConfig: _websiteConfig };
+        const state = stateFilter({ websiteConfig: _websiteConfig });
 
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
@@ -311,7 +324,7 @@ Request.get('/recommend', async(req, res, next) => {
         const recommend = {
             motto: ret.text
         };
-        const state = { recommend: recommend };
+        const state = stateFilter({ recommend: recommend });
 
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
@@ -358,7 +371,7 @@ Request.use(async(req, res, next) => {
         const title = `${site_name} | 后台管理`;
 
         //初始化页面数据
-        const state = {};
+        const state = stateFilter();
 
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));

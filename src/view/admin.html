@@ -15,10 +15,11 @@
     <link rel="stylesheet" href="/static/css/font-awesome.css">
     <link rel="stylesheet" href="/static/dist/style.css">
 </head>
-<body class="landing is-loading">
+<body class="landing">
 <div id="app">#app#</div>
 <script>
-    window.__data_init__ =#init#;
+    document.getElementsByTagName('body')[0].className = "landing is-loading";
+    window.__data_init__ = #init#;
 </script>
 <script src="/static/dist/main.js"></script>
 </body>

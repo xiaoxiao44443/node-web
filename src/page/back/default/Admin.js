@@ -166,10 +166,13 @@ SideNav = withRouter(SideNav);
 class Admin extends PageComponent{
     constructor(props){
         super(props);
-        this.state = {
+        const state = {
             showSideNav: true,
-            ...this.state
+            user: {
+                nickname: ''
+            }
         };
+        this._setDefaultState(state);
         this.toggleSideNav = this.toggleSideNav.bind(this);
     }
     toggleSideNav(){
@@ -179,14 +182,14 @@ class Admin extends PageComponent{
 
     }
     render(){
-        const { showSideNav } = this.state;
+        const { showSideNav, user } = this.state;
         const mainWrapClass = classNames({
             'main-wrap admin': true,
             showSideNav: showSideNav
         });
         return (
             <div className={mainWrapClass}>
-                <Header toggle={this.toggleSideNav} />
+                <Header toggle={this.toggleSideNav} user={user} />
                 <SideNav nav={navData}/>
                 <div className="admin-main">
                     <Switch>
