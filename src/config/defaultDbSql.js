@@ -102,7 +102,7 @@ const user_group = {
 const friend = {
     desc: '友情链接表',
     sql: `
-    CREATE TABLE lo_friend (
+    CREATE TABLE ${prefix}friend (
         id int(11) NOT NULL AUTO_INCREMENT,
         friend_name varchar(64) NOT NULL COMMENT '博主名字',
         blog_name varchar(64) NOT NULL COMMENT '博客名称',
@@ -119,7 +119,7 @@ const friend = {
 const motto = {
     desc: '格言表',
     sql: `
-    CREATE TABLE lo_motto (
+    CREATE TABLE ${prefix}motto (
         id int(11) NOT NULL AUTO_INCREMENT,
         text varchar(256) NOT NULL DEFAULT '' COMMENT '格言内容',
         create_time bigint(11) NOT NULL,
@@ -132,7 +132,7 @@ const motto = {
 const user_login = {
     desc: '用户登录表',
     sql: `
-    CREATE TABLE lo_user_login (
+    CREATE TABLE ${prefix}user_login (
         id int(11) NOT NULL AUTO_INCREMENT,
         user_id int(11) NOT NULL COMMENT '用户id',
         login_time bigint(11) NOT NULL COMMENT '登录时间',
