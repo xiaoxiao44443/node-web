@@ -21,9 +21,7 @@ const queryArticle = async option => {
     let page = `${(p - 1)*size},${size}`;
 
     let { results } = await model.query(`SELECT id,title,summary,main_img,tags,views,comments,categroy,create_time,edit_time,stick FROM ?? WHERE status = 0 ORDER BY create_time desc,stick desc LIMIT ${page}`, [prefix + 'article']);
-    return new Promise((resolve, reject) => {
-        resolve(results);
-    });
+    return Promise.resolve(results);
 };
 
 //文章分页查询后台版
@@ -42,18 +40,14 @@ const queryArticleAdmin = async option => {
     let page = `${(p - 1)*size},${size}`;
 
     let { results } = await model.query(`SELECT id,author,title,views,comments,create_time,stick FROM ?? WHERE status = 0 ORDER BY create_time desc,stick desc LIMIT ${page}`, [prefix + 'article']);
-    return new Promise((resolve, reject) => {
-        resolve(results);
-    });
+    return Promise.resolve(results);
 };
 
 //获取指定文章
 const getArticle = async id => {
     let model = new Model;
     let { results } = await model.query(`SELECT * FROM ?? WHERE id = ?`, [prefix + 'article', id]);
-    return new Promise((resolve, reject) => {
-        resolve(results.length > 0 ? results[0] : false);
-    });
+    return Promise.resolve(results.length > 0 ? results[0] : false);
 };
 
 //编辑文章
@@ -70,9 +64,7 @@ const saveArticle = async (id, article) => {
         tags: article.tags
     };
     let { results } = await model.query(`UPDATE ?? SET ? WHERE id = ?`, [prefix + 'article', updates, id]);
-    return new Promise((resolve, reject) => {
-        resolve( results.affectedRows >=0);
-    });
+    return Promise.resolve(results.affectedRows >=0);
 };
 
 //发布文章
@@ -95,57 +87,47 @@ const publishArticle = async article => {
         stick:0
     };
     let { results } = await model.query(`INSERT INTO ?? SET ?`, [prefix + 'article', insert]);
-    return new Promise((resolve, reject) => {
-        resolve( results.affectedRows >=0);
-    });
+    return Promise.resolve(results.affectedRows >=0);
 };
 
 //删除文章(假删除)
 const deleteArticle = async id => {
     let model = new Model;
     let { results } = await model.query(`UPDATE ?? SET status = -1 WHERE id = ?`, [prefix + 'article', id]);
-    return new Promise((resolve, reject) => {
-        resolve(results.affectedRows >=1);
-    });
+    return Promise.resolve(results.affectedRows >=1);
 };
 
 //删除文章(真删除)
-const deleteArticleZ = id => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let model = new Model;
-            let { results } = await model.query('DELETE FROM ?? WHERE id = ?',  [prefix + 'article', id]);
-            resolve(results.affectedRows >=1);
-        }catch (err){
-            reject(err);
-        }
-    });
+const deleteArticleZ = async id => {
+    try {
+        let model = new Model;
+        let { results } = await model.query('DELETE FROM ?? WHERE id = ?',  [prefix + 'article', id]);
+        return Promise.resolve(results.affectedRows >=1);
+    }catch (err){
+        return Promise.reject(err);
+    }
 };
 
 //文章阅读次数+1
-const articleViewAdd = id => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let model = new Model;
-            let { results } = await model.query(`UPDATE ?? SET views = views + 1 WHERE id = ?`, [prefix + 'article', id]);
-            resolve(results.affectedRows >=1);
-        }catch (err){
-            reject(err);
-        }
-    });
+const articleViewAdd = async id => {
+    try {
+        let model = new Model;
+        let { results } = await model.query(`UPDATE ?? SET views = views + 1 WHERE id = ?`, [prefix + 'article', id]);
+        return Promise.resolve(results.affectedRows >=1);
+    }catch (err){
+        return Promise.reject(err);
+    }
 };
 
 //文章评论数+1
-const articleCommentsAdd = id => {
-    return new Promise(async(resolve, reject) => {
-        try {
-            let model = new Model;
-            let { results } = await model.query(`UPDATE ?? SET comments = comments + 1 WHERE id = ?`, [prefix + 'article', id]);
-            resolve(results.affectedRows >=1);
-        }catch (err){
-            reject(err);
-        }
-    });
+const articleCommentsAdd = async id => {
+    try {
+        let model = new Model;
+        let { results } = await model.query(`UPDATE ?? SET comments = comments + 1 WHERE id = ?`, [prefix + 'article', id]);
+        return Promise.resolve(results.affectedRows >=1);
+    }catch (err){
+        return Promise.reject(err);
+    }
 };
 
 
