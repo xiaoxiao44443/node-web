@@ -279,7 +279,7 @@ class CommentItem extends Component {
             <li className="comment-item" id={`comment-${comment.id}`}>
                 <div className="user-head">
                     {comment.account_type == 100 ?
-                        <a href={'http://weibo.com/' + comment.profile_url} target="_blank"><img src={removeHttp(comment.user_head)}/></a>:
+                        <a href={'https://weibo.com/' + comment.profile_url} target="_blank"><img src={removeHttp(comment.user_head)}/></a>:
                         <a href="javascript:void(0);"><img src={removeHttp(comment.user_head)}/></a>
                     }
                 </div>
