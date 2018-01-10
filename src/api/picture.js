@@ -22,10 +22,12 @@ const getFileMd5 = async filePath => {
     stream.on('data', chunk => {
         md5sum.update(chunk);
     });
-    stream.on('end', () => {
-        let str = md5sum.digest('hex').toUpperCase();
-        // console.log('文件:'+filePath+',MD5签名为:'+str+'.耗时:'+(new Date().getTime()-start)/1000.00+"秒");
-        return Promise.resolve(str);
+    return new Promise((resolve, reject) => {
+        stream.on('end', () => {
+            let str = md5sum.digest('hex').toUpperCase();
+            // console.log('文件:'+filePath+',MD5签名为:'+str+'.耗时:'+(new Date().getTime()-start)/1000.00+"秒");
+            resolve(str);
+        });
     });
 };
 
@@ -88,7 +90,7 @@ const savePic = async (pathname, type, author) => {
         }
 
     }catch (err){
-        Promise.reject(err);
+        return Promise.reject(err);
     }
 };
 
