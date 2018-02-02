@@ -35,11 +35,11 @@ class Header extends Component {
         });
     };
     render(){
-        const { toggleSideNav, user } = this.props;
+        const { toggle, user } = this.props;
         return (
             <header id="admin-header">
                 <div className="sidebar-toggle-box">
-                    <div id="tool-bar" className="icon-reorder tooltips" onClick={toggleSideNav} />
+                    <div id="tool-bar" className="icon-reorder tooltips" onClick={toggle} />
                 </div>
                 <a href="/admin" className="logo">LOLILI<span>管理中心</span></a>
                 <nav id="admin-header-nav">

@@ -31,6 +31,10 @@ html.admin body{
     display: inline-block;
     font-size: 20px;
 }
+.icon-reorder:before {
+    content: "\f0c9";
+    font-family: FontAwesome;
+}
 #admin-header a.logo {
     font-size: 21px;
     color: #2e2e2e;
