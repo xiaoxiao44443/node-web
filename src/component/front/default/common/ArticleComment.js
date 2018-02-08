@@ -12,6 +12,7 @@ import { scroll2ElementByClassName as scroll2Element } from '../../../../tool/do
 
 //移除http
 const removeHttp = (url) => {
+    if (!url) return '';
     return url.substring(0,7)== 'http://' ? url.substring(5) : url;
 };
 
