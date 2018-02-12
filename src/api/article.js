@@ -38,8 +38,10 @@ const queryArticleAdmin = async option => {
     size = parseInt(size >=1 ? size : _default.size);
 
     let page = `${(p - 1)*size},${size}`;
+    let t1 = prefix + 'article';
+    let t2 = prefix + 'user';
 
-    let { results } = await model.query(`SELECT id,author,title,views,comments,create_time,stick FROM ?? WHERE status = 0 ORDER BY create_time desc,stick desc LIMIT ${page}`, [prefix + 'article']);
+    let { results } = await model.query(`SELECT ${t1}.id,author author_id,${t2}.nickname author,title,views,comments,${t1}.create_time,stick FROM ${t1} JOIN ${t2} ON ${t1}.author = ${t2}.id WHERE status = 0 ORDER BY create_time desc,stick desc LIMIT ${page}`);
     return Promise.resolve(results);
 };
 

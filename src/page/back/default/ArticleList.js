@@ -20,7 +20,7 @@ class ArticleItem extends Component {
                     {article.id}.  <a href={`/blog/ad${article.id}`} target="_blank">{article.title}</a>
                 </div>
                 <div className="article-other-info">
-                    <span><a className="article-author">、  这不科学</a></span>
+                    <span><a className="article-author">{article.author}</a></span>
                     <span><a className="">{article.comments} Comments</a></span>
                     <span><a className="article-view-num">{article.views} Views</a></span>
                     <span><a className="article-date">{publishTime}</a></span>
