@@ -254,7 +254,7 @@ class ArticleWrite extends PageComponent {
         if (this.editorScroll) clearTimeout(this.editorScroll);
         this.editorScroll = setTimeout(() => {
             this.editorScroll = false;
-        });
+        }, 500);
         const editorResult = this.refs.editorResult;
         const ele = event.target;
         const targetTop = parseInt((editorResult.scrollHeight - editorResult.offsetHeight) / ((ele.scrollHeight - ele.offsetHeight) / ele.scrollTop));
@@ -269,7 +269,7 @@ class ArticleWrite extends PageComponent {
         if (this.resultScroll) clearTimeout(this.resultScroll);
         this.resultScroll = setTimeout(() => {
             this.resultScroll = false;
-        });
+        }, 500);
         const editor = this.refs.editor;
         const ele = event.target;
         const targetTop = parseInt((editor.scrollHeight - editor.offsetHeight) / ((ele.scrollHeight -ele.offsetHeight) / ele.scrollTop));
