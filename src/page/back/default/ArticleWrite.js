@@ -29,6 +29,10 @@ class PicSelector extends Component {
         this.getUploadedPics(true);
         this._isMounted = true;
     }
+    componentWillUnmount(){
+        clearTimeout(this.editorScroll);
+        clearTimeout(this.resultScroll);
+    }
     selectPicFileChange = (files, event) => {
         const newPicList = this.state.preUploadPics.concat(files);
         this.setState({
@@ -245,15 +249,32 @@ class ArticleWrite extends PageComponent {
         });
     };
     editorOnScroll = event => {
-        const targetTop = parseInt(this.refs.editorResult.scrollHeight / (event.target.scrollHeight / event.target.scrollTop));
-        if(Math.abs(this.refs.editorResult.scrollTop - targetTop) > 2){
-            this.refs.editorResult.scrollTop =  targetTop;
+        //防止抖动
+        if (this.resultScroll) return;
+        if (this.editorScroll) clearTimeout(this.editorScroll);
+        this.editorScroll = setTimeout(() => {
+            this.editorScroll = false;
+        });
+        const editorResult = this.refs.editorResult;
+        const ele = event.target;
+        const targetTop = parseInt((editorResult.scrollHeight - editorResult.offsetHeight) / ((ele.scrollHeight - ele.offsetHeight) / ele.scrollTop));
+        if(Math.abs(editorResult.scrollTop - targetTop) > 2){
+            editorResult.scrollTop =  targetTop;
         }
     };
     resultOnScroll = event => {
-        const targetTop = parseInt(this.refs.editor.scrollHeight / (event.target.scrollHeight / event.target.scrollTop));
-        if(Math.abs(this.refs.editor.scrollTop - targetTop) > 2){
-            this.refs.editor.scrollTop =  targetTop;
+        if (event.target.nodeName == 'PRE') return;
+        //防止抖动
+        if (this.editorScroll) return;
+        if (this.resultScroll) clearTimeout(this.resultScroll);
+        this.resultScroll = setTimeout(() => {
+            this.resultScroll = false;
+        });
+        const editor = this.refs.editor;
+        const ele = event.target;
+        const targetTop = parseInt((editor.scrollHeight - editor.offsetHeight) / ((ele.scrollHeight -ele.offsetHeight) / ele.scrollTop));
+        if(Math.abs(editor.scrollTop - targetTop) > 2){
+            editor.scrollTop =  targetTop;
         }
     };
     toggleEditorMode = mode => {
