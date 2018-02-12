@@ -86,6 +86,7 @@ class PageComponent extends Component {
                     title: res.title, init: res.data
                 });
             if(res.code == 0){
+                this.props.$store.update({ _page: { url, state: res.data, title: res.title } });
                 this.setState({
                     ...res.data,
                     _pageLoadOver: true
@@ -114,6 +115,8 @@ class PageComponent extends Component {
             });
             //设置延时让组件render
             setTimeout(() => {this._pageInit(nextProps, true)}, 10);
+        } else {
+            if (nextProps._page.state) this.setState({ ...nextProps._page.state });
         }
     }
     static withStore(WrappedComponent){

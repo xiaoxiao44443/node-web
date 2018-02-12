@@ -1,0 +1,9 @@
+.admin-account{
+    width: 100%;
+}
+.admin-account .admin-form-group .img-head{
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+}

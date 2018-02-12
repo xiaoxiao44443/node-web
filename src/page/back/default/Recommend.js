@@ -56,14 +56,14 @@ class Recommend extends PageComponent {
     };
     render(){
         if(!this.state._pageLoadOver){
-            return <Spin loading><div className="admin-article-edit" /></Spin>
+            return <Spin loading><div className="admin-recommend" /></Spin>
         }
 
         const { recommend } = this.state;
         const formInputOnChange = this.formInputOnChange;
 
         return (
-            <div className="admin-config slideInUp animated-fast">
+            <div className="admin-recommend slideInUp animated-fast">
                 <div className="admin-form-group">
                     <h2>推荐设置~~</h2>
                     <h5>【今日格言】</h5>

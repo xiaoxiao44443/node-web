@@ -35,15 +35,16 @@ class Config extends PageComponent {
     };
     saveConfig = () =>{
         if(this.state.loading) return;
-        this.setState({
-            loading: true
-        });
 
         const { websiteConfig } = this.state;
         if(websiteConfig.site_name.length == 0){
             alert('必须输入站点名称哦~');
             return;
         }
+
+        this.setState({
+            loading: true
+        });
 
         const url = this.props.match.url;
         const data = {

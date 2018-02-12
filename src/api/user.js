@@ -207,6 +207,33 @@ const updateZsUser = async user_info => {
     }
 };
 
+const updateUser = async (user_id, user_info) => {
+    try {
+        let model;
+        //是否有修改密码
+        let update = {
+            nickname: user_info.nickname,
+            head: user_info.head,
+            sex: user_info.sex,
+            email: user_info.email
+        };
+        if (user_info.psw2 && user_info.psw1) {
+            const psw = userPassword(user_info.psw1); //旧密码
+            model = new Model;
+            const { results } = await model.query('SELECT * FROM ?? WHERE id = ? AND password = ? LIMIT 1', [prefix + 'user', user_id, psw]);
+            if(results.length == 0){
+                return Promise.reject(new Error('旧密码错误哦~'));
+            }
+            update.password = userPassword(user_info.psw2); //新密码
+        }
+        model = new Model;
+        let { results } = await model.query('UPDATE ?? SET ? WHERE id = ?', [prefix + 'user', update, user_id]);
+        return Promise.resolve(results.affectedRows >=0);
+    } catch (err) {
+        return Promise.reject(err);
+    }
+};
+
 const Api = {
     userLogin,
     tokenLogin,
@@ -216,7 +243,8 @@ const Api = {
     getZsUserInfo,
     createZsUser,
     updateZsUser,
-    addLoginToken
+    addLoginToken,
+    updateUser
 };
 
 export default Api;

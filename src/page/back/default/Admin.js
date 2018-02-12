@@ -15,6 +15,7 @@ import AdminArticleWrite from './ArticleWrite';
 import Welcome from './Welcome';
 import NotFound from '../../../component/common/Status/NotFound';
 import AdminRecommend from './Recommend';
+import AdminAccount from './Account';
 
 const navData = [
     {
@@ -45,6 +46,11 @@ const navData = [
         icon: 'icon-book',
         name: '推荐管理',
         link: '/admin/recommend'
+    },
+    {
+        icon: 'icon-account',
+        name: '账户管理',
+        link: '/admin/account'
     },
     {
         icon: 'icon-cogs',
@@ -178,9 +184,6 @@ class Admin extends PageComponent{
     toggleSideNav(){
         this.setState({showSideNav: !this.state.showSideNav});
     }
-    componentWillReceiveProps(nextProps){
-
-    }
     render(){
         const { showSideNav, user } = this.state;
         const mainWrapClass = classNames({
@@ -198,6 +201,7 @@ class Admin extends PageComponent{
                         <Route path="/admin/article/edit/ad([0-9]+)" component={AdminArticleWrite}/>
                         <Route path="/admin/article/write" component={AdminArticleWrite}/>
                         <Route path="/admin/site-config" component={AdminConfig}/>
+                        <Route path="/admin/account" component={AdminAccount}/>
                         <Route path="/admin/recommend" component={AdminRecommend}/>
                         <Route component={NotFound}/>
                     </Switch>

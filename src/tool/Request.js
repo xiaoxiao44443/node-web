@@ -30,6 +30,8 @@ class _Request {
                         group_id: userInfo.group_id,
                         head: userInfo.head,
                         nickname: userInfo.nickname,
+                        sex: userInfo.sex,
+                        email: userInfo.email,
                         profile_url: userInfo.profile_url
                     };
                     if(userInfo.account_type == 100){

@@ -184,6 +184,18 @@ html.admin body{
     font-weight: 300;
     margin-bottom: 1em;
 }
+.admin-form-radio{
+    display: inline-block;
+    font-size: 20px;
+    padding: 5px;
+    font-weight: 300;
+    margin-bottom: 1em;
+    position: relative;
+    top: -2px;
+}
+.admin-form-group > label + label{
+    margin-left: .75em;
+}
 .admin-form-textarea{
     display: inline-block;
     width: 100%;
