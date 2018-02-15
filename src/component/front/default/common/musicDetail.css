@@ -323,7 +323,7 @@
     }
     .music-list-box-wrap .music-list{
         width: 100%;
-        height: calc(65% - 2.6em - 2.2em);
+        height: calc(100% - 2.6em - 2.2em);
         overflow-y: auto;
         padding: 0 .5em;
     }

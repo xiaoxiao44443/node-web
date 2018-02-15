@@ -14,7 +14,7 @@ const serverRender = (url, store = {}) => {
     const app = renderToString(
         <Provider>
             <StaticRouter location={url} context={context}>
-                {routes('error' in store)}
+                {routes('error' in store, 'notFound' in store)}
             </StaticRouter>
         </Provider>
     );

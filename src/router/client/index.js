@@ -34,6 +34,9 @@ const Routes = (isError = false, is404 = false) => {
     return isError ? <Switch><RoutePlus component={Error} /></Switch> :
         (is404 ? <Switch><RoutePlus component={NotFound} /></Switch> :
         <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/admin*" component={Admin} />
+            <Route exact path="/login/*" component={MessageJump} />
             <Route exact path="/*">
                 <div className="container">
                     <Switch>
@@ -44,9 +47,6 @@ const Routes = (isError = false, is404 = false) => {
                     <MusicWedgit/>
                 </div>
             </Route>
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/admin*" component={Admin} />
-            <Route exact path="/login/*" component={MessageJump} />
             <RoutePlus component={NotFound} />
         </Switch>)
 };
