@@ -339,12 +339,10 @@ class MusicDetail extends Component {
     };
     back = (callClose = true) => {
         this.refs.music_detail.className = 'music-detail animated-fast slideOutRight';
-        this.backTimer = setTimeout(() => {
-            const mainWrap = document.getElementsByClassName('main-wrap')[0];
-            mainWrap.style.marginTop = '';
-            mainWrap.style.position = '';
-            if (callClose && this.props.onClose) this.props.onClose();
-        }, 500);
+        const mainWrap = document.getElementsByClassName('main-wrap')[0];
+        mainWrap.style.marginTop = '';
+        mainWrap.style.position = '';
+        if (callClose && this.props.onClose) this.props.onClose()
     };
     showListBox = () => {
         const player = { ...this.state.player };

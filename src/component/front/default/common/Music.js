@@ -59,11 +59,13 @@ class MusicWedgit extends Component {
             zIndex: showMusicDetail ? -1 : 9
         };
         if (x && y) style = { left: x, top: y, ...style };
+        let musicWedgitCls = showMusicDetail ? 'animated-fast fadeOutLeft' : 'animated-fast fadeInLeft';
+        if (!pause) musicWedgitCls = musicWedgitCls + ' music_playing';
         return (
             <div id="lolili_music">
                 {showMusicDetail && <div ref="mask" className="mask" onClick={this.maskClick} />}
                 <MusicDetail visible={showMusicDetail} show={showInit} onChangeMusic={this.onChangeMusic} onClose={this.closeMusicDetail} onPlay={this.onPlay} onPause={this.onPause}/>
-                <div id="music_wedgit" className={!pause ? 'music_playing' : false} style={style} onClick={this.showMusicDetail}
+                <div id="music_wedgit" className={musicWedgitCls} style={style} onClick={this.showMusicDetail}
                      {...this.DragHelper.props}>
                     {musicCover !='' && <img src={musicCover}/> }
                 </div>
