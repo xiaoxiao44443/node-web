@@ -95,9 +95,10 @@ class MusicDetail extends Component {
 
     resizeCover = () => {
         const w = window.document.body.offsetWidth > 1400 ? 400 : window.document.body.offsetWidth * .65 + 100;
+        const ohterHeight = 75 + 35;
         this.setState({
-            coverHeight: w < window.innerHeight ? w : window.innerHeight - 75 - 35,
-            summaryTop: w < window.innerHeight ? '' : window.innerHeight - 75 - 35
+            coverHeight: w < window.innerHeight - ohterHeight ? w : window.innerHeight - ohterHeight,
+            summaryTop: w < window.innerHeight - ohterHeight ? w : window.innerHeight - ohterHeight
         });
     };
     onResize = () => {
