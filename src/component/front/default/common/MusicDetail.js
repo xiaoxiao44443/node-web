@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import './musicDetail.css';
 import { getWindowScrollY } from '../../../../tool/dom-js';
 import { store } from '../../../../tool/store';
+import DragHelper from '../../../../component/common/tool/DragHepler';
 
 const showTopTip = (text, duration) => {
     const musicDetail = document.getElementsByClassName('music-detail')[0];
@@ -59,6 +60,7 @@ class MusicDetail extends Component {
     };
     state = {
         coverHeight: 0,
+        summaryTop: '',
         summaryMini: true,
         marginTop: 0,
         init: false,
@@ -77,9 +79,9 @@ class MusicDetail extends Component {
     };
     componentDidMount(){
         const { _music } = this.props;
-        this.setState({
-            coverHeight: window.document.body.offsetWidth,
-        });
+        this.resizeCover();
+        window.addEventListener('resize', this.onResize);
+        this.DragHelper = new DragHelper(this.onDragMove);
         if (_music) {
             const player = { ...this.state.player };
             player.mode = _music.mode;
@@ -90,6 +92,17 @@ class MusicDetail extends Component {
         }
         if (this.props.show) this.addEventLister();
     }
+
+    resizeCover = () => {
+        const w = window.document.body.offsetWidth > 1400 ? 400 : window.document.body.offsetWidth * .65 + 100;
+        this.setState({
+            coverHeight: w < window.innerHeight ? w : window.innerHeight - 75 - 35,
+            summaryTop: w < window.innerHeight ? '' : window.innerHeight - 75 - 35
+        });
+    };
+    onResize = () => {
+       this.resizeCover();
+    };
     addEventListener = () => {
         const { init } = this.state;
         if (init) return;
@@ -117,6 +130,9 @@ class MusicDetail extends Component {
         this.setState({ init: false });
     };
     componentWillReceiveProps(nextProps){
+        if (this.props.visible && !nextProps.visible) {
+            this.back(false);
+        }
         if (!this.props.visible && nextProps.visible) {
             if (this.state.init) this.refs.music_detail.className = 'music-detail animated-fast slideInRight';
             const mainWrap = document.getElementsByClassName('main-wrap')[0];
@@ -207,44 +223,13 @@ class MusicDetail extends Component {
         clearTimeout(this.t);
         clearTimeout(this.backTimer);
         this.removeEventListener();
+        window.removeEventListener('resize', this.onResize);
     }
     callChangeMusic = audioIndex => {
         if (this.props.onChangeMusic) {
             const music = this.state.player.list[audioIndex || this.state.player.audioIndex];
             this.props.onChangeMusic(music && music.cover);
         }
-    };
-    onTouchStart = e => {
-        const touch = e.targetTouches[0];
-        let player = { ...this.state.player };
-        player.touchStart = {
-            offsetX: touch.pageX - e.target.offsetLeft
-        };
-        this.setState({
-            player
-        });
-    };
-    onTouchMove = e => {
-        let player  = { ...this.state.player };
-        if (player.duration == 0) return;
-        const { touchStart } = player;
-        if (e.cancelable) {
-            // 判断默认行为是否已经被禁用
-            if (!e.defaultPrevented) {
-                e.preventDefault();
-            }
-        }
-        const touch = e.targetTouches[0];
-        const w = e.target.offsetWidth;
-        let x = touch.pageX - touchStart.offsetX;
-        const processW = this.refs.process_bar.offsetWidth;
-        x = x >= - parseInt(w / 2) ? x : - parseInt(w / 2);
-        if (x > processW - w / 2 ) x = processW - w / 2;
-        player.btnX = x;
-        this.setState({
-            player
-        });
-        this.bar2process(x);
     };
     bar2process = btnx => {
         const player = { ...this.state.player };
@@ -260,6 +245,18 @@ class MusicDetail extends Component {
         const w = this.refs.process_btn.offsetWidth;
         player.btnX = player.duration > 0 ? barWidth * currentTime / player.duration - w / 2 : - w / 2;
         this.setState({ player });
+    };
+    onDragMove = ({ x, y, w, h }) => {
+        let player  = { ...this.state.player };
+        if (player.duration == 0) return;
+        const processW = this.refs.process_bar.offsetWidth;
+        x = x >= - parseInt(w / 2) ? x : - parseInt(w / 2);
+        if (x > processW - w / 2 ) x = processW - w / 2;
+        player.btnX = x;
+        this.setState({
+            player
+        });
+        this.bar2process(x);
     };
     beforeMusic = () => {
         const player = { ...this.state.player };
@@ -340,13 +337,13 @@ class MusicDetail extends Component {
                 break;
         }
     };
-    back = () => {
+    back = (callClose = true) => {
         this.refs.music_detail.className = 'music-detail animated-fast slideOutRight';
         this.backTimer = setTimeout(() => {
             const mainWrap = document.getElementsByClassName('main-wrap')[0];
             mainWrap.style.marginTop = '';
             mainWrap.style.position = '';
-            if (this.props.onClose) this.props.onClose();
+            if (callClose && this.props.onClose) this.props.onClose();
         }, 500);
     };
     showListBox = () => {
@@ -373,7 +370,7 @@ class MusicDetail extends Component {
         this.setState({ summaryMini: !this.state.summaryMini });
     };
     render() {
-        const { player, coverHeight, summaryMini } = this.state;
+        const { player, coverHeight, summaryMini, summaryTop } = this.state;
         const operOnClick = this.operOnClick;
         let precessBtnStyle = {
             left: player.btnX
@@ -402,19 +399,14 @@ class MusicDetail extends Component {
                 );
             });
         }
-        let musicDetailStyle = {
-            display: 'none'
-        };
-        if (this.props.visible) {
-            musicDetailStyle.display = 'block';
-        }
+
         if (!this.props.show) return null;
         let modeName = '';
         if (player.mode == 0) modeName = '列表循环';
         if (player.mode == 1) modeName = '随机播放';
         if (player.mode == 2) modeName = '单曲循环';
         return (
-            <div ref="music_detail" className="music-detail animated-fast slideInRight" style={musicDetailStyle}>
+            <div ref="music_detail" className="music-detail animated-fast slideInRight">
                 <div className="music-cover" style={{ height: coverHeight }}>
                     <div className="info-blurbg-wrapper">
                         <div className="info-blurbg" style={style}/>
@@ -426,7 +418,7 @@ class MusicDetail extends Component {
                         </div>
                     </div>
                 </div>
-                <div ref="music_summary" className={summaryMini ? 'music-summary' : 'music-summary all'}>
+                <div ref="music_summary" className={summaryMini ? 'music-summary' : 'music-summary all'} style={summaryMini ? { top: summaryTop } : null}>
                     <div className="summary-tab" onClick={this.toggleSummary}>
                         <span>简介</span>
                     </div>
@@ -441,7 +433,7 @@ class MusicDetail extends Component {
                         <div className="process-timer">{this.sec2time(player.currentTime)}</div>
                         <div ref="process_bar" className="process-bar">
                             <div ref="process_btn" className={player.loading ? 'process-btn-loading' : 'process-btn'} style={precessBtnStyle}
-                                 onTouchStart={this.onTouchStart} onTouchMove={this.onTouchMove}/>
+                                 {...this.DragHelper.props}/>
                             <div className="process-inner"/>
                             <div className="process-bg"/>
                         </div>
