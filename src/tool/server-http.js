@@ -29,6 +29,21 @@ const apiMethods = {
             })
         })
     },
+    apiPost2(url, data, header = {}) {
+        return new Promise((resolve, reject) => {
+            axios.post(url, querystring.stringify(data),{
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    ...header
+                }
+            }).then((response) => {
+                resolve(response.data);
+            }).catch((response) => {
+                reject(response);
+            })
+        })
+    },
     apiFile(url, data) {
         return new Promise((resolve, reject) => {
             axios.post(url, data,{
