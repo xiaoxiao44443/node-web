@@ -9,6 +9,10 @@ import MusicDetail from './MusicDetail';
 import DragHelper from '../../../../component/common/tool/DragHepler';
 
 class MusicWedgit extends Component {
+    constructor() {
+        super();
+        this.DragHelper = new DragHelper(this.onDragMove);
+    }
     state = {
         showInit: false,
         x: false,
@@ -17,9 +21,6 @@ class MusicWedgit extends Component {
         musicCover: '',
         pause: true
     };
-    componentDidMount() {
-        this.DragHelper = new DragHelper(this.onDragMove);
-    }
     onDragMove = ({ x, y, w, h }) => {
         let windowWidth = window.document.body.offsetWidth;
         let windowHeight =  window.innerHeight;
