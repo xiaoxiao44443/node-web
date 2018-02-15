@@ -14,6 +14,8 @@ import uploader from '../../tool/uploader';
 import pictureApi from '../../api/picture';
 import mottoApi from '../../api/motto';
 import userApi from '../../api/user';
+import musicApi from '../../api/music';
+import serverHttp from "../../tool/server-http";
 
 //state添加用户信息
 const addUserInfo = state => {
@@ -125,8 +127,7 @@ Request.post('/article/edit', async(req, res, next) =>{
                 res.json(returnSuc(ret));
             }else{
                 //发布文章
-                //TODO 获取作者id
-                article.author = 1;
+                article.author = Request.USER.id;
                 await articleApi.publishArticle(article);
                 res.json(returnSuc('发布成功!'));
             }
@@ -410,6 +411,233 @@ Request.post('/account', async(req, res, next) => {
     }catch (ex){
         next(ex);
     }
+});
+
+//admin/music/list
+Request.get('/music/list', async(req, res, next) => {
+    try {
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name} | 后台管理`;
+
+        //初始化页面数据 获取所有音乐列表
+        let musics = await musicApi.queryMusicList();
+
+        let state = stateFilter({musics: musics});
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'admin');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//删除音乐
+Request.post('/music/delete', async(req, res, next) =>{
+    try {
+
+        if(Request.REQUEST_JSON){
+
+            const id = req.body.id;
+            if(id <= 0) return res.json(returnErr('音乐id错误'));
+
+            let ret = await musicApi.deleteMusic(id);
+            if(ret){
+                res.json(returnSuc('删除成功~'));
+            }else{
+                res.json(returnErr('删除失败!'));
+            }
+
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//音乐编辑页面 /admin/music/edit
+Request.get('/music/edit/id([0-9]+)', async(req, res, next) =>{
+    try {
+        const id = req.params[0];
+
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name} | 后台管理`;
+
+        //初始化页面数据 获取文章数据
+        let music = await musicApi.getMusic(id);
+        const state  = stateFilter({ music: music });
+
+        if(!music) return next();
+
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'admin');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//添加/保存音乐
+Request.post('/music/edit', async(req, res, next) =>{
+    try {
+
+        if(Request.REQUEST_JSON){
+
+            const id = req.body.id;
+            const music = req.body.music;
+
+            if(id>0){
+                //保存文章
+                let ret = await musicApi.editMusic(id, music);
+                res.json(returnSuc(ret));
+            }else{
+                //发布文章
+                await musicApi.addMusic(music);
+                res.json(returnSuc('添加成功!'));
+            }
+
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+
+//添加音乐页面
+Request.get('/music/add', async(req, res, next) =>{
+    try {
+
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name} | 后台管理`;
+
+        //初始化页面数据 获取文章数据
+        let music = {
+            caption: '',
+            cover: '',
+            author: '',
+            src: ''
+        };
+        const state  = stateFilter({ music: music });
+
+        if(!music) return next();
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'admin');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+
+});
+
+//网易云音乐解析admin
+Request.post('/net-music', async(req, res, next) => {
+
+    let data = {
+        music_input: '',
+        music_filter: 'id',
+        music_type: 'netease'
+    };
+    const header = {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+    };
+    const net_music_id = req.body.net_music_id;
+    data.music_input = net_music_id;
+    const ret = await serverHttp.apiPost2('http://www.guqiankun.com/tools/music/?source=toolsindex', data, header);
+    //移除http
+    if (ret.code == 200) {
+        let music = ret.data[0];
+        if (!music.url) return '';
+        music.url = music.url.substring(0,7)== 'http://' ? music.url.substring(5) : url;
+        music = {
+            cover: music.pic.slice(0, music.pic.indexOf('?')),
+            caption: music.title,
+            src: '/music/id' + net_music_id,
+            author: music.author
+        };
+        res.json(returnSuc(music));
+    } else {
+        res.json(returnErr('解析失败!'));
+    }
+});
+
+//admin/music/config
+Request.get('/music/config', async(req, res, next) => {
+    try {
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name} | 后台管理`;
+
+        //初始化页面数据
+        const musicConfig = await configApi.music();
+        const _musicConfig = {
+            mode: musicConfig.mode.value,
+            audioIndex: musicConfig.audio_index.value
+        };
+        const state = stateFilter({ musicConfig: _musicConfig });
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'admin');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//音乐设置 admin/music/config
+Request.post('/music/config', async(req, res, next) => {
+    try {
+
+        if(Request.REQUEST_JSON){
+
+            const musicConfig = await configApi.music();
+            const newMusicConfig = req.body.musicConfig;
+
+            let _musicConfig = {
+                mode: { name: musicConfig.mode.name, value: parseInt(newMusicConfig.mode) },
+                audio_index: { name: musicConfig.audio_index.name, value: parseInt(newMusicConfig.audioIndex) }
+            };
+
+            //更新音乐配置
+            let ret = await configApi.updateMusic(_musicConfig);
+
+            if(ret){
+                res.json(returnSuc('保存成功~'));
+            }else{
+                res.json(returnErr('保存失败!'));
+            }
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//admin/music 都默认调到music/list
+Request.get('/music*', async(req, res, next) => {
+    res.redirect('/admin/music/list');
 });
 
 //admin

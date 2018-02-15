@@ -29,8 +29,7 @@ Request.get('/music/id([0-9]+)', async(req, res, next) => {
         'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     };
-    const id = req.params[0];
-    data.music_input = id;
+    data.music_input = req.params[0];
     const ret = await serverHttp.apiPost2('http://www.guqiankun.com/tools/music/?source=toolsindex', data, header);
     //移除http
     if (ret.code == 200) {

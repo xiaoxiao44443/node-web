@@ -16,6 +16,9 @@ import Welcome from './Welcome';
 import NotFound from '../../../component/common/Status/NotFound';
 import AdminRecommend from './Recommend';
 import AdminAccount from './Account';
+import AdminMusicList from './MusicList';
+import AdminMusicEdit from './MusicEdit';
+import AdminMusicConfig from './MusicConfig';
 
 const navData = [
     {
@@ -34,6 +37,24 @@ const navData = [
             {
                 name: '写文章',
                 link: '/admin/article/write'
+            }
+        ]
+    },
+    {
+        icon: 'icon-book',
+        name: '音乐',
+        children: [
+            {
+                name: '所有音乐',
+                link: '/admin/music/list'
+            },
+            {
+                name: '添加音乐',
+                link: '/admin/music/add'
+            },
+            {
+                name: '音乐设置',
+                link: '/admin/music/config'
             }
         ]
     },
@@ -203,6 +224,10 @@ class Admin extends PageComponent{
                         <Route path="/admin/site-config" component={AdminConfig}/>
                         <Route path="/admin/account" component={AdminAccount}/>
                         <Route path="/admin/recommend" component={AdminRecommend}/>
+                        <Route path="/admin/music/list" component={AdminMusicList}/>
+                        <Route path="/admin/music/add" component={AdminMusicEdit}/>
+                        <Route path="/admin/music/edit/id([0-9]+)" component={AdminMusicEdit}/>
+                        <Route path="/admin/music/config" component={AdminMusicConfig}/>
                         <Route component={NotFound}/>
                     </Switch>
                 </div>

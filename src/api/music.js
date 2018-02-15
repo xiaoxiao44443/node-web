@@ -41,7 +41,7 @@ const addMusic = async music => {
 const deleteMusic = async id => {
     try {
         let model = new Model;
-        let { results } = await model.query('DELETE * FROM ?? WHERE id = ? LIMIT 1', [prefix + 'music', id]);
+        let { results } = await model.query('DELETE FROM ?? WHERE id = ? LIMIT 1', [prefix + 'music', id]);
         return Promise.resolve(results.affectedRows >=1);
     }catch (err){
         return Promise.reject(err);
@@ -58,7 +58,7 @@ const editMusic = async (id, music) => {
             cover: music.cover,
             src: music.src
         };
-        let { results } = await model.query(`UPDATE ?? SET ? WHERE id = ?`, [prefix + 'article', updates, id]);
+        let { results } = await model.query(`UPDATE ?? SET ? WHERE id = ?`, [prefix + 'music', updates, id]);
         return Promise.resolve(results.affectedRows >=0);
     }catch (err){
         return Promise.reject(err);
@@ -82,10 +82,22 @@ const getMusicInfo = async () => {
     }
 };
 
+//获取单首歌曲信息
+const getMusic = async id => {
+    try {
+        let model = new Model;
+        let { results } = await model.query('SELECT * FROM ?? WHERE id = ? LIMIT 1', [prefix + 'music', id]);
+        return Promise.resolve(results.length > 0 ? results[0] : false);
+    }catch (err){
+        return Promise.reject(err);
+    }
+};
+
 export  default {
     queryMusicList,
     addMusic,
     deleteMusic,
     editMusic,
-    getMusicInfo
+    getMusicInfo,
+    getMusic
 }

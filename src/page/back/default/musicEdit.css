@@ -1,0 +1,9 @@
+.admin-music-edit{
+    width: 100%;
+}
+.admin-music-edit .admin-form-group .img-cover{
+    width: 120px;
+    height: 120px;
+    margin-bottom: 3em;
+    border: 1px solid #ccc;
+}

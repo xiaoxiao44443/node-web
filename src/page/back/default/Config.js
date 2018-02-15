@@ -66,7 +66,7 @@ class Config extends PageComponent {
     };
     render(){
         if(!this.state._pageLoadOver){
-            return <Spin loading><div className="admin-article-edit" /></Spin>
+            return <Spin loading><div className="admin-config" /></Spin>
         }
 
         const { websiteConfig } = this.state;
