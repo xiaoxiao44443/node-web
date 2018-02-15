@@ -16,32 +16,9 @@ import userApi from '../../api/user';
 import commentApi from '../../api/comment';
 import mottoApi from '../../api/motto';
 import serverHttp from '../../tool/server-http';
+import musicApi from '../../api/music';
 
-//state添加用户信息
-const addMusicInfo = () => {
-
-    return {
-        _music: {
-            mode: 0, // 0:列表循环 1:随机播放 2:单曲循环,
-            audioIndex: 0,
-            list: [
-                {
-                    caption: 'メグメル',
-                    author: 'riya',
-                    cover: '//p1.music.126.net/ckfEE9UUGcnGHylQJ12ENA==/670702092966093.jpg',
-                    src: '/music/id22706981'
-                },
-                {
-                    caption: '汐',
-                    author: '戸越まごめ',
-                    cover: 'http://p1.music.126.net/ckfEE9UUGcnGHylQJ12ENA==/670702092966093.jpg',
-                    src: '/music/id22706979'
-                }
-            ]
-        }
-    };
-};
-
+//网易云音乐解析
 Request.get('/music/id([0-9]+)', async(req, res, next) => {
     let data = {
         music_input: '',
@@ -55,8 +32,12 @@ Request.get('/music/id([0-9]+)', async(req, res, next) => {
     const id = req.params[0];
     data.music_input = id;
     const ret = await serverHttp.apiPost2('http://www.guqiankun.com/tools/music/?source=toolsindex', data, header);
+    //移除http
     if (ret.code == 200) {
-        res.redirect(ret.data[0].url);
+        let url = ret.data[0].url;
+        if (!url) return '';
+        url = url.substring(0,7)== 'http://' ? url.substring(5) : url;
+        res.redirect(url);
     }
 });
 
@@ -151,7 +132,8 @@ Request.get('/', async(req, res, next) => {
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
         }else{
-            resRender(req, res, title, state, 'index', addMusicInfo());
+            const musicInfo = await musicApi.getMusicInfo();
+            resRender(req, res, title, state, 'index', musicInfo);
         }
 
     }catch (ex){
@@ -183,7 +165,8 @@ Request.get('/blog', async(req, res, next) => {
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
         }else{
-            resRender(req, res, title, state, 'index', addMusicInfo());
+            const musicInfo = await musicApi.getMusicInfo();
+            resRender(req, res, title, state, 'index', musicInfo);
         }
 
     }catch (ex){
@@ -241,7 +224,8 @@ Request.get('/blog/ad([0-9]+)', async(req, res, next) => {
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
         }else{
-            resRender(req, res, title, state, 'index', addMusicInfo());
+            const musicInfo = await musicApi.getMusicInfo();
+            resRender(req, res, title, state, 'index', musicInfo);
         }
 
     }catch (ex){

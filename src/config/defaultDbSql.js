@@ -140,6 +140,19 @@ const user_login = {
         PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户登录表'`
 };
+const music = {
+    desc: '音乐表',
+    sql:
+    `CREATE TABLE ${prefix}music (
+        id int(11) NOT NULL AUTO_INCREMENT,
+        caption varchar(256) NOT NULL COMMENT '标题',
+        author varchar(128) NOT NULL COMMENT '作者',
+        cover varchar(256) NOT NULL COMMENT '封面地址',
+        src varchar(256) NOT NULL COMMENT '音乐源地址',
+        create_time bigint(11) NOT NULL COMMENT '添加时间',
+        PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='音乐表'`
+};
 //插入数据
 const insert_user_group = {
     desc: '用户组数据',
@@ -163,6 +176,16 @@ const insert_website_config = {
     INSERT INTO ${prefix}config (id, name, value) VALUES
         (1, 'website', ${sqlString.escape(JSON.stringify(websiteConfig))})`
 };
+const musicConfig = {
+    mode: {name: '播放模式', value: '0'},
+    audio_index: {name: '默认音乐', value: 0}
+};
+const insert_music_config = {
+    desc: '音乐配置数据',
+    sql: `
+    INSERT INTO ${prefix}config (id, name, value) VALUES
+        (2, 'music', ${sqlString.escape(JSON.stringify(musicConfig))})`
+};
 const NOW_TIME = parseInt(Date.now() / 1000);
 const insert_motto = {
     desc: '默认格言数据',
@@ -180,12 +203,14 @@ const createTable = [
     user_group,
     friend,
     motto,
-    user_login
+    user_login,
+    music
 ];
 
 const insert = [
     insert_user_group,
     insert_website_config,
+    insert_music_config,
     insert_motto
 ];
 

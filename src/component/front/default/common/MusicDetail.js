@@ -2,11 +2,51 @@
  * Created by xiao on 2018/2/14.
  */
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import './musicDetail.css';
 import { getWindowScrollY } from '../../../../tool/dom-js';
 import { store } from '../../../../tool/store';
-import {maxWidthPoint} from "../../../../enum";
+
+const showTopTip = (text, duration) => {
+    const musicDetail = document.getElementsByClassName('music-detail')[0];
+    if (!musicDetail) return;
+    const container = document.createElement('div');
+    musicDetail.appendChild(container);
+    const remove = () => musicDetail.removeChild(container);
+    ReactDOM.render(<TopTip text={text} duration={duration} remove={remove}/> ,container);
+};
+class TopTip extends Component {
+    static propTypes = {
+        text: PropTypes.string,
+        duration: PropTypes.number,
+        remove: PropTypes.func
+    };
+    static defaultProps = {
+        duration: 2000
+    };
+    state = {
+        hide: false
+    };
+    componentDidMount(){
+        const { duration } = this.props;
+        this.timer = setTimeout(() => {
+            this.setState({ hide: true });
+            if (this.props.remove) this.props.remove();
+        }, duration);
+    }
+    componentWillUnmount(){
+        clearTimeout(this.timer);
+    }
+    render() {
+        return(
+            <div className={!this.state.hide ? 'top-tip show' : 'top-tip'}>
+                <span>{this.props.text}</span>
+            </div>
+        );
+    }
+}
 
 class MusicDetail extends Component {
     static propTypes = {
@@ -23,6 +63,7 @@ class MusicDetail extends Component {
         marginTop: 0,
         init: false,
         player: {
+            loading: false,
             touchStart: {},
             listBoxVisible: false,
             paused: true,
@@ -53,24 +94,26 @@ class MusicDetail extends Component {
         const { init } = this.state;
         if (init) return;
         const audio = this.refs.audio;
-        audio.addEventListener('canplay', this.onCanplay());
         audio.addEventListener('pause', this.onPause);
         audio.addEventListener('play', this.onPlay);
         audio.addEventListener('playing', this.onPlaying);
         audio.addEventListener('timeupdate', this.onTimeupdate);
         audio.addEventListener('ended', this.onEnded);
+        audio.addEventListener('loadstart', this.onLoadstart);
+        audio.addEventListener('canplay', this.onCanplay);
         this.setState({ init: true });
     };
     removeEventListener = () => {
         const { init } = this.state;
         if (!init) return;
         const audio = this.refs.audio;
-        audio.removeEventListener('canplay', this.onCanplay());
+        audio.removeEventListener('canplay', this.onCanplay);
         audio.removeEventListener('pause', this.onPause);
         audio.removeEventListener('play', this.onPlay);
         audio.removeEventListener('playing', this.onPlaying);
         audio.removeEventListener('timeupdate', this.onTimeupdate);
         audio.removeEventListener('ended', this.onEnded);
+        audio.removeEventListener('loadstart', this.onLoadstart);
         this.setState({ init: false });
     };
     componentWillReceiveProps(nextProps){
@@ -82,8 +125,15 @@ class MusicDetail extends Component {
             mainWrap.style.marginTop = marginTop + 'px';
             mainWrap.style.position = 'fixed';
         }
+        if((nextProps.history.action == 'PUSH' || nextProps.history.action == 'POP')
+            && nextProps.match.url!==this.props.match.url && this.props.visible){
+            this.back();
+        }
     }
     componentDidUpdate(prevProps, prevState){
+        if(!prevProps.visible && this.refs.music_detail) {
+            if (this.state.player.list.length == 0) showTopTip('暂无音乐');
+        }
         if(this.refs.audio) {
             this.addEventListener();
         }
@@ -91,6 +141,11 @@ class MusicDetail extends Component {
             window.scrollTo(0, - this.state.marginTop);
         }
     }
+    onLoadstart = e => {
+        const player = { ...this.state.player };
+        player.loading = true;
+        this.setState({ player });
+    };
     onPause = e => {
         const player = { ...this.state.player };
         player.paused = true;
@@ -130,6 +185,7 @@ class MusicDetail extends Component {
     //就绪
     onCanplay = e => {
         const player = { ...this.state.player };
+        player.loading = false;
         this.setState({ player });
     };
     onPlay = e => {
@@ -255,10 +311,17 @@ class MusicDetail extends Component {
         }, 250);
         const audio = this.refs.audio;
         const player = { ...this.state.player };
+        const emptyMusic = player.list.length == 0;
+        if (emptyMusic) return showTopTip('暂无音乐');
         switch (name) {
             case 'mode':
                 player.mode  = player.mode + 1 <= 2 ? player.mode + 1 : 0;
                 this.setState({ player });
+                let modeName;
+                if (player.mode == 0) modeName = '列表循环';
+                if (player.mode == 1) modeName = '随机播放';
+                if (player.mode == 2) modeName = '单曲循环';
+                showTopTip(modeName);
                 break;
             case 'before':
                 this.beforeMusic();
@@ -312,7 +375,7 @@ class MusicDetail extends Component {
     render() {
         const { player, coverHeight, summaryMini } = this.state;
         const operOnClick = this.operOnClick;
-        const precessBtnStyle = {
+        let precessBtnStyle = {
             left: player.btnX
         };
         const audioInfo = player.list[player.audioIndex];
@@ -377,7 +440,7 @@ class MusicDetail extends Component {
                     <div className="music-process-wrap">
                         <div className="process-timer">{this.sec2time(player.currentTime)}</div>
                         <div ref="process_bar" className="process-bar">
-                            <div ref="process_btn" className="process-btn" style={precessBtnStyle}
+                            <div ref="process_btn" className={player.loading ? 'process-btn-loading' : 'process-btn'} style={precessBtnStyle}
                                  onTouchStart={this.onTouchStart} onTouchMove={this.onTouchMove}/>
                             <div className="process-inner"/>
                             <div className="process-bg"/>
@@ -428,4 +491,4 @@ class MusicDetail extends Component {
 
 const map = (state) => ({ _music: state._music });
 
-export default store(MusicDetail, map);
+export default store(withRouter(MusicDetail), map);

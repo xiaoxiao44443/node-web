@@ -1,3 +1,19 @@
+@-webkit-keyframes rotateAlways{
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@keyframes rotateAlways{
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 @media screen and (max-width: 736px){
     .music-detail{
         width: 100%;
@@ -7,6 +23,31 @@
         pointer-events: auto;
         font-weight: 300;
         position: relative;
+    }
+    .music-detail .top-tip{
+        position: fixed;
+        top: 50%;
+        width: 100%;
+        height: 3em;
+        z-index: 203;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -1.5em;
+        transition: opacity ease .8s;
+
+        opacity: 0;
+    }
+    .music-detail .top-tip.show{
+        opacity: 1;
+    }
+    .music-detail .top-tip >span{
+        display: block;
+        padding: .6em .75em;
+        font-size: .85em;
+        background: black;
+        color: white;
+        border-radius: 5px;
     }
     .music-detail .music-cover{
         width: 100%;
@@ -118,7 +159,8 @@
     }
     .music-summary .summary-inner .caption{
         color: black;
-        font-size: .85em;
+        font-size: 1.25em;
+        margin: .5em 0;
     }
     .music-summary .summary-inner .other-info{
         color: #949494;
@@ -220,6 +262,18 @@
         margin-top: -8px;
         left: -8px;
     }
+    .music-process-wrap .process-btn-loading{
+        position: absolute;
+        z-index: 3;
+        width: 16px;
+        height: 16px;
+        background: url('/static/images/default/loading.png') no-repeat;
+        background-size: 100%;
+        top: 50%;
+        margin-top: -9px;
+        left: -8px;
+        animation: rotateAlways 1s infinite;
+    }
     .music-process-wrap .process-inner{
         height: 2px;
         background-color: #e44c65;
@@ -240,7 +294,7 @@
         position: absolute;
         left: 0;
         bottom: 0;
-        z-index: 199;
+        z-index: 201;
     }
     .music-list-box .music-list-box-mask{
         width: 100%;
