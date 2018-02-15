@@ -101,6 +101,7 @@
     width: 62%;
     height: calc(100% - 3em);
     margin: 0 auto;
+    text-align: center;
 }
 .cover-info .cover-img >img{
     max-width: 100%;
