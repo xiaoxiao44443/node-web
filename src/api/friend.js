@@ -43,7 +43,7 @@ const queryAllFriend = async () => {
 const addFriend = async friend => {
     try {
         let model = new Model;
-        let NOW_TIME = Math.round(Date.now() / 100);
+        let NOW_TIME = Math.round(Date.now() / 1000);
         let insert = {
             friend_name: friend.friend_name,
             blog_name: friend.blog_name,
@@ -86,7 +86,7 @@ const editFriend = async (id, friend) => {
             blog_url: friend.blog_url,
             blog_motto: friend.blog_motto,
             friend_head: friend.friend_head,
-            update_time: Math.round(Date.now() / 100),
+            update_time: Math.round(Date.now() / 1000),
             display_order: friend.display_order
         };
 
