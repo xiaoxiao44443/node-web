@@ -69,7 +69,10 @@
         padding: 0 .25em;
     }
     .my-friends .friend-wrap .friend-head img{
-        width: 90%;
-        max-height: 90%;
+        max-width: 70%;
+        max-height: 70%;
+    }
+    .my-friends .friend-wrap .friend-head{
+        text-align: left;
     }
 }
