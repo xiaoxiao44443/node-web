@@ -137,6 +137,7 @@
     z-index: 199;
     transition: top ease .5s;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 .music-detail .music-summary.all{
     top: 55px;
@@ -337,6 +338,7 @@
     width: 100%;
     height: calc(100% - 2.6em - 2.2em);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 0 .5em;
 }
 .music-list-box-wrap .music-list .list-item{
