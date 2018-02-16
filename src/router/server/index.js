@@ -17,6 +17,7 @@ import commentApi from '../../api/comment';
 import mottoApi from '../../api/motto';
 import serverHttp from '../../tool/server-http';
 import musicApi from '../../api/music';
+import friendApi from '../../api/friend';
 
 //网易云音乐解析
 Request.get('/music/id([0-9]+)', async(req, res, next) => {
@@ -159,7 +160,10 @@ Request.get('/blog', async(req, res, next) => {
         //今日格言
         let { text:motto } = await mottoApi.todayMotto();
 
-        const state  = { articles: articles, newComments: newComments, motto: motto };
+        //友情链接
+        let friends = await friendApi.queryAllFriend();
+
+        const state  = { articles: articles, newComments: newComments, motto: motto, friends: friends };
 
         if(Request.REQUEST_JSON){
             res.json(returnSuc(state, title));
@@ -216,7 +220,10 @@ Request.get('/blog/ad([0-9]+)', async(req, res, next) => {
         //今日格言
         let { text:motto } = await mottoApi.todayMotto();
 
-        const state  = { article: article,  newComments: newComments, motto: motto };
+        //友情链接
+        let friends = await friendApi.queryAllFriend();
+
+        const state  = { article: article,  newComments: newComments, motto: motto, friends: friends };
 
         //网站标题是文章标题
         const title = `${site_name} | ${article.title}`;

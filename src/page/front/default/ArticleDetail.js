@@ -28,7 +28,7 @@ class ArticleDetail extends PageComponent {
         }
     }
     render(){
-        const { article, newComments, motto } = this.state;
+        const { article, newComments, motto, friends } = this.state;
 
         let articleContent;
         if(article){
@@ -52,7 +52,7 @@ class ArticleDetail extends PageComponent {
                 </div>
         }
         return (
-            <BlogWrap className="article-detail" newComments={newComments} motto={motto}>
+            <BlogWrap className="article-detail" newComments={newComments} motto={motto} friends={friends}>
                 <div className="article-detail-wrap">
                     {article === null ?
                     <div className="notFound">

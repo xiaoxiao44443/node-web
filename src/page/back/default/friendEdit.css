@@ -1,0 +1,26 @@
+.admin-friend-edit{
+    width: 100%;
+}
+.admin-friend-edit .admin-form-group .img-head{
+    width: 100%;
+    height: 100%;
+}
+.admin-friend-edit .friend-head{
+    width: 140px;
+    height: 140px;
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 3em;
+    position: relative;
+}
+.admin-friend-edit .friend-head:hover:before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(228,76,101,0.1);
+}

@@ -15,6 +15,7 @@ import pictureApi from '../../api/picture';
 import mottoApi from '../../api/motto';
 import userApi from '../../api/user';
 import musicApi from '../../api/music';
+import friendApi from '../../api/friend';
 import serverHttp from "../../tool/server-http";
 
 //state添加用户信息
@@ -262,21 +263,23 @@ Request.post('/site-config', async(req, res, next) => {
     }
 });
 
-Request.post('/article/edit/upload-img', async(req, res, next) => {
+//根据类型上传图片
+Request.post('/edit/upload-img', async(req, res, next) => {
 
     try{
-        (new uploader.blogImgUpload)(req, res, async err => {
+        (new uploader.imageUpload)(req, res, async err => {
             if(err){
                 next(err);
             }else{
                 const files = req.files;
+                const type =parseInt(req.body.type);
 
                 if(files){
                     const filesPath = files.map(val => {
                         return val.path;
                     });
                     try {
-                        const ret = await pictureApi.savePic(filesPath, 1, Request.USER.id);
+                        const ret = await pictureApi.savePic(filesPath, type, Request.USER.id);
                         if(ret){
                             res.json(returnSuc('上传成功'));
                         }else{
@@ -295,16 +298,21 @@ Request.post('/article/edit/upload-img', async(req, res, next) => {
     }
 });
 
-//获取已上传的文章图片列表 50张
-Request.post('/article/edit/uploaded-pics', async(req, res, next) => {
+//根据类型获取已上传的图片列表 50张
+Request.post('/edit/uploaded-pics', async(req, res, next) => {
 
     try {
         //获取网站配置
         if(Request.REQUEST_JSON){
             //初始化数据
+            const type = parseInt(req.body.type);
+            if ([1, 2].indexOf(type) == -1) {
+                res.json(returnErr('图片类型错误'));
+                return;
+            }
             const p = req.body.p;
 
-            let pics = await pictureApi.getPicsByType(1, Request.USER.id,{p});
+            let pics = await pictureApi.getPicsByType(type, Request.USER.id,{p});
             res.json(returnSuc(pics));
         }
     }catch (ex){
@@ -638,6 +646,128 @@ Request.post('/music/config', async(req, res, next) => {
 //admin/music 都默认调到music/list
 Request.get('/music*', async(req, res, next) => {
     res.redirect('/admin/music/list');
+});
+
+Request.get('/friend/list', async(req, res, next) =>{
+    try {
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name} | 后台管理`;
+
+        //初始化页面数据 获取20个友联
+        let friends = await friendApi.queryFriendAdmin();
+
+        let state = stateFilter({friends: friends});
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'admin');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//get more article
+Request.post('/friend/list', async(req, res, next) =>{
+    try {
+        //获取网站配置
+
+        if(Request.REQUEST_JSON){
+            //初始化页面数据 获取20个友联
+            const p = req.body.p;
+
+            let friends = await friendApi.queryFriendAdmin({p});
+            res.json(returnSuc(friends));
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+// article/edit
+Request.get('/friend/edit/ad([0-9]+)', async(req, res, next) =>{
+    try {
+        const ad = req.params[0];
+
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name} | 后台管理`;
+
+        //初始化页面数据 获取友联数据
+        let friend = await friendApi.getFriend(ad);
+        const state  = stateFilter({ friend: friend });
+
+        if(!friend) return next();
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'admin');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//添加/编辑友联
+Request.post('/friend/edit', async(req, res, next) =>{
+    try {
+
+        if(Request.REQUEST_JSON){
+
+            const ad = req.body.ad;
+            const friend = req.body.friend;
+
+            if(ad>0){
+                //保存友联
+                let ret = await friendApi.editFriend(ad, friend);
+                res.json(returnSuc(ret));
+            }else{
+                //添加友联
+                await friendApi.addFriend(friend);
+                res.json(returnSuc('添加成功!'));
+            }
+
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//删除友联
+Request.post('/friend/delete', async(req, res, next) =>{
+    try {
+
+        if(Request.REQUEST_JSON){
+
+            const ad = req.body.ad;
+            if(ad <= 0 || !ad) return res.json(returnErr('友人id错误'));
+
+            let ret = await friendApi.deleteFriend(ad);
+            if(ret){
+                res.json(returnSuc('删除成功~'));
+            }else{
+                res.json(returnErr('删除失败!'));
+            }
+
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//admin/friend 都默认调到friend/list
+Request.get('/friend*', async(req, res, next) => {
+    res.redirect('/admin/friend/list');
 });
 
 //admin

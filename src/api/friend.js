@@ -6,11 +6,11 @@ const prefix = dbConfig.prefix;
 import Model from '../tool/Model';
 
 //友情链接分页查询
-const queryFriend = async option => {
+const queryFriendAdmin = async option => {
     try {
         const _default = {
             p: 1,
-            size: 10
+            size: 20
         };
         let _option = option || _default;
         let model = new Model;
@@ -21,7 +21,18 @@ const queryFriend = async option => {
 
         let page = `${(p - 1)*size},${size}`;
 
-        let { results } = await model.query(`SELECT id,friend_name,blog_name,blog_url,blog_motto,friend_head,create_time,update_time,display_order FROM ?? WHERE status = 0 ORDER BY display_order desc,create_time desc LIMIT ${page}`, [prefix + 'friend']);
+        let { results } = await model.query(`SELECT id,friend_name,blog_name,blog_url,blog_motto,friend_head,create_time,update_time,display_order FROM ?? WHERE status = 0 ORDER BY display_order desc,create_time asc LIMIT ${page}`, [prefix + 'friend']);
+        return Promise.resolve(results);
+    }catch (err){
+        return Promise.reject(err);
+    }
+};
+
+//全部友情链接(前端)
+const queryAllFriend = async () => {
+    try {
+        let model = new Model;
+        let { results } = await model.query(`SELECT friend_name,blog_name,blog_url,blog_motto,friend_head FROM ?? WHERE status = 0 ORDER BY display_order desc,create_time asc`, [prefix + 'friend']);
         return Promise.resolve(results);
     }catch (err){
         return Promise.reject(err);
@@ -55,10 +66,10 @@ const addFriend = async friend => {
 };
 
 //获取指定友情链接
-const getFriend = async () => {
+const getFriend = async id => {
     try {
         let model = new Model;
-        let { results } = await model.query(`SELECT * FROM ?? WHERE id = ?`, [prefix + 'friend', id]);
+        let { results } = await model.query(`SELECT * FROM ?? WHERE id = ? and status = 0`, [prefix + 'friend', id]);
         return Promise.resolve(results.length > 0 ? results[0] : false);
     }catch (err){
         return Promise.reject(err);
@@ -66,7 +77,7 @@ const getFriend = async () => {
 };
 
 //编辑友情链接
-const editFriend = async friend => {
+const editFriend = async (id, friend) => {
     try {
         let model = new Model;
         let updates = {
@@ -111,7 +122,8 @@ const deleteFriendZ = async id => {
 };
 
 export default {
-    queryFriend,
+    queryFriendAdmin,
+    queryAllFriend,
     addFriend,
     getFriend,
     editFriend,

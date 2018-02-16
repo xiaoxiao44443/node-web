@@ -13,6 +13,7 @@ import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { maxWidthPoint } from '../../../../enum';
 import { getWindowScrollY } from '../../../../tool/dom-js';
+import Friend from '../blog/Friend';
 
 class BlogWrap extends Component {
     constructor(props){
@@ -85,6 +86,7 @@ class BlogWrap extends Component {
         const className = this.props.className || '';
 
         const { motto } = this.props;
+        const { friends } = this.props;
 
         const { groupPanelVisible, newCommentList } = this.state;
         const mainWrapClass = classNames({
@@ -161,13 +163,10 @@ class BlogWrap extends Component {
                                 <div className="recommend-item-container">
                                     <div className="recommend-item-header">
                                         <span className="name">博主の友人</span>
-                                        <div className="story-intro">博主闪亮登场！</div>
+                                        <div className="story-intro">对！就是这种低调，如同吃了炫迈</div>
                                     </div>
                                     <div className="recommend-item-main">
-                                        <p>
-                                            “只要你能幸福，我是谁，又有什么关系？<br/>
-                                            记不记得住，又有什么关系啊！”
-                                        </p>
+                                        <Friend friends={friends} />
                                     </div>
                                     <span className="recommend-item-more">
                                         超有爱
@@ -188,11 +187,13 @@ class BlogWrap extends Component {
 }
 
 BlogWrap.PropTypes = {
-    newComments: PropTypes.array
+    newComments: PropTypes.array,
+    friends: PropTypes.array
 };
 
 BlogWrap.defaultProps = {
-    newComments: []
+    newComments: [],
+    friends: []
 };
 
 export default BlogWrap;

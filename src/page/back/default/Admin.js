@@ -19,6 +19,8 @@ import AdminAccount from './Account';
 import AdminMusicList from './MusicList';
 import AdminMusicEdit from './MusicEdit';
 import AdminMusicConfig from './MusicConfig';
+import AdminFriendList from './FriendList';
+import AdminFriendEdit from './FriendEdit';
 
 const navData = [
     {
@@ -61,7 +63,16 @@ const navData = [
     {
         icon: 'icon-link',
         name: '友链管理',
-        link: '/admin/friend-link'
+        children: [
+            {
+                name: '所有朋友',
+                link: '/admin/friend/list'
+            },
+            {
+                name: '添加朋友',
+                link: '/admin/friend/add'
+            }
+        ]
     },
     {
         icon: 'icon-book',
@@ -228,6 +239,9 @@ class Admin extends PageComponent{
                         <Route path="/admin/music/add" component={AdminMusicEdit}/>
                         <Route path="/admin/music/edit/id([0-9]+)" component={AdminMusicEdit}/>
                         <Route path="/admin/music/config" component={AdminMusicConfig}/>
+                        <Route path="/admin/friend/list" component={AdminFriendList}/>
+                        <Route path="/admin/friend/edit/ad([0-9]+)" component={AdminFriendEdit}/>
+                        <Route path="/admin/friend/add/" component={AdminFriendEdit}/>
                         <Route component={NotFound}/>
                     </Switch>
                 </div>

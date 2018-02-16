@@ -1,0 +1,69 @@
+.admin-friend-list{
+    width: 100%;
+    overflow: hidden;
+}
+.admin-friend-list .friend-list-item{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: white;
+    position: relative;
+    padding-left: 60px;
+    margin-bottom: 20px;
+    font-size: .85em;
+    border: 1px solid #f5f1f1;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.admin-friend-list .friend-list-item .friend-index{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background: #e44c65;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.admin-friend-list .friend-item-head{
+    width: 140px;
+    height: 140px;
+    border: 1px solid #dedfda;
+}
+.admin-friend-list .friend-item-head img{
+    width: 100%;
+    height: 100%;
+}
+.admin-friend-list .friend-item-info{
+    margin-left: 1em;
+    height: 140px;
+}
+.admin-friend-list .friend-item-info .line{
+    padding: 5px 0;
+}
+.admin-friend-list .friend-item-info .btn-delete{
+    margin-left: 15px;
+}
+.admin-friend-list .friend-list-tip{
+    text-align: center;
+    margin-top: 200px;
+}
+.admin-friend-list .load-more{
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+.admin-friend-list .load-more >a{
+    padding: .3em .5em;
+    display: inline-block;
+    transition: background-color ease .5s;
+}
+.admin-friend-list .load-more >a:hover{
+    background: #e44c65;
+    color: white;
+    animation: links .1s 3;
+}

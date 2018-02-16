@@ -1,0 +1,68 @@
+.my-friends{
+    width: 100%;
+    padding: .5em 0;
+}
+.my-friends ul{
+    margin: 0;
+    padding: 0;
+}
+.my-friends .friend-wrap{
+    width: 33.33%;
+    overflow: hidden;
+    display: inline-block;
+    padding: 0 1.2em;
+    margin-top: 1em;
+    vertical-align: top;
+}
+.my-friends .friend-wrap .friend-head{
+    width: 100%;
+    height: 100%;
+    margin: .75em 0;
+    text-align: center;
+}
+.my-friends .friend-wrap .friend-head img{
+    width: 100%;
+    max-height: 100%;
+}
+.my-friends .friend-wrap .blog-name{
+    font-size: .85em;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 1.5em;
+    height: 1.5em;
+    text-overflow: ellipsis;
+}
+.my-friends .friend-wrap .friend-name{
+    font-size: .75em;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 1.5em;
+    height: 1.5em;
+    text-overflow: ellipsis;
+}
+.my-friends .friend-wrap .blog_motto{
+    font-size: .75em;
+    width: 100%;
+    height: 3em;
+    line-height: 1.5em;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 1200px){
+    .my-friends .friend-wrap{
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 736px){
+    .my-friends .friend-wrap{
+        width: 100%;
+        padding: 0 .25em;
+    }
+    .my-friends .friend-wrap .friend-head img{
+        width: 90%;
+        max-height: 90%;
+    }
+}

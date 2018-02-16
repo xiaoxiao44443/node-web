@@ -119,11 +119,11 @@ class Blog extends PageComponent {
         const articleList = articles.map((val) => {
             return <Article data={val} key={val.id}/>
         });
-        const { loadingMoreArticle, noMoreArticle, newComments, motto } = this.state;
+        const { loadingMoreArticle, noMoreArticle, newComments, motto, friends } = this.state;
         const loadingMoreArticleTip = !loadingMoreArticle ? (!noMoreArticle ? '加载更多' :'已经到底了//~~') : '努力加载中//~~';
         const loadMore = <div className="load-more"><a href="javascript:void(0);" onClick={this.loadMoreArticle}>{loadingMoreArticleTip}</a></div>;
         return (
-            <BlogWrap backGroundImg={backGroundImg} newComments={newComments} motto={motto}>
+            <BlogWrap backGroundImg={backGroundImg} newComments={newComments} motto={motto} friends={friends}>
                 <div className="article-list">
                     {
                         articleList.length == 0 ? loadMore :
