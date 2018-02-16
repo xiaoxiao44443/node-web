@@ -238,7 +238,7 @@ class MusicDetail extends Component {
     onPlaying = e => {
         const player = { ...this.state.player };
         player.paused = false;
-        layer.loading = false;
+        player.loading = false;
         this.setState({ player });
         if (this.props.onPlay) this.props.onPlay();
     };
