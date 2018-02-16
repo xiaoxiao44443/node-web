@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import './musicDetail.css';
 import { getWindowScrollY } from '../../../../tool/dom-js';
 import { store } from '../../../../tool/store';
-import DragHelper from '../../../../component/common/tool/DragHelper';
+import DragHelper from '../../../../component/common/tool/DragHepler';
 
 const showTopTip = (text, duration) => {
     const musicDetail = document.getElementsByClassName('music-detail')[0];
@@ -194,7 +194,7 @@ class MusicDetail extends Component {
         const num = player.list.length;
         if (num == 0) return;
         //0:列表循环 1:随机播放 2:单曲循环
-        if (player.mode == 2) {
+        if (player.mode == 2 || num == 1) {
             this.process2bar(0);
             audio.play();
         } else {
