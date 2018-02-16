@@ -66,12 +66,13 @@ class MusicDetail extends Component {
         init: false,
         player: {
             loading: false,
+            canPlay: false,
             touchStart: {},
             listBoxVisible: false,
             paused: true,
             btnX: -8,
             currentTime: 0,
-            duration: 0,
+            duration: -1,
             mode: 0, // 0:列表循环 1:随机播放 2:单曲循环,
             audioIndex: 0,
             list: [],
@@ -81,7 +82,11 @@ class MusicDetail extends Component {
         const { _music } = this.props;
         this.resizeCover();
         window.addEventListener('resize', this.onResize);
-        this.DragHelper = new DragHelper(this.onDragMove);
+        this.DragHelper = new DragHelper({
+            onDragStart: this.onDragStart ,
+            onDragMove: this.onDragMove,
+            onDragEnd: this.onDragEnd
+        });
         if (_music) {
             const player = { ...this.state.player };
             player.mode = _music.mode;
@@ -115,6 +120,7 @@ class MusicDetail extends Component {
         audio.addEventListener('ended', this.onEnded);
         audio.addEventListener('loadstart', this.onLoadstart);
         audio.addEventListener('canplay', this.onCanplay);
+        audio.addEventListener('durationchange', this.onDurationchange);
         this.setState({ init: true });
     };
     removeEventListener = () => {
@@ -128,6 +134,7 @@ class MusicDetail extends Component {
         audio.removeEventListener('timeupdate', this.onTimeupdate);
         audio.removeEventListener('ended', this.onEnded);
         audio.removeEventListener('loadstart', this.onLoadstart);
+        audio.removeEventListener('durationchange', this.onDurationchange);
         this.setState({ init: false });
     };
     componentWillReceiveProps(nextProps){
@@ -161,6 +168,16 @@ class MusicDetail extends Component {
     onLoadstart = e => {
         const player = { ...this.state.player };
         player.loading = true;
+        player.canPlay = false;
+        player.currentTime = 0;
+        player.duration = -1; //显示'--:--'
+        player.btnX = this.currentTime2btnX(0);
+        this.setState({ player });
+    };
+    onDurationchange = e => {
+        const player = { ...this.state.player };
+        const audio = this.refs.audio;
+        player.duration = audio.duration;
         this.setState({ player });
     };
     onPause = e => {
@@ -178,6 +195,7 @@ class MusicDetail extends Component {
         if (num == 0) return;
         //0:列表循环 1:随机播放 2:单曲循环
         if (player.mode == 2) {
+            this.process2bar(0);
             audio.play();
         } else {
             this.nextMusic();
@@ -185,6 +203,7 @@ class MusicDetail extends Component {
     };
     //播放位置改变
     onTimeupdate = e => {
+        if (this._dragStart) return;
         const player = { ...this.state.player };
         const audio = this.refs.audio;
         player.currentTime = audio.currentTime;
@@ -192,6 +211,7 @@ class MusicDetail extends Component {
         this.process2bar(audio.currentTime);
     };
     sec2time = second => {
+        if (second == -1) return '--:--';
         let m, s;
         m = parseInt(second / 60);
         s = parseInt(second - m * 60);
@@ -202,12 +222,13 @@ class MusicDetail extends Component {
     //就绪
     onCanplay = e => {
         const player = { ...this.state.player };
-        player.loading = false;
+        player.canPlay = true;
         this.setState({ player });
     };
     onPlay = e => {
         const player = { ...this.state.player };
         player.paused = false;
+        player.loading = false;
         const audio = this.refs.audio;
         player.duration = audio.duration;
         this.setState({ player });
@@ -217,6 +238,7 @@ class MusicDetail extends Component {
     onPlaying = e => {
         const player = { ...this.state.player };
         player.paused = false;
+        layer.loading = false;
         this.setState({ player });
         if (this.props.onPlay) this.props.onPlay();
     };
@@ -232,20 +254,39 @@ class MusicDetail extends Component {
             this.props.onChangeMusic(music && music.cover);
         }
     };
-    bar2process = btnx => {
+    bar2process = btnX => {
+        const currentTime = this.btnX2CurrentTime(btnX);
+        const audio = this.refs.audio;
+        audio.currentTime = currentTime;
+        audio.play();
+    };
+    btnX2CurrentTime = btnX => {
         const player = { ...this.state.player };
         const barWidth = this.refs.process_bar.offsetWidth;
         const w = this.refs.process_btn.offsetWidth;
-        const currentTime = (btnx + w / 2) * player.duration / barWidth;
-        const audio = this.refs.audio;
-        audio.currentTime = currentTime;
+        let _c = (btnX + w / 2) * player.duration / barWidth;
+        _c = _c > 0 ? _c : 0;
+        const _max = player.duration > parseInt(player.duration) ? parseInt(player.duration) : player.duration - .1;
+        return _c < player.duration ? _c : _max;
+    };
+    currentTime2btnX = currentTime => {
+        const player = { ...this.state.player };
+        const barWidth = this.refs.process_bar.offsetWidth;
+        const w = this.refs.process_btn.offsetWidth;
+        return player.duration > 0 ? barWidth * currentTime / player.duration - w / 2 : - w / 2;
     };
     process2bar = currentTime => {
         const player = { ...this.state.player };
-        const barWidth = this.refs.process_bar.offsetWidth;
-        const w = this.refs.process_btn.offsetWidth;
-        player.btnX = player.duration > 0 ? barWidth * currentTime / player.duration - w / 2 : - w / 2;
+        player.btnX = this.currentTime2btnX(currentTime);
         this.setState({ player });
+    };
+    onDragStart = () => {
+        this._dragStart = true;
+    };
+    onDragEnd = () => {
+        this._dragStart = false;
+        let player  = { ...this.state.player };
+        this.bar2process(player.btnX);
     };
     onDragMove = ({ x, y, w, h }) => {
         let player  = { ...this.state.player };
@@ -254,10 +295,10 @@ class MusicDetail extends Component {
         x = x >= - parseInt(w / 2) ? x : - parseInt(w / 2);
         if (x > processW - w / 2 ) x = processW - w / 2;
         player.btnX = x;
+        player.currentTime = this.btnX2CurrentTime(x);
         this.setState({
             player
         });
-        this.bar2process(x);
     };
     beforeMusic = () => {
         const player = { ...this.state.player };
@@ -269,6 +310,7 @@ class MusicDetail extends Component {
         player.audioIndex = audioIndex;
         audio.src = player.list[audioIndex].src;
         audio.autoplay = true;
+        audio.play();
         this.callChangeMusic(audioIndex);
         this.setState({ player });
     };
@@ -293,6 +335,7 @@ class MusicDetail extends Component {
         player.audioIndex = audioIndex;
         audio.src = player.list[audioIndex].src;
         audio.autoplay = true;
+        audio.play();
         this.callChangeMusic(audioIndex);
         this.setState({ player });
     };
@@ -325,7 +368,7 @@ class MusicDetail extends Component {
                 this.beforeMusic();
                 break;
             case 'play':
-                audio.play();
+                if (!player.loading && player.canPlay) audio.play();
                 break;
             case 'pause':
                 audio.pause();
@@ -338,6 +381,7 @@ class MusicDetail extends Component {
                 break;
         }
     };
+    //关闭
     back = (callClose = true) => {
         this.refs.music_detail.className = 'music-detail animated-fast slideOutRight';
         const mainWrap = document.getElementsByClassName('main-wrap')[0];

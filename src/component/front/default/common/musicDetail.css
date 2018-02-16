@@ -242,6 +242,7 @@
     align-items: center;
     justify-content: center;
     margin-top: 5px;
+    -webkit-user-select: none;
 }
 .music-process-wrap .process-timer{
     font-size: .65em;
@@ -249,6 +250,7 @@
     display: inline-block;
     width: 3.5em;
     text-align: center;
+    cursor: default;
 }
 .music-process-wrap .process-bar{
     width: calc(100% - 7em);
@@ -269,6 +271,8 @@
     margin-top: -8px;
     left: -8px;
     cursor: pointer;
+    -webkit-user-select: none;
+    touch-action: none;
 }
 .music-process-wrap .process-btn-loading{
     position: absolute;

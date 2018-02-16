@@ -11,7 +11,7 @@ import DragHelper from '../../../../component/common/tool/DragHepler';
 class MusicWedgit extends Component {
     constructor() {
         super();
-        this.DragHelper = new DragHelper(this.onDragMove);
+        this.DragHelper = new DragHelper({ onDragMove: this.onDragMove });
     }
     state = {
         showInit: false,
@@ -34,7 +34,7 @@ class MusicWedgit extends Component {
         });
     };
     showMusicDetail = () => {
-        if (this.DragHelper.dragging > 0) return;
+        if (this.DragHelper.draggingIndex > 0) return;
         this.setState({ showInit: true, showMusicDetail: true });
     };
     maskClick = () => {

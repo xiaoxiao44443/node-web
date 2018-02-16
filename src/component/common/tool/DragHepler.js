@@ -3,8 +3,10 @@
  */
 
 class DragHelper {
-    constructor(func = () => {}) {
-        this.moveCallBack = func;
+    constructor({ onDragStart, onDragMove, onDragEnd }) {
+        this.dragStartCallBack = typeof onDragStart == 'function' ? onDragStart : () => {};
+        this.moveCallBack = typeof onDragMove == 'function' ? onDragMove : () => {};
+        this.dragEndCallBack = typeof onDragEnd == 'function' ? onDragEnd : () => {};
     };
     start = {
         offsetX: 0,
@@ -12,15 +14,16 @@ class DragHelper {
     };
     touch = false;
     mouseDown = false;
-    dragging = 0; //鼠标弹起计数器
+    draggingIndex = 0; //鼠标弹起计数器
     target = null;
-    moveCallBack = () => {};
+    lastMovePos = false;
     recordStart = touch => {
         const target = this.target;
         this.start = {
             offsetX: touch.clientX - target.offsetLeft,
             offsetY: touch.clientY - target.offsetTop
-        }
+        };
+        this.dragStartCallBack();
     };
     moveCalc = touch => {
         const start = this.start;
@@ -29,11 +32,10 @@ class DragHelper {
         let y = touch.clientY - start.offsetY;
         let w = target.offsetWidth;
         let h = target.offsetHeight;
-        if (typeof this.moveCallBack == 'function') {
-            this.moveCallBack({
-                x, y, w, h
-            });
-        }
+        this.lastMovePos = { x, y, w, h };
+        this.moveCallBack({
+            x, y, w, h
+        });
     };
     onMouseMove = e => {
         if (!this.mouseDown) return;
@@ -45,7 +47,7 @@ class DragHelper {
                 e.preventDefault();
             }
         }
-        this.dragging = 2; //鼠标弹起，用来判断是否触发click
+        this.draggingIndex = 2; //鼠标弹起，用来判断是否触发click
         this.moveCalc(e, e.target);
     };
     onMouseUp =  e => {
@@ -61,18 +63,20 @@ class DragHelper {
         this.touch = false;
         this.mouseDown = false;
         this.target = null;
+        this.dragEndCallBack(this.lastMovePos);
+        this.lastMovePos = false;
     };
     props = {
         onMouseDown: e => {
             this.mouseDown = true;
-            this.dragging = 1;
+            this.draggingIndex = 1;
             this.target = e.target;
             document.addEventListener('mousemove', this.onMouseMove);
             document.addEventListener('mouseup', this.onMouseUp);
             this.recordStart(e);
         },
         onMouseUp: e => {
-            this.dragging = this.dragging - 1;
+            this.draggingIndex = this.draggingIndex - 1;
             e.preventDefault();
             this.dragEnd();
             this.removeEventListener();
