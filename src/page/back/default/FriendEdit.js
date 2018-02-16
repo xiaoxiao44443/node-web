@@ -113,7 +113,7 @@ class FriendEdit extends PageComponent {
 
         //id小于0约定为添加友联
         const data = {
-            id,
+            ad: id,
             friend: {
                 friend_name, friend_head, blog_name, blog_url, display_order, blog_motto
             }
