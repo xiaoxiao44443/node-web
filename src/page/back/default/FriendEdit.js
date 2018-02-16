@@ -148,7 +148,7 @@ class FriendEdit extends PageComponent {
             return;
         }
         let friend = {...this.state.friend};
-        friend.friend_head = `/api/pic${id}`;
+        friend.friend_head = `/api/pic${id}?format=200*200`;
         this.setState({
             friend
         });

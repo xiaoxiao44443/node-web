@@ -77,12 +77,48 @@ Request.get('/logout',async(req, res, next) => {
 
 //api/pic
 Request.get('/api/pic([0-9]+)', async(req, res, next) => {
-    const pic = req.params[0];
     try {
+        const pic = req.params[0];
+        let format = req.query.format;
+
         let realPath = await pictureApi.getPicPath(pic);
         if(realPath){
             res.setHeader('Cache-Control', 'public, max-age=1d');
-            res.sendFile(realPath);
+            if (format) {
+                //缩放图片
+                //比如 300x300
+                format = format.split('x');
+                let w = null;
+                let h = null;
+                if (format.length == 1) {
+                    w = (format[0] > 0 && format[0] < 9999) ? parseInt(format[0]) : w;
+                }
+                if (format.length == 2) {
+                    w = (format[0] > 0 && format[0] < 9999) ? parseInt(format[0]) : w;
+                    h = (format[1] > 0 && format[1] < 9999) ? parseInt(format[1]) : h;
+                }
+                if (w || h) {
+                    let image;
+                    let metadata = false;
+                    try {
+                        const sharp = require('sharp');
+                        image = sharp(realPath);
+                        metadata = await image.metadata();
+                    } catch (err) {
+                        //
+                    }
+                    if (metadata) {
+                        const buffer = await image.resize(w, h).toBuffer();
+                        res.setHeader('Content-Type', `image/${metadata.format}`);
+                        res.send(buffer);
+                    } else {
+                        res.sendFile(realPath);
+                    }
+                }
+            } else {
+                res.sendFile(realPath);
+            }
+
         }else{
             next();
         }
