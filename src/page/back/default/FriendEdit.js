@@ -184,7 +184,7 @@ class FriendEdit extends PageComponent {
                 <div className="admin-form-group text-right">
                     {id ? <a className="btn btn-confirm" href="javascript:void(0);" onClick={this.saveFriend}>{this.state.loading ? '保存...': '保存'}</a> :
                         <a className="btn btn-confirm" href="javascript:void(0);" onClick={this.addFriend}>{this.state.loading ? '添加...': '添加'}</a>}
-                    <Link className="btn btn-cancel" to="/admin/music/list">取消</Link>
+                    <Link className="btn btn-cancel" to="/admin/friend/list">取消</Link>
                 </div>
             </div>
         );
