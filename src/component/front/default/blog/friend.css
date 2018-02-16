@@ -21,7 +21,7 @@
     text-align: center;
 }
 .my-friends .friend-wrap .friend-head img{
-    width: 100%;
+    max-width: 100%;
     max-height: 100%;
 }
 .my-friends .friend-wrap .blog-name{
@@ -50,7 +50,14 @@
     overflow: hidden;
 }
 
-@media screen and (max-width: 1200px){
+@media screen and (min-width: 1200px){
+    .my-friends .friend-wrap .friend-head img{
+        max-width: 90%;
+        max-height: 90%;
+    }
+}
+
+@media screen and (max-width: 1500px){
     .my-friends .friend-wrap{
         width: 50%;
     }

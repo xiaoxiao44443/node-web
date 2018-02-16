@@ -131,7 +131,7 @@ class FriendList extends PageComponent {
                 {
                     friendList.length > 0 ? <ul>{friendList}</ul> : <div className="friend-list-tip">没有任何朋友哦//~~</div>
                 }
-                {loadMore}
+                {friendList.length > 0 && loadMore}
             </div>
         );
     }

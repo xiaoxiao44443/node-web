@@ -14,7 +14,7 @@ class FriendItem extends Component {
                     <a href={friend.blog_url} target="_blank"> ■{friend.blog_name}</a>
                 </div>
                 <div className="friend-head">
-                    <a href={friend} target="_blank"><img src={friend.friend_head}/></a>
+                    <a href={friend.blog_url} target="_blank"><img src={friend.friend_head}/></a>
                 </div>
                 <div className="friend-name">
                     --{friend.friend_name}
