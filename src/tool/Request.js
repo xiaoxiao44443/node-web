@@ -96,10 +96,11 @@ class _Request {
     }
 }
 
-export const returnSuc = (data, title, url) =>{
+export const returnSuc = (data, title, url, other) =>{
     let ret = {code:0, data};
     if(title) ret.title = title;
     if(url) ret.url = url;
+    if(other) ret.other = other;
     return ret;
 };
 export const returnErr = (data, title, url) =>{

@@ -127,12 +127,15 @@ Request.get('/', async(req, res, next) => {
         const title = `${site_name}`;
 
         //初始化页面数据
+
         const state = {};
 
+        //音乐盒信息
+        const musicInfo = await musicApi.getMusicInfo();
+
         if(Request.REQUEST_JSON){
-            res.json(returnSuc(state, title));
+            res.json(returnSuc(state, title, false, musicInfo));
         }else{
-            const musicInfo = await musicApi.getMusicInfo();
             resRender(req, res, title, state, 'index', musicInfo);
         }
 
@@ -165,10 +168,12 @@ Request.get('/blog', async(req, res, next) => {
 
         const state  = { articles: articles, newComments: newComments, motto: motto, friends: friends };
 
+        //音乐盒信息
+        const musicInfo = await musicApi.getMusicInfo();
+
         if(Request.REQUEST_JSON){
-            res.json(returnSuc(state, title));
+            res.json(returnSuc(state, title, false, musicInfo));
         }else{
-            const musicInfo = await musicApi.getMusicInfo();
             resRender(req, res, title, state, 'index', musicInfo);
         }
 
@@ -227,10 +232,13 @@ Request.get('/blog/ad([0-9]+)', async(req, res, next) => {
 
         //网站标题是文章标题
         const title = `${site_name} | ${article.title}`;
+
+        //音乐盒信息
+        const musicInfo = await musicApi.getMusicInfo();
+
         if(Request.REQUEST_JSON){
-            res.json(returnSuc(state, title));
+            res.json(returnSuc(state, title, false, musicInfo));
         }else{
-            const musicInfo = await musicApi.getMusicInfo();
             resRender(req, res, title, state, 'index', musicInfo);
         }
 

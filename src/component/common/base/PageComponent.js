@@ -86,7 +86,8 @@ class PageComponent extends Component {
                     title: res.title, init: res.data
                 });
             if(res.code == 0){
-                this.props.$store.update({ _page: { url, state: res.data, title: res.title } });
+                const other = res.other;
+                this.props.$store.update({ _page: { url, state: res.data, title: res.title }, ...other });
                 this.setState({
                     ...res.data,
                     _pageLoadOver: true

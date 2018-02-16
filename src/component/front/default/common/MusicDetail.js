@@ -79,7 +79,6 @@ class MusicDetail extends Component {
         }
     };
     componentDidMount(){
-        const { _music } = this.props;
         this.resizeCover();
         window.addEventListener('resize', this.onResize);
         this.DragHelper = new DragHelper({
@@ -87,7 +86,15 @@ class MusicDetail extends Component {
             onDragMove: this.onDragMove,
             onDragEnd: this.onDragEnd
         });
-        if (_music) {
+       this.getMusicInfo(this.props);
+        if (this.props.show) this.addEventLister();
+    }
+
+    //从props中获取music
+    getMusicInfo = props => {
+        const { _music } = props;
+        //播放列表为空才更新
+        if (_music && this.state.player.list.length == 0) {
             const player = { ...this.state.player };
             player.mode = _music.mode;
             player.audioIndex = _music.audioIndex;
@@ -95,9 +102,7 @@ class MusicDetail extends Component {
             this.setState({ player });
             setTimeout(() => this.callChangeMusic(_music.audioIndex));
         }
-        if (this.props.show) this.addEventLister();
-    }
-
+    };
     resizeCover = () => {
         const w = window.document.body.offsetWidth > 1400 ? 400 : window.document.body.offsetWidth * .65 + 100;
         const ohterHeight = 75 + 35;
@@ -138,6 +143,7 @@ class MusicDetail extends Component {
         this.setState({ init: false });
     };
     componentWillReceiveProps(nextProps){
+        this.getMusicInfo(nextProps);
         if (this.props.visible && !nextProps.visible) {
             this.back(false);
         }
@@ -425,7 +431,7 @@ class MusicDetail extends Component {
             audioSrc = audioInfo.src;
         }
         const style = {
-            backgroundImage: `url(${cover})`,
+            backgroundImage: cover ? `url(${cover})` : '',
             backgroundPosition: 'center',
             backgroundSize: '200%'
         };
@@ -455,7 +461,7 @@ class MusicDetail extends Component {
                     <div className="cover-info">
                         <div className="caption">{caption}<a onClick={this.back} className="back-btn" href="javascript:void(0);"/></div>
                         <div className="cover-img">
-                            <img src={cover}/>
+                            {cover && <img src={cover}/>}
                         </div>
                     </div>
                 </div>
