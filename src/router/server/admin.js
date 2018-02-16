@@ -320,6 +320,26 @@ Request.post('/edit/uploaded-pics', async(req, res, next) => {
     }
 });
 
+Request.post('/edit/delete-pic', async(req, res, next) => {
+
+    try {
+        //获取网站配置
+        if(Request.REQUEST_JSON){
+            //初始化数据
+            const id = req.body.id;
+
+            let ret = await pictureApi.deletePic(id);
+            if(ret){
+                res.json(returnSuc('删除成功~'));
+            }else{
+                res.json(returnErr('删除失败!'));
+            }
+        }
+    }catch (ex) {
+        next(ex);
+    }
+});
+
 //admin/recommend
 Request.get('/recommend', async(req, res, next) => {
     try {

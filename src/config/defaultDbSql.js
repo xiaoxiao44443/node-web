@@ -64,6 +64,7 @@ const image = {
         author int(11) NOT NULL COMMENT '作者',
         md5 char(32) NOT NULL COMMENT '图片md5',
         create_time bigint(11) NOT NULL COMMENT '创建时间',
+        status tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态 0:正常 -1:删除',
         PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图片表'`
 };

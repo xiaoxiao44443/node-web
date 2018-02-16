@@ -128,8 +128,29 @@ class PicSelector extends Component {
             }
         });
     };
+    deletePic = async () => {
+        if(this.state.loadingUploadedPics) return;
+
+        const { uploadedSelected, uploadedPics } = this.state;
+        const nowSelected = uploadedSelected >-1 ? uploadedPics[uploadedSelected].id : false;
+        if (!nowSelected) return alert('没有选择任何已上传图片哦');
+
+        //删除图片
+        const data = { id: nowSelected };
+        const res = await http.apiPost('/admin/edit/delete-pic', data);
+
+        this.setState({
+            loadingUploadedPics: false
+        });
+        if (res.code == 0) {
+            this.getUploadedPics(true);
+            alert('删除成功~');
+        } else {
+            alert('删除失败~');
+        }
+    };
     onConfirm = () => {
-        const { uploadedSelected, uploadedPics} = this.state;
+        const { uploadedSelected, uploadedPics } = this.state;
         if(uploadedSelected == -1){
             alert('没有选择任何已上传图片哦');
             return;
@@ -162,7 +183,9 @@ class PicSelector extends Component {
                     <div className="admin-pic-select">
                         <h3>选择图片</h3>
                         <a className="btn btn-confirm" href="javascript:void(0);" onClick={() => this.getUploadedPics(true)}>刷新</a>
-                        <span>当前选择图片：{nowSelected? <input value={nowSelected} readOnly/>:null}{nowSelected? <small style={{marginLeft:15}}>可右键复制图片地址233~~</small>:null}</span>
+                        <span>当前选择图片：{nowSelected && <input value={nowSelected} readOnly/>}{nowSelected && <small style={{marginLeft:15, marginRight:15}}>可右键复制图片地址233~~</small>}</span>
+                        <a className="btn btn-confirm" href="javascript:void(0);" onClick={this.deletePic}>删除</a>
+                        {nowSelected && <span><small>仅从列表中删除，不删除源文件</small></span>}
                         <div className="thumbs-box">
                             <ul>{uploadedPicLst}</ul>
                         </div>
@@ -173,7 +196,7 @@ class PicSelector extends Component {
                         </div>
                         <div className="text-right">
                             <a className="btn btn-confirm" href="javascript:void(0);" onClick={this.upload}>选中上传</a>
-                            {this.props.onConfirm ? <a href="javascript:void(0);" className="btn btn-confirm" onClick={this.onConfirm}>确定修改</a>: null}
+                            {this.props.onConfirm && <a href="javascript:void(0);" className="btn btn-confirm" onClick={this.onConfirm}>确定修改</a>}
                             <a href="javascript:void(0);" className="btn btn-cancel" onClick={onClose}>关闭</a>
                         </div>
                     </div>

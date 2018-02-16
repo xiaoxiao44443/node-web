@@ -94,7 +94,7 @@ const savePic = async (pathname, type, author) => {
     }
 };
 
-const getPicsByType = async (type, author ,option) => {
+const getPicsByType = async (type, author ,option, status = 0) => {
     try {
         const _default = {
             p: 1,
@@ -108,9 +108,21 @@ const getPicsByType = async (type, author ,option) => {
         size = parseInt(size >=1 ? size : _default.size);
 
         let page = `${(p - 1)*size},${size}`;
-        let { results } = await model.query(`SELECT id FROM ?? WHERE type = ? AND author = ? ORDER BY create_time desc LIMIT ${page}`, [prefix + 'image', type, author]);
+        let { results } = await model.query(`SELECT id FROM ?? WHERE type = ? AND author = ? AND status = ? ORDER BY create_time desc LIMIT ${page}`, [prefix + 'image', type, author, status]);
         return Promise.resolve(results);
     }catch (err){
+        return Promise.reject(err);
+    }
+};
+
+//假删除
+const deletePic = async pic => {
+    try {
+        let model = new Model;
+
+        let { results } = await model.query(`UPDATE ?? SET status = -1 WHERE id = ? AND status = 0`, [prefix + 'image', pic]);
+        return Promise.resolve(results.affectedRows >= 1);
+    } catch (err) {
         return Promise.reject(err);
     }
 };
@@ -118,5 +130,6 @@ export  default {
     getPicPath,
     savePic,
     picType,
-    getPicsByType
+    getPicsByType,
+    deletePic
 }
