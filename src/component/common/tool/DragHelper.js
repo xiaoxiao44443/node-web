@@ -68,6 +68,7 @@ class DragHelper {
     };
     props = {
         onMouseDown: e => {
+            if (e.button !== 0) return; //只能左键点击
             this.mouseDown = true;
             this.draggingIndex = 1;
             this.target = e.target;

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import './music.css';
 import { maxWidthPoint } from '../../../../enum';
 import MusicDetail from './MusicDetail';
-import DragHelper from '../../../../component/common/tool/DragHepler';
+import DragHelper from '../../../../component/common/tool/DragHelper';
 
 class MusicWedgit extends Component {
     constructor() {
