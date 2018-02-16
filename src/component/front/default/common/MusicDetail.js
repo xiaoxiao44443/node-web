@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import './musicDetail.css';
 import { getWindowScrollY } from '../../../../tool/dom-js';
 import { store } from '../../../../tool/store';
-import DragHelper from '../../../../component/common/tool/DragHepler';
+import DragHelper from '../../../../component/common/tool/DragHelper';
 
 const showTopTip = (text, duration) => {
     const musicDetail = document.getElementsByClassName('music-detail')[0];
