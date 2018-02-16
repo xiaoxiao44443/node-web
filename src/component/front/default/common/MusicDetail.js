@@ -310,7 +310,6 @@ class MusicDetail extends Component {
         player.audioIndex = audioIndex;
         audio.src = player.list[audioIndex].src;
         audio.autoplay = true;
-        audio.play();
         this.callChangeMusic(audioIndex);
         this.setState({ player });
     };
@@ -335,7 +334,6 @@ class MusicDetail extends Component {
         player.audioIndex = audioIndex;
         audio.src = player.list[audioIndex].src;
         audio.autoplay = true;
-        audio.play();
         this.callChangeMusic(audioIndex);
         this.setState({ player });
     };

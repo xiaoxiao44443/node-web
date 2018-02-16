@@ -380,7 +380,9 @@
     text-align: center;
     border-top: 1px solid #ddd;
 }
-
+.music-list-box-wrap .btn-group >a{
+    display: block;
+}
 
 @media screen and (min-width: 1400px){
     .music-detail{
