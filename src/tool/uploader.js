@@ -3,6 +3,7 @@
  */
 import multer from 'multer';
 import moment from 'moment';
+import mkdirp from 'mkdirp';
 import pictureApi from '../api/picture';
 
 const fileFilter = (req, file, cb) => {
@@ -23,11 +24,16 @@ const destination = (req, file, cb) => {
     if (type == pictureApi.picType.friend) {
         destination = './public/upload/images/friend/' + moment().format('YYYY/MM/DD');
     }
-    cb(null, destination);
+    mkdirp(destination, err => {
+        if (err) {
+            cb(err);
+        } else {
+            cb(null, destination);
+        }
+    });
 };
 
 const imageUpload = function (cb) {
-    const destination = './public/upload/images/article/' + moment().format('YYYY/MM/DD');
     return multer({
         storage: multer.diskStorage({
             destination,
