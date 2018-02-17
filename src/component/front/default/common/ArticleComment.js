@@ -93,7 +93,7 @@ class CommentItem extends Component {
         if (typeof this.props.onDidMount === 'function') this.props.onDidMount();
     }
     async componentWillReceiveProps(nextProps){
-        if(nextProps.nowPage !== undefined && nextProps.nowPage!=this.state.page){
+        if(nextProps.nowPage !== undefined){
             await this.queryReply(nextProps.nowPage);
             if (typeof this.props.onDidMount === 'function') this.props.onDidMount();
         }
@@ -397,7 +397,10 @@ class ArticleComment extends Component {
     }
     callDidMount = () => {
         if (!this.state.hashChange) return;
-        this.setState({ hashChange: false });
+        this.setState({
+            hashChange: false,
+            findComment: {}
+        });
         if (this.props.onDidMount) this.props.onDidMount();
     };
     updateUserInfo = async () => {
