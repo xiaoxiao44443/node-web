@@ -278,7 +278,6 @@ Request.post('/edit/upload-img', async(req, res, next) => {
                     //图片压缩，超过300k的友联图片压缩到300x300
                     const filesPath = await pictureApi.compress(files, type);
 
-                    if (type == pictureApi.picType.friend)
                     try {
                         const ret = await pictureApi.savePic(filesPath, type, Request.USER.id);
                         if(ret){

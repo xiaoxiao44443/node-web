@@ -139,7 +139,7 @@ const compress = (files, type) => {
             for(let i = 0; i < files.length; i++){
                 let _path = files[i].path;
                 filesPath.push(_path);
-                if (type != picType.friend) return resolve(filesPath);
+                if (type != picType.friend) continue;
                 const { size, width, height } = picSizeLimit.friend;
                 if (size && files[i].size / 1024 > size){
                     try {
