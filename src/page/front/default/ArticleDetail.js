@@ -10,7 +10,6 @@ import PageComponent from '../../../component/common/base/PageComponent';
 import { maxWidthPoint } from '../../../enum';
 import markdown from '../../../tool/markdown';
 import ArticleComment from '../../../component/front/default/common/ArticleComment';
-const Easing = typeof window !== 'undefined' ? require('../../../component/common/tool/ease-sential') : {};
 import { scroll2ElementByClassName, scroll2EleByHashID } from '../../../tool/dom-js';
 
 class ArticleDetail extends PageComponent {
@@ -36,7 +35,7 @@ class ArticleDetail extends PageComponent {
     scroll2Hash = () => {
         //跳转到指定哈希值元素
         if (this.props.location.hash === '') return;
-        scroll2EleByHashID(this.props.location.hash, 0, 2000, 450);
+        setTimeout(() => scroll2EleByHashID(this.props.location.hash, 0, 2000, 450), 100);
     };
     render(){
         const { article, newComments, motto, friends } = this.state;

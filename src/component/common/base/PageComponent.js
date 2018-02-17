@@ -114,7 +114,8 @@ class PageComponent extends Component {
         if (nextProps.match.url!==this.props.match.url) {
             if (nextProps.history.action == 'PUSH' || nextProps.history.action == 'POP'){
                 this.setState({
-                    _pageLoadOver: false
+                    _pageLoadOver: false,
+                    ...this._defaultState
                 });
                 //设置延时让组件render
                 setTimeout(() => {this._pageInit(nextProps, true)}, 10);
