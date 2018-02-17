@@ -126,6 +126,7 @@ class MusicDetail extends Component {
         audio.addEventListener('loadstart', this.onLoadstart);
         audio.addEventListener('canplay', this.onCanplay);
         audio.addEventListener('durationchange', this.onDurationchange);
+        audio.addEventListener('canplaythrough', this.onCanplaythrough);
         this.setState({ init: true });
     };
     removeEventListener = () => {
@@ -140,6 +141,7 @@ class MusicDetail extends Component {
         audio.removeEventListener('ended', this.onEnded);
         audio.removeEventListener('loadstart', this.onLoadstart);
         audio.removeEventListener('durationchange', this.onDurationchange);
+        audio.removeEventListener('canplaythrough', this.onCanplaythrough);
         this.setState({ init: false });
     };
     componentWillReceiveProps(nextProps){
@@ -178,6 +180,12 @@ class MusicDetail extends Component {
         player.currentTime = 0;
         player.duration = -1; //显示'--:--'
         player.btnX = this.currentTime2btnX(0);
+
+        this.setState({ player });
+    };
+    onCanplaythrough = e => {
+        const player = { ...this.state.player };
+        player.loading = false;
         this.setState({ player });
     };
     onDurationchange = e => {
@@ -230,11 +238,12 @@ class MusicDetail extends Component {
         const player = { ...this.state.player };
         player.canPlay = true;
         this.setState({ player });
+        const audio = this.refs.audio;
+        audio.play();
     };
     onPlay = e => {
         const player = { ...this.state.player };
         player.paused = false;
-        player.loading = false;
         const audio = this.refs.audio;
         player.duration = audio.duration;
         this.setState({ player });
@@ -244,7 +253,6 @@ class MusicDetail extends Component {
     onPlaying = e => {
         const player = { ...this.state.player };
         player.paused = false;
-        player.loading = false;
         this.setState({ player });
         if (this.props.onPlay) this.props.onPlay();
     };
