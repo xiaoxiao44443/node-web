@@ -40,6 +40,31 @@ class PicSelector extends Component {
     onSelectPrePics = (index) =>{
         let newList = [];
         let flag = false;
+        const { preUploadPics } = this.state;
+        const { picType } = this.props;
+        //判断图片大小
+        if (picType == 1) {
+            //博客图片5M
+            if (preUploadPics[index].size / 1024 / 1024 > 5) {
+                alert('只能上传不大于1M的图片哦~');
+                delete preUploadPics[index];
+                this.setState({
+                    preUploadPics
+                });
+                return;
+            }
+        }
+        if (picType == 2) {
+            //友联头像1M
+            if (preUploadPics[index].size / 1024 / 1024 > 1) {
+                alert('只能上传不大于1M的图片~');
+                delete preUploadPics[index];
+                this.setState({
+                    preUploadPics
+                });
+                return;
+            }
+        }
         this.state.preUploadSelected.forEach((val, i) => {
             if(index != val){
                 newList.push(val);
@@ -88,7 +113,7 @@ class PicSelector extends Component {
                 //重新获取新的课选择图片列表（服务器返回）
                 this.getUploadedPics(true);
             }else{
-                alert('上传失败');
+                alert(res.data);
             }
         });
     };
@@ -129,24 +154,26 @@ class PicSelector extends Component {
         });
     };
     deletePic = async () => {
-        if(this.state.loadingUploadedPics) return;
+        if (window.confirm('真的要从列表中删除这张图片吗吗？')) {
+            if(this.state.loadingUploadedPics) return;
 
-        const { uploadedSelected, uploadedPics } = this.state;
-        const nowSelected = uploadedSelected >-1 ? uploadedPics[uploadedSelected].id : false;
-        if (!nowSelected) return alert('没有选择任何已上传图片哦');
+            const { uploadedSelected, uploadedPics } = this.state;
+            const nowSelected = uploadedSelected >-1 ? uploadedPics[uploadedSelected].id : false;
+            if (!nowSelected) return alert('没有选择任何已上传图片哦');
 
-        //删除图片
-        const data = { id: nowSelected };
-        const res = await http.apiPost('/admin/edit/delete-pic', data);
+            //删除图片
+            const data = { id: nowSelected };
+            const res = await http.apiPost('/admin/edit/delete-pic', data);
 
-        this.setState({
-            loadingUploadedPics: false
-        });
-        if (res.code == 0) {
-            this.getUploadedPics(true);
-            alert('删除成功~');
-        } else {
-            alert('删除失败~');
+            this.setState({
+                loadingUploadedPics: false
+            });
+            if (res.code == 0) {
+                this.getUploadedPics(true);
+                alert('删除成功~');
+            } else {
+                alert('删除失败~');
+            }
         }
     };
     onConfirm = () => {
@@ -184,7 +211,7 @@ class PicSelector extends Component {
                         <h3>选择图片</h3>
                         <a className="btn btn-confirm" href="javascript:void(0);" onClick={() => this.getUploadedPics(true)}>刷新</a>
                         <span>当前选择图片：{nowSelected && <input value={nowSelected} readOnly/>}{nowSelected && <small style={{marginLeft:15, marginRight:15}}>可右键复制图片地址233~~</small>}</span>
-                        <a className="btn btn-confirm" href="javascript:void(0);" onClick={this.deletePic}>删除</a>
+                        {nowSelected && <a className="btn btn-confirm" href="javascript:void(0);" onClick={this.deletePic}>删除</a>}
                         {nowSelected && <span><small>仅从列表中删除，不删除源文件</small></span>}
                         <div className="thumbs-box">
                             <ul>{uploadedPicLst}</ul>
