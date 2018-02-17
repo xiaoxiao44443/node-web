@@ -31,9 +31,6 @@ class ArticleDetail extends PageComponent {
     onUpdate = () => {
         //从其他页面跳转过来滚动到内容部分 没有哈希值才跳转到内容部分
         if (this.props.location.hash !== '') return;
-        this.setState({
-            updateComment: false
-        });
         scroll2ElementByClassName('article-detail-wrap', 0, 5000, 450);
     };
     scroll2Hash = () => {
@@ -42,7 +39,7 @@ class ArticleDetail extends PageComponent {
         scroll2EleByHashID(this.props.location.hash, 0, 2000, 450);
     };
     render(){
-        const { article, newComments, motto, friends, updateComment } = this.state;
+        const { article, newComments, motto, friends } = this.state;
 
         let articleContent;
         if(article){
