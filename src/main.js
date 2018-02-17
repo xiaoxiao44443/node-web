@@ -50,9 +50,6 @@ class Root extends Component {
             if(location.hash!=''){
                 //哈希跳转
                 //滚动到指定元素位置
-                if(action == 'PUSH' || action == 'REPLACE'){
-                    scroll2EleByHashID(location.hash, 0, 0, 2000)
-                }
                 if(action == 'POP'){
                     scroll2EleByHashID(location.hash);
                 }
