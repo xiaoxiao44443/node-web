@@ -52,6 +52,9 @@ class PageComponent extends Component {
         }
         const props = nextProps || this.props;
         const url = props.match.url;
+        if(props._page && props._page.url !== url){
+            props.$store.update({_page: false});
+        }
         if(!initState && props._page && props._page && props._page.url === url){
             const _page = props._page;
             props.history.replace(url + props.location.hash, {title: document.title, init: _page.state});
