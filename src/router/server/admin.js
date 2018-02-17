@@ -269,15 +269,16 @@ Request.post('/edit/upload-img', async(req, res, next) => {
     try{
         (new uploader.imageUpload)(req, res, async err => {
             if(err){
-                next(err);
+                res.send(returnErr(err.message));
             }else{
                 const files = req.files;
-                const type =parseInt(req.body.type);
+                const type = parseInt(req.body.type);
 
                 if(files){
-                    const filesPath = files.map(val => {
-                        return val.path;
-                    });
+                    //图片压缩，超过300k的友联图片压缩到300x300
+                    const filesPath = await pictureApi.compress(files, type);
+
+                    if (type == pictureApi.picType.friend)
                     try {
                         const ret = await pictureApi.savePic(filesPath, type, Request.USER.id);
                         if(ret){

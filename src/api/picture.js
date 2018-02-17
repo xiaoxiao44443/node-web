@@ -13,6 +13,10 @@ const picType = {
     friend: 2
 };
 
+const picSizeLimit = {
+    blog: false,
+    friend: { size: 300, width: 300, height: 300 } //300kb 压缩到300*300
+};
 
 const getFileMd5 = async filePath => {
     let c = require('crypto');
@@ -126,10 +130,46 @@ const deletePic = async pic => {
         return Promise.reject(err);
     }
 };
+
+//图片压缩
+const compress = (files, type) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let filesPath = [];
+            for(let i = 0; i < files.length; i++){
+                let _path = files[i].path;
+                filesPath.push(_path);
+                if (type != picType.friend) return resolve(filesPath);
+                const { size, width, height } = picSizeLimit.friend;
+                if (size && files[i].size / 1024 > size){
+                    try {
+                        const sharp = require('sharp');
+                        const image = sharp(_path);
+                        await image.metadata();
+                        const moment = require('moment');
+                        const _tmpPath = require('path').resolve(_path, '..')
+                            + '/_tmp'+ moment().format('YYYYMMDDHHssSSS');
+                        await image.resize(width, height).toFile(_tmpPath);
+                        const fse = require('fs-extra');
+                        fse.moveSync(_tmpPath, _path, { overwrite: true });
+                    } catch (err) {
+                        //
+                    }
+                }
+            }
+            resolve(filesPath);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 export  default {
     getPicPath,
     savePic,
     picType,
+    picSizeLimit,
+    compress,
     getPicsByType,
     deletePic
 }

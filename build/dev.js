@@ -1,7 +1,7 @@
 /**
  * Created by xiao on 2017/4/28.
  */
-let fse = require('node-fs-extra');
+let fse = require('fs-extra');
 let path = require('path');
 
 console.log('removing old files...');
