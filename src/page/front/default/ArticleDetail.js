@@ -10,14 +10,15 @@ import PageComponent from '../../../component/common/base/PageComponent';
 import { maxWidthPoint } from '../../../enum';
 import markdown from '../../../tool/markdown';
 import ArticleComment from '../../../component/front/default/common/ArticleComment';
-
+const Easing = typeof window !== 'undefined' ? require('../../../component/common/tool/ease-sential') : {};
+import { scroll2ElementByClassName, scroll2EleByHashID } from '../../../tool/dom-js';
 
 class ArticleDetail extends PageComponent {
     constructor(props){
         super(props);
 
         const state = {
-            article: null,
+            article: null
         };
         this._setDefaultState(state);
     }
@@ -27,8 +28,21 @@ class ArticleDetail extends PageComponent {
             this.refs.articleWrap.className = maxWidth > maxWidthPoint.medium ? 'bounceInUp animated' : '';
         }
     }
+    onUpdate = () => {
+        //从其他页面跳转过来滚动到内容部分 没有哈希值才跳转到内容部分
+        if (this.props.location.hash !== '') return;
+        this.setState({
+            updateComment: false
+        });
+        scroll2ElementByClassName('article-detail-wrap', 0, 5000, 450);
+    };
+    scroll2Hash = () => {
+        //跳转到指定哈希值元素
+        if (this.props.location.hash === '') return;
+        scroll2EleByHashID(this.props.location.hash, 0, 2000, 450);
+    };
     render(){
-        const { article, newComments, motto, friends } = this.state;
+        const { article, newComments, motto, friends, updateComment } = this.state;
 
         let articleContent;
         if(article){
@@ -68,7 +82,9 @@ class ArticleDetail extends PageComponent {
                             : articleContent
                     )}
                 </div>
-                { article === null || <ArticleComment type="article" type_key={article.id} /> }
+                { article !== null &&
+                <ArticleComment type="article" type_key={article.id}
+                                hashCommentHash={this.props.location.hash} onDidMount={this.scroll2Hash} /> }
             </BlogWrap>
         );
     }

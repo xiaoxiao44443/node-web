@@ -195,6 +195,7 @@ const deleteComment = async (id) => {
 
 };
 
+//最新回复列表
 const newCommentList = async (size = 5) => {
     try {
         let model = new Model;
@@ -206,6 +207,55 @@ const newCommentList = async (size = 5) => {
     }
 };
 
+//根据回复查找到指定评论页码
+const queryByComment = async (id, commentSize = 10, replySize = 5 ) => {
+    try {
+        let model = new Model(false);
+        let { results } = await model.query(`SELECT * FROM ?? WHERE id = ? AND status = 0 LIMIT 1`, [prefix + 'comment', id]);
+        if (results.length == 0) {
+            await model.end();
+            return Promise.resolve(false);
+        }
+        let comment = results[0];
+        if (comment.comment_id == 0) {
+            //这是评论，计算评论在第几页
+            const comment_id = comment.id;
+            const type_key = comment.type_key;
+            //统计评论数
+            let { results: count_comment_res } = await model.query(`SELECT COUNT(*) AS lo_count FROM ?? WHERE type_key = ? AND comment_id = 0 AND status = 0 AND id <= ?`, [prefix + 'comment', type_key, comment_id]);
+            const comment_count = count_comment_res[0]['lo_count'];
+            //计算页数
+            const comment_page = Math.ceil(comment_count / commentSize);
+            await model.end();
+            return Promise.resolve({ comment_page, reply_page: 0, comment_id });
+        } else {
+            //这是回复，计算他的父级评论在第几页，计算他在回复中占第几页
+            const comment_id = comment.comment_id;
+            const reply_id = comment.id;
+            let { results } = await model.query(`SELECT * FROM ?? WHERE id = ? AND status = 0 LIMIT 1`, [prefix + 'comment', comment_id]);
+            if (results.length == 0) {
+                await model.end();
+                return Promise.resolve(false);
+            }
+            comment = results[0];
+            const type_key = comment.type_key;
+            //统计在该评论前的评论数
+            let { results: count_comment_res } = await model.query(`SELECT COUNT(*) AS lo_count FROM ?? WHERE type_key = ? AND comment_id = 0 AND status = 0 AND id <= ?`, [prefix + 'comment', type_key, comment_id]);
+            const comment_count = count_comment_res[0]['lo_count'];
+            //统计在该回复前的回复数
+            let { results: count_reply_res } = await model.query(`SELECT COUNT(*) AS lo_count FROM ?? WHERE type_key = ? AND comment_id = ? AND status = 0 AND id <= ?`, [prefix + 'comment', type_key, comment_id, reply_id]);
+            const reply_count = count_reply_res[0]['lo_count'];
+            //计算页数
+            const comment_page = Math.ceil(comment_count / commentSize);
+            const reply_page = Math.ceil(reply_count / replySize);
+            await model.end();
+            return Promise.resolve({ comment_page, reply_page, comment_id });
+        }
+    } catch (err) {
+        return Promise.reject(err);
+    }
+};
+
 export default {
     query,
     queryReply,
@@ -213,5 +263,6 @@ export default {
     reply,
     deleteComment,
     sendLimit,
-    newCommentList
+    newCommentList,
+    queryByComment
 }

@@ -18,7 +18,7 @@ const scroll2Element = ($ele, offset, duration) => {
 
     //手机端才需要减去导航高度
     const headerHeight = document.getElementById('header').offsetHeight;
-    top = window.document.body.offsetWidth <= maxWidthPoint.medium ? top - headerHeight : top;
+    top = window.document.body.offsetWidth <= maxWidthPoint.small ? top - headerHeight : top;
 
     Easing.tween({
         from: getWindowScrollY(),
@@ -44,9 +44,23 @@ const getWindowScrollY = () => {
     return y;
 };
 
-const scroll2ElementByClassName = (className, offset = 0, duration = 450) => {
+const scroll2ElementByClassName = (className, offset = 0, timeout = 0, duration = 450) => {
     let $ele = document.getElementsByClassName(className)[0];
-    scroll2Element($ele, offset, duration);
+    if(timeout > 0){
+        //延迟，等元素加载完毕
+        const interval = (start_time) => {
+            if(Date.now() > start_time + timeout) return;
+            let $ele = document.getElementsByClassName(className)[0];
+            if(!$ele){
+                setTimeout(interval, 10, start_time)
+            }else{
+                scroll2Element($ele, offset, duration);
+            }
+        };
+        interval(Date.now());
+    }else{
+        scroll2Element($ele, offset, duration);
+    }
 };
 
 const scroll2EleByHashID = (hashID, offset = 0, timeout = 0, duration = 450) => {

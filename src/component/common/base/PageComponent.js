@@ -91,7 +91,8 @@ class PageComponent extends Component {
                 this.setState({
                     ...res.data,
                     _pageLoadOver: true
-                })
+                });
+                if (typeof this.onUpdate == 'function') this.onUpdate();
             }else{
                 alert('服务器返回异常');
             }
@@ -110,14 +111,18 @@ class PageComponent extends Component {
         this.props.history.replace(url + this.props.location.hash, { title: document.title, init: newState });
     }
     componentWillReceiveProps(nextProps){
-        if((nextProps.history.action == 'PUSH' || nextProps.history.action == 'POP') && nextProps.match.url!==this.props.match.url){
-            this.setState({
-                _pageLoadOver: false
-            });
-            //设置延时让组件render
-            setTimeout(() => {this._pageInit(nextProps, true)}, 10);
+        if (nextProps.match.url!==this.props.match.url) {
+            if (nextProps.history.action == 'PUSH' || nextProps.history.action == 'POP'){
+                this.setState({
+                    _pageLoadOver: false
+                });
+                //设置延时让组件render
+                setTimeout(() => {this._pageInit(nextProps, true)}, 10);
+            }
         } else {
-            if (nextProps._page.state) this.setState({ ...nextProps._page.state });
+            if (nextProps._page.state && nextProps._page.url == nextProps.match.url) {
+                this.setState({ ...nextProps._page.state });
+            }
         }
     }
     static withStore(WrappedComponent){

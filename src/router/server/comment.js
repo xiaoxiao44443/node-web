@@ -58,6 +58,24 @@ Request.post('/query-reply', async(req, res, next) => {
     }
 });
 
+//根据回复查找到指定评论页码
+Request.post('/find-comment', async(req, res, next) => {
+    try {
+        //获取网站配置
+        if(Request.REQUEST_JSON){
+            const { id } = req.body;
+            let ret = await commentApi.queryByComment(id);
+            if (ret) {
+                res.json(returnSuc(ret));
+            } else {
+                res.json(returnErr('该评论不存在'));
+            }
+        }
+    }catch (ex){
+        next(ex);
+    }
+});
+
 //发表评论
 Request.post('/send', async(req, res, next) => {
     //需要登录

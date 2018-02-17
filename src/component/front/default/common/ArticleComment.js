@@ -86,10 +86,17 @@ class CommentItem extends Component {
             updateUser: false,
         }
     }
-    componentDidMount(){
-
+    async componentDidMount(){
+        const { nowPage } = this.props;
+        if (nowPage === undefined) return;
+        await this.queryReply(nowPage);
+        if (typeof this.props.onDidMount === 'function') this.props.onDidMount();
     }
-    componentWillReceiveProps(nextProps){
+    async componentWillReceiveProps(nextProps){
+        if(nextProps.nowPage !== undefined && nextProps.nowPage!=this.state.page){
+            await this.queryReply(nextProps.nowPage);
+            if (typeof this.props.onDidMount === 'function') this.props.onDidMount();
+        }
         if(nextProps.nowReplyBox != this.state.comment.id){
             this.setState({
                 showCommentBox: false
@@ -102,7 +109,7 @@ class CommentItem extends Component {
             });
         }
     }
-    queryReply = (p) => {
+    queryReply = async p => {
 
         const { loading, comment } = this.state;
         if(loading) return;
@@ -115,20 +122,19 @@ class CommentItem extends Component {
             id: comment.id
         };
 
-        http.apiPost('/comment/query-reply', data).then(res => {
-            this.setState({
-                loading: false
-            });
-            if(res.code == 0){
-                this.setState({
-                    replies: res.data,
-                    p: res.data.nowPage,
-                    showAll: true
-                });
-            }else{
-                alert(res.info);
-            }
+        const res = await http.apiPost('/comment/query-reply', data);
+        this.setState({
+            loading: false
         });
+        if(res.code == 0){
+            this.setState({
+                replies: res.data,
+                page: res.data.nowPage,
+                showAll: true
+            });
+        }else{
+            alert(res.data);
+        }
     };
     showCommentBox = (author, reply_id = 0) => {
         if(!this.props.user){
@@ -337,7 +343,8 @@ class CommentItem extends Component {
 CommentItem.PropTypes = {
     replyBoxOnShow: PropTypes.func,
     nowReplyBox: PropTypes.number,
-    user: PropTypes.object
+    user: PropTypes.object,
+    onDidMount: PropTypes.func
 };
 
 class ArticleComment extends Component {
@@ -352,6 +359,7 @@ class ArticleComment extends Component {
                 list: []
             },
             page: 1,
+            findComment: {},  //用于该评论下预加载指定页回复
             loading: false,
             showCommentBox: false,
             user: false,
@@ -359,13 +367,16 @@ class ArticleComment extends Component {
             lastCommentContextInput: '',
             maxContentNum: 140,
             publishingComment: false,
-            nowReplyBox: false
+            nowReplyBox: false,
+            lasHashCommentHash: props.hashCommentHash,
+            hashChange: false
         }
     }
-    componentDidMount(){
-        this.queryComment();
-        this.updateUserInfo();
-
+    async componentDidMount(){
+        await this.findComment();
+        await this.queryComment();
+        await this.updateUserInfo();
+        if (this.state.findComment.reply_page === 0) this.callDidMount();
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -373,24 +384,59 @@ class ArticleComment extends Component {
             scroll2Element('article-comment-wrap');
         }
     }
-    updateUserInfo = () => {
+    async componentWillReceiveProps(nextProps){
+        const { lasHashCommentHash } = this.state;
+        if (nextProps.hashCommentHash !== '' && nextProps.hashCommentHash !== lasHashCommentHash){
+            this.setState({
+                lasHashCommentHash: nextProps.hashCommentHash
+            });
+            await this.findComment(nextProps);
+            await this.queryComment();
+            if (this.state.findComment.reply_page  === 0) this.callDidMount();
+        }
+    }
+    callDidMount = () => {
+        if (!this.state.hashChange) return;
+        this.setState({ hashChange: false });
+        if (this.props.onDidMount) this.props.onDidMount();
+    };
+    updateUserInfo = async () => {
         if(this.state.updateUser) return;
         this.setState({
             updateUser: true
         });
 
-        http.apiGet('/user/check-login', {}).then(res => {
-            this.setState({
-                updateUser: false
-            });
-            if(res.code == 0){
-                this.setState({
-                    user: res.data
-                });
-            }
+        const res = await http.apiGet('/user/check-login');
+        this.setState({
+            updateUser: false
         });
+        if(res.code == 0){
+            this.setState({
+                user: res.data
+            });
+        }
     };
-    queryComment = (p) => {
+    //查找哈希评论id页码
+    findComment = async props => {
+        const { hashCommentHash } = props || this.props;
+        if (hashCommentHash === '') return;
+        this.setState({
+            hashChange: true
+        });
+        const hashCommentId = hashCommentHash.replace(/^#comment-/, '');
+        if (isNaN(hashCommentId)) return;
+        const data = {
+            id: parseInt(hashCommentId)
+        };
+        const res = await http.apiPost('/comment/find-comment', data);
+        if (res.code == 0) {
+            this.setState({
+                page: res.data.comment_page,
+                findComment: res.data
+            });
+        }
+    };
+    queryComment = async p => {
 
         const { loading } = this.state;
         const { type, type_key } = this.props;
@@ -407,19 +453,18 @@ class ArticleComment extends Component {
         data.type = type;
         if(type_key) data.type_key = type_key;
 
-        http.apiPost('/comment/query', data).then(res => {
-            this.setState({
-                loading: false
-            });
-            if(res.code == 0){
-                this.setState({
-                    comments: res.data,
-                    p: res.data.nowPage
-                });
-            }else{
-                alert(res.info);
-            }
+        const res = await http.apiPost('/comment/query', data);
+        this.setState({
+            loading: false
         });
+        if(res.code == 0){
+            this.setState({
+                comments: res.data,
+                p: res.data.nowPage
+            });
+        }else{
+            alert(res.info);
+        }
     };
     showCommentBox = () => {
         this.setState({
@@ -506,7 +551,8 @@ class ArticleComment extends Component {
     };
     pageOnChange = (page) => {
         this.setState({
-            page: page
+            page: page,
+            findComment: {}
         });
         setTimeout(() => scroll2Element('comment-list-title'), 50);
         this.queryComment(page);
@@ -517,9 +563,13 @@ class ArticleComment extends Component {
         });
     };
     render(){
-        const { comments, showCommentBox, commentContextInput, maxContentNum, loading, nowReplyBox, user } = this.state;
+        const { comments, showCommentBox, commentContextInput, maxContentNum, loading, nowReplyBox, user, findComment } = this.state;
         const commentList = this.state.comments.list.map(val => {
-            return <CommentItem data={val} key={val.id} replyBoxOnShow={() => {this.replyBoxOnShow(val.id)}} nowReplyBox={nowReplyBox} user={user} />
+            let nowPage;
+            if (findComment.comment_id === val.id && findComment.reply_page >= 1){
+                nowPage = findComment.reply_page;
+            }
+            return <CommentItem data={val} key={val.id} nowPage={nowPage} onDidMount={this.callDidMount} replyBoxOnShow={() => {this.replyBoxOnShow(val.id)}} nowReplyBox={nowReplyBox} user={user} />
         });
         return (
             <div className="article-comment-wrap">
@@ -580,7 +630,12 @@ class ArticleComment extends Component {
 
 ArticleComment.PropTypes = {
     type: PropTypes.string.isRequired,
-    type_key: PropTypes.string
+    type_key: PropTypes.string,
+    hashCommentId: PropTypes.number,
+    onDidMount: PropTypes.func
+};
+ArticleComment.defaultProps = {
+    hashCommentHash: ''
 };
 
 export default ArticleComment;
