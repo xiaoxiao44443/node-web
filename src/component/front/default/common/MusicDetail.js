@@ -190,7 +190,6 @@ class MusicDetail extends Component {
     onError = e => {
         const player = { ...this.state.player };
         //失败最大此时不再重试
-        console.log(player.errorCount)
         if (player.errorCount >= player.maxErrorCount) {
             return;
         }
