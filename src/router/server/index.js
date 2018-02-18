@@ -30,13 +30,18 @@ Request.get('/music/id([0-9]+)', async(req, res, next) => {
         'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     };
-    data.music_input = req.params[0];
+    const music_id = req.params[0];
+    data.music_input = music_id;
     const ret = await serverHttp.apiPost2('http://www.guqiankun.com/tools/music/?source=toolsindex', data, header);
     //移除http
     if (ret.code == 200) {
         let url = ret.data[0].url;
-        if (!url) return '';
-        url = url.substring(0,7)== 'http://' ? url.substring(5) : url;
+        if (!url) {
+            //未解析到音乐地址，使用2号解析 http://i.oppsu.cn/link/
+            url = 'http://i.oppsu.cn/link/' + music_id + '.mp3';
+        } else {
+            url = url.substring(0,7)== 'http://' ? url.substring(5) : url;
+        }
         res.redirect(url);
     }
 });

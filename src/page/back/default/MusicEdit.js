@@ -163,7 +163,7 @@ class MusicEdit extends PageComponent {
             this.setState({ music });
             alert('解析成功~');
         } else {
-            alert('解析失败');
+            alert(res.data);
         }
     };
     render() {

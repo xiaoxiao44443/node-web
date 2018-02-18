@@ -670,8 +670,8 @@ body.landing.is-loading:after {
         margin: 0 0 .4em;
     }
     ::-webkit-scrollbar{
-        width: 5px;
-        height: 4px;
+        width: 3px;
+        height: 3px;
     }
     .article-html hr{
         margin-top: .8em;

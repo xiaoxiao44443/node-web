@@ -8,8 +8,9 @@
     overflow: hidden;
     pointer-events: none;
 }
-#lolili_music{
-
+#lolili_music::-webkit-scrollbar{
+    width: 3px;
+    height: 3px;
 }
 #lolili_music .mask{
     width: 100%;

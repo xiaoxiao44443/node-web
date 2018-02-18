@@ -592,7 +592,6 @@ Request.post('/net-music', async(req, res, next) => {
     const ret = await serverHttp.apiPost2('http://www.guqiankun.com/tools/music/?source=toolsindex', data, header);
     //移除http
     if (ret.code == 200) {
-
         //移除http
         const removeHttp = (url) => {
             if (!url) return '';
@@ -600,8 +599,6 @@ Request.post('/net-music', async(req, res, next) => {
         };
 
         let music = ret.data[0];
-        if (!music.url) return '';
-        music.url = music.url.substring(0,7)== 'http://' ? music.url.substring(5) : url;
         music = {
             cover: removeHttp(music.pic.slice(0, music.pic.indexOf('?'))),
             caption: music.title,
