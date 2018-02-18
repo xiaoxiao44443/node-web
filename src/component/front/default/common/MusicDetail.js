@@ -76,6 +76,8 @@ class MusicDetail extends Component {
             mode: 0, // 0:列表循环 1:随机播放 2:单曲循环,
             audioIndex: 0,
             list: [],
+            errorCount: 0, //失败次数
+            maxErrorCount: 5  //最大失败次数，超过后不再重试
         }
     };
     componentDidMount(){
@@ -127,6 +129,7 @@ class MusicDetail extends Component {
         audio.addEventListener('canplay', this.onCanplay);
         audio.addEventListener('durationchange', this.onDurationchange);
         audio.addEventListener('canplaythrough', this.onCanplaythrough);
+        audio.addEventListener('error', this.onError);
         this.setState({ init: true });
     };
     removeEventListener = () => {
@@ -142,6 +145,7 @@ class MusicDetail extends Component {
         audio.removeEventListener('loadstart', this.onLoadstart);
         audio.removeEventListener('durationchange', this.onDurationchange);
         audio.removeEventListener('canplaythrough', this.onCanplaythrough);
+        audio.removeEventListener('error', this.onError);
         this.setState({ init: false });
     };
     componentWillReceiveProps(nextProps){
@@ -182,6 +186,23 @@ class MusicDetail extends Component {
         player.btnX = this.currentTime2btnX(0);
 
         this.setState({ player });
+    };
+    onError = e => {
+        const player = { ...this.state.player };
+        //失败最大此时不再重试
+        console.log(player.errorCount)
+        if (player.errorCount >= player.maxErrorCount) {
+            return;
+        }
+        player.errorCount ++ ;
+        this.setState({ player });
+        const audio = this.refs.audio;
+        //2:单曲循环
+        if (player.list.length == 1 || player.mode == 2) {
+            setTimeout(() => audio.load(), 3000);
+        } else {
+            setTimeout(this.nextMusic, 3000);
+        }
     };
     onCanplaythrough = e => {
         const player = { ...this.state.player };
@@ -237,6 +258,7 @@ class MusicDetail extends Component {
     onCanplay = e => {
         const player = { ...this.state.player };
         player.canPlay = true;
+        player.errCount = 0;
         this.setState({ player });
         const audio = this.refs.audio;
         audio.play();
@@ -244,6 +266,7 @@ class MusicDetail extends Component {
     onPlay = e => {
         const player = { ...this.state.player };
         player.paused = false;
+        player.errCount = 0;
         const audio = this.refs.audio;
         player.duration = audio.duration;
         this.setState({ player });
@@ -253,6 +276,7 @@ class MusicDetail extends Component {
     onPlaying = e => {
         const player = { ...this.state.player };
         player.paused = false;
+        player.errCount = 0;
         this.setState({ player });
         if (this.props.onPlay) this.props.onPlay();
     };
