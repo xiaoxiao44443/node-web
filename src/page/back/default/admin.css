@@ -187,7 +187,7 @@ html.admin body{
     color: #737B83;
 }
 .admin-main{
-    width: 100%;
+    width: calc(100% + 20px);
     padding: 20px;
     transition: padding-left .5s ease;
     margin-top: 60px;
