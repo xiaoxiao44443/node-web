@@ -409,6 +409,10 @@ class MusicDetail extends Component {
                 if (player.mode == 1) modeName = '随机播放';
                 if (player.mode == 2) modeName = '单曲循环';
                 showTopTip(modeName);
+                if (player.adminMode) {
+                    //管理员修改同时保存播放模式
+                    http.apiPost('/admin/music/mode', { mode: player.mode });
+                }
                 break;
             case 'before':
                 this.beforeMusic();

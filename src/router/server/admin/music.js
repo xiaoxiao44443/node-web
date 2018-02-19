@@ -71,8 +71,34 @@ Request.post('/music/delete', async(req, res, next) =>{
     }
 });
 
+//修改音乐播放模式
+Request.post('/music/mode', async(req, res, next) => {
+    try {
+
+        if(Request.REQUEST_JSON){
+
+            const mode = parseInt(req.body.mode);
+            if([0,1,2].indexOf(mode) == -1) return res.json(returnErr('音乐模式错误'));
+
+            //更新音乐配置
+            let musicConfig = await configApi.music();
+            musicConfig.mode.value = mode;
+            let ret = await configApi.updateMusic(musicConfig);
+
+            if(ret){
+                res.json(returnSuc('修改播放模式成功~'));
+            }else{
+                res.json(returnErr('修改播放模式失败!'));
+            }
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
 //设置默认音乐
-Request.post('/music/default', async(req, res, next) =>{
+Request.post('/music/default', async(req, res, next) => {
     try {
 
         if(Request.REQUEST_JSON){
