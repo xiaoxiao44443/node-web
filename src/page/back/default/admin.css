@@ -99,6 +99,7 @@ html.admin body{
     border-radius: 4px;
     transition: all .3s ease;
 }
+
 .admin-side-nav ul.sidebar-menu li a {
     color: #8b9199;
     text-decoration: none;
@@ -115,15 +116,35 @@ html.admin body{
     color: #e44c65;
 }
 .admin-side-nav ul.sidebar-menu li a i {
-    font-size: 18px;
+    font-size: 16px;
     padding-right: 6px;
+    font-style: normal;
 }
-.admin-side-nav ul.sidebar-menu li.active a i {
-    color: #e44c65;
+.admin-side-nav i[class^="icon-"] {
+    width: 22px;
+    display: inline-block;
+    font-family: FontAwesome;
 }
-.admin-side-nav ul.sidebar-menu li a i {
-    font-size: 18px;
-    padding-right: 6px;
+.admin-side-nav .icon-dashboard:before {
+    content: "\f0e4";
+}
+.admin-side-nav .icon-book:before {
+    content: "\f02d";
+}
+.admin-side-nav .icon-cogs:before {
+    content: "\f085";
+}
+.admin-side-nav .icon-link:before {
+    content: "\f0c1";
+}
+.admin-side-nav .icon-music:before {
+    content: "\f001";
+}
+.admin-side-nav .icon-user:before {
+    content: "\f007";
+}
+.admin-side-nav .icon-motto:before {
+    content: "\f249";
 }
 .admin-side-nav>ul>li>a .arrow {
     border-bottom: 4px solid transparent;

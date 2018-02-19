@@ -43,7 +43,7 @@ const navData = [
         ]
     },
     {
-        icon: 'icon-book',
+        icon: 'icon-music',
         name: '音乐',
         children: [
             {
@@ -75,12 +75,12 @@ const navData = [
         ]
     },
     {
-        icon: 'icon-book',
+        icon: 'icon-motto',
         name: '推荐管理',
         link: '/admin/recommend'
     },
     {
-        icon: 'icon-account',
+        icon: 'icon-user',
         name: '账户管理',
         link: '/admin/account'
     },
