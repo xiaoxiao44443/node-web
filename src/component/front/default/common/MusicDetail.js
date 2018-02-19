@@ -581,7 +581,7 @@ class MusicDetail extends Component {
                         <div className="info-blurbg" style={style}/>
                     </div>
                     <div className="cover-info">
-                        <div className="caption">{caption}<a onClick={this.back} className="back-btn" href="javascript:void(0);"/></div>
+                        <div className="caption">{caption}<span onClick={this.back} className="back-btn" /></div>
                         <div className="cover-img">
                             {cover && <img src={cover}/>}
                         </div>
@@ -610,23 +610,23 @@ class MusicDetail extends Component {
                     </div>
                     <div className="music-btns">
                         <div className="btn-wrap">
-                            {player.mode == 0 && <a className="btn mode0" href="javascript:void(0);" onClick={() => operOnClick('mode')}/>}
-                            {player.mode == 1 && <a className="btn mode1" href="javascript:void(0);" onClick={() => operOnClick('mode')}/>}
-                            {player.mode == 2 && <a className="btn mode2" href="javascript:void(0);" onClick={() => operOnClick('mode')}/>}
+                            {player.mode == 0 && <span className="btn mode0" onClick={() => operOnClick('mode')}/>}
+                            {player.mode == 1 && <span className="btn mode1" onClick={() => operOnClick('mode')}/>}
+                            {player.mode == 2 && <span className="btn mode2" onClick={() => operOnClick('mode')}/>}
                         </div>
                         <div className="btn-wrap">
-                            <a className="btn before" href="javascript:void(0);" onClick={() => operOnClick('before')}/>
+                            <span className="btn before" onClick={() => operOnClick('before')}/>
                         </div>
                         <div ref="play_pause" className="btn-wrap">
                             {player.paused ?
-                                <a className="btn play" href="javascript:void(0);" onClick={() => operOnClick('play')}/> :
-                                <a className="btn pause" href="javascript:void(0);" onClick={() => operOnClick('pause')}/>}
+                                <span className="btn play" onClick={() => operOnClick('play')}/> :
+                                <span className="btn pause" onClick={() => operOnClick('pause')}/>}
                         </div>
                         <div className="btn-wrap">
-                            <a className="btn next" href="javascript:void(0);" onClick={() => operOnClick('next')}/>
+                            <span className="btn next" onClick={() => operOnClick('next')}/>
                         </div>
                         <div className="btn-wrap">
-                            <a className="btn list" href="javascript:void(0);" onClick={() => operOnClick('list')}/>
+                            <span className="btn list" onClick={() => operOnClick('list')}/>
                         </div>
                     </div>
                 </div>
@@ -641,7 +641,7 @@ class MusicDetail extends Component {
                             {listBoxItem}
                         </div>
                         <div className="btn-group">
-                            <a href="javascript:void(0);" onClick={this.closeListBox}>关闭</a>
+                            <span onClick={this.closeListBox}>关闭</span>
                         </div>
                     </div>
                 </div>}

@@ -126,6 +126,7 @@
     border-radius: 50%;
     background-size: 26px;
     z-index: 9;
+    -webkit-user-select: none;
 }
 .music-detail .music-summary{
     width: 100%;
@@ -181,7 +182,7 @@
 }
 .music-detail .music-btns{
     width: 100%;
-    margin-top: 3px
+    margin-top: 3px;
 }
 .music-detail .music-btns .btn-wrap{
     width: 20%;
@@ -195,6 +196,8 @@
     height: 25px;
     display: inline-block;
     background-size: 205px 25px;
+    -webkit-user-select: none;
+    cursor: pointer;
 }
 .music-detail .music-btns .btn-wrap.lighting:before{
     content: "";
@@ -398,8 +401,10 @@
     text-align: center;
     border-top: 1px solid #ddd;
 }
-.music-list-box-wrap .btn-group >a{
+.music-list-box-wrap .btn-group >span{
     display: block;
+    -webkit-user-select: none;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 1400px){
