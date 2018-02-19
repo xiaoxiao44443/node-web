@@ -54,7 +54,7 @@ const tokenLogin = async (id, token) => {
         const maxAge = cookieConfig.maxAge;
         const NOW_TIME = parseInt(Date.now() / 1000);
         const { results } = await model.query('SELECT * FROM ?? WHERE user_id = ? AND login_token = ? AND login_time >= ? LIMIT 1',
-            [prefix + 'user_login', id, token, NOW_TIME - maxAge]);
+            [prefix + 'user_login', id, token, NOW_TIME - maxAge / 1000]);
         if(results.length > 0){
             //获取用户信息
             const { results } = await model.query('SELECT * FROM ?? WHERE id = ? LIMIT 1', [prefix + 'user', id]);
@@ -76,7 +76,7 @@ const addLoginToken = async id => {
 
         //清除过期失效的token
         const maxAge = cookieConfig.maxAge;
-        await model.query('DELETE FROM ?? WHERE user_id = ? AND login_time < ?', [prefix + 'user_login', id, NOW_TIME - maxAge]);
+        await model.query('DELETE FROM ?? WHERE user_id = ? AND login_time < ?', [prefix + 'user_login', id, NOW_TIME - maxAge / 1000]);
 
         //添加token到user_login表
         const insert = {
