@@ -16,7 +16,7 @@ class MusicConfig extends PageComponent {
         const state = {
             musicConfig: {
                 mode: 0,
-                audioIndex: 0
+                defaultMusic: 0
             },
             loading: false
         };
@@ -38,12 +38,12 @@ class MusicConfig extends PageComponent {
         if(this.state.loading) return;
 
         const { musicConfig } = this.state;
-        if(musicConfig.audioIndex === ''){
-            alert('必须输入默认音乐索引~');
+        if(musicConfig.defaultMusic === ''){
+            alert('必须输入默认音乐id~');
             return;
         }
-        if(isNaN(musicConfig.audioIndex)){
-            alert('默认音乐索引必须为数字哦~');
+        if(isNaN(musicConfig.defaultMusic)){
+            alert('默认音乐id必须为数字哦~');
             return;
         }
 
@@ -75,7 +75,7 @@ class MusicConfig extends PageComponent {
             return <Spin loading><div className="admin-music-config" /></Spin>
         }
 
-        const { mode, audioIndex } = this.state.musicConfig;
+        const { mode, defaultMusic } = this.state.musicConfig;
         const formInputOnChange = this.formInputOnChange;
         const formRadioOnchange = this.formRadioOnchange;
 
@@ -88,7 +88,7 @@ class MusicConfig extends PageComponent {
                     <label><input className="admin-form-radio" type="radio" name="mode" value="1" checked={mode == 1} onChange={formRadioOnchange}/>随机播放</label>
                     <label><input className="admin-form-radio" type="radio" name="mode" value="2" checked={mode == 2} onChange={formRadioOnchange}/>单曲循环</label>
                     <h5>【默认音乐索引-从0开始的数字】</h5>
-                    <FormInput name="audioIndex" value={audioIndex} onChange={formInputOnChange} />
+                    <FormInput name="defaultMusic" value={defaultMusic} onChange={formInputOnChange} />
                 </div>
                 <div className="admin-form-group text-right">
                     <a className="btn btn-confirm" href="javascript:void(0);" onClick={this.saveConfig}>{this.state.loading ? '保存...': '保存'}</a>

@@ -9,6 +9,8 @@ import router from '../src/router/server/index';
 import admin from '../src/router/server/admin';
 import comment from '../src/router/server/comment';
 import user from '../src/router/server/user';
+import music from '../src/router/server/music';
+import login from '../src/router/server/login';
 import serverRender from '../src/tool/server-render';
 import { returnErr } from '../src/tool/Request';
 
@@ -32,9 +34,11 @@ app.use(express.static(path.resolve(__dirname, '../public'), {
 tpl(app);
 
 app.use('/', router);
+app.use('/', login);
 app.use('/admin', admin);
 app.use('/comment', comment);
 app.use('/user', user);
+app.use('/music', music);
 
 
 //404页面处理

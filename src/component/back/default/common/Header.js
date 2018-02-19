@@ -45,7 +45,7 @@ class Header extends Component {
                 <nav id="admin-header-nav">
                     <div className="user">
                         <span className="user-name">{user.nickname} <span className="well">欢迎你！</span></span>
-                        <Link to="/admin/logout" onClick={this.logout}>退出</Link>
+                        <a href="javascript:void(0);" onClick={this.logout}>退出</a>
                     </div>
                     <ul>
                         <li><Link to="/">首页</Link></li>

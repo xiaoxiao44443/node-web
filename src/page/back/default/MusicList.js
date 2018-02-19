@@ -18,11 +18,12 @@ class MusicItem extends Component {
         cover: PropTypes.string,
         src: PropTypes.string,
         index: PropTypes.number,
-        create_time: PropTypes.number
+        create_time: PropTypes.number,
+        isDefault: PropTypes.bool
     };
     render() {
-        let { caption, author, cover, src, index, create_time, id  } = this.props;
-        const { musicDelete } = this.props;
+        let { caption, author, cover, src, index, create_time, id, isDefault  } = this.props;
+        const { musicDelete, musicDefault } = this.props;
         if (index < 10) index = '0' + index;
         const addTime = moment(create_time*1000).format('YYYY-MM-DD HH:mm');
         return(
@@ -46,6 +47,8 @@ class MusicItem extends Component {
                     <div className="line oper">
                         <Link className="btn-edit" to={`/admin/music/edit/id${id}`} >编辑</Link>
                         <a className="btn-delete" href="javascript:void(0);" onClick={() => musicDelete(id)}>删除</a>
+                        {isDefault && <span className="music-default">默认音乐</span>}
+                        {!isDefault && <a className="btn-default" href="javascript:void(0);" onClick={() => musicDefault(id)}>设为默认</a>}
                     </div>
                 </div>
             </li>
@@ -78,13 +81,26 @@ class MusicList extends PageComponent {
             }
         }
     };
+    //设置为默认音乐
+    musicDefault = async id => {
+        const data = {
+            id
+        };
+        const res = await http.apiPost('/admin/music/default', data);
+        if(res.code == 0){
+            alert('设置成功~');
+            this._pageUpdate();
+        }else{
+            alert(res.data);
+        }
+    };
     render() {
         if(!this.state._pageLoadOver){
             return <Spin loading><div className="admin-music-list" /></Spin>
         }
         const { musics, loadingMoreMusics } = this.state;
         const musicList = musics.map((val, index) => {
-            return <MusicItem key={index} {...val} index={index + 1} musicDelete={this.musicDelete}/>
+            return <MusicItem key={index} {...val} index={index + 1} musicDelete={this.musicDelete} musicDefault={this.musicDefault}/>
         });
         return(
             <div className="admin-music-list slideInUp animated-fast">

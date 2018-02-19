@@ -179,7 +179,7 @@ const insert_website_config = {
 };
 const musicConfig = {
     mode: {name: '播放模式', value: '0'},
-    audio_index: {name: '默认音乐', value: 0}
+    defaultMusic: {name: '默认音乐', value: 0}
 };
 const insert_music_config = {
     desc: '音乐配置数据',

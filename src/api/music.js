@@ -30,7 +30,8 @@ const addMusic = async music => {
             create_time: NOW_TIME,
         };
         let { results } = await model.query(`INSERT INTO ?? SET ?`, [prefix + 'music', insert]);
-        return Promise.resolve(results.affectedRows >=0);
+        console.log(results);
+        return Promise.resolve(results.affectedRows >=0 ? results.insertId : false);
     }catch (err){
         return Promise.reject(err);
     }
@@ -73,7 +74,7 @@ const getMusicInfo = async () => {
         return Promise.resolve({
             _music: {
                 mode: parseInt(musicConfig.mode.value), // 0:列表循环 1:随机播放 2:单曲循环,
-                audioIndex: parseInt(musicConfig.audio_index.value),
+                defaultMusic: parseInt(musicConfig.default_music.value),
                 list: musicList
             }
         });
@@ -93,11 +94,39 @@ const getMusic = async id => {
     }
 };
 
+//设置默认音乐
+const setDefaultMusic = async id => {
+    try {
+        let musicConfig = await configApi.music();
+        musicConfig.default_music.value = id;
+        //更新音乐配置
+        return await configApi.updateMusic(musicConfig);
+    }catch (err){
+        return Promise.reject(err);
+    }
+};
+
+//取消设置默认音乐
+const unSetDefaultMusic = async id => {
+    try {
+        let musicConfig = await configApi.music();
+        if (musicConfig.default_music.value == id) {
+            musicConfig.default_music.value = 0;
+        }
+        //更新音乐配置
+        return await configApi.updateMusic(musicConfig);
+    }catch (err){
+        return Promise.reject(err);
+    }
+};
+
 export  default {
     queryMusicList,
     addMusic,
     deleteMusic,
     editMusic,
     getMusicInfo,
-    getMusic
+    getMusic,
+    setDefaultMusic,
+    unSetDefaultMusic
 }

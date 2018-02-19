@@ -23,6 +23,7 @@ class MusicEdit extends PageComponent {
                 src: '',
                 author: ''
             },
+            isDefault: false,
             net_music_analysis: false,
             net_music_id: ''
         };
@@ -38,9 +39,13 @@ class MusicEdit extends PageComponent {
             this.setState({ [name]: value });
         }
     };
+    formRadioOnchange = e => {
+        this.setState({ isDefault: e.target.value == 1 });
+    };
     addMusic = async () => {
         if(this.state.loading) return;
         const { cover, author, caption, src } = this.state.music;
+        const { isDefault } = this.state;
         if (cover.length == 0){
             alert('请输入封面地址!');
             return;
@@ -63,7 +68,8 @@ class MusicEdit extends PageComponent {
             id: -1,
             music: {
                 cover, author, caption, src
-            }
+            },
+            isDefault
         };
 
         this.setState({ loading: true });
@@ -83,6 +89,7 @@ class MusicEdit extends PageComponent {
     saveMusic = async () => {
         if(this.state.loading) return;
         const { cover, author, caption, src, id } = this.state.music;
+        const { isDefault } = this.state;
         if(!id){
             alert('音乐数据出错,请刷新重试');
             return;
@@ -109,7 +116,8 @@ class MusicEdit extends PageComponent {
             id,
             music: {
                 cover, author, caption, src
-            }
+            },
+            isDefault
         };
 
         this.setState({ loading: true });
@@ -172,8 +180,10 @@ class MusicEdit extends PageComponent {
         }
 
         const { caption, cover, author, src, id } = this.state.music;
-        const { net_music_id, net_music_analysis } = this.state;
+        const { net_music_id, net_music_analysis, isDefault } = this.state;
         const formInputOnChange = this.formInputOnChange;
+        const formRadioOnchange = this.formRadioOnchange;
+
         return (
             <div className="admin-music-edit slideInUp animated-fast">
                 <div className="admin-form-group">
@@ -196,6 +206,9 @@ class MusicEdit extends PageComponent {
                     <h5>【封面】</h5>
                     <FormInput name="cover" value={cover} onChange={formInputOnChange} />
                     <img className="img-cover" src={cover}/>
+                    <h5>【默认音乐】</h5>
+                    <label><input className="admin-form-radio" type="radio" name="sex" value="0" checked={isDefault == false} onChange={formRadioOnchange}/>否</label>
+                    <label><input className="admin-form-radio" type="radio" name="sex" value="1" checked={isDefault == true} onChange={formRadioOnchange}/>是</label>
                 </div>
                 <div className="admin-form-group text-right">
                     {id ? <a className="btn btn-confirm" href="javascript:void(0);" onClick={this.saveMusic}>{this.state.loading ? '保存...': '保存'}</a> :

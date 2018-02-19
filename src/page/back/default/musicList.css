@@ -48,6 +48,13 @@
 .admin-music-list .music-item-info .btn-delete{
     margin-left: 15px;
 }
+.admin-music-list .music-item-info .btn-default{
+    margin-left: 15px;
+}
+.admin-music-list .music-item-info .music-default{
+    margin-left: 15px;
+    color: #e44c65;
+}
 .admin-music-list .music-list-tip{
     text-align: center;
     margin-top: 200px;

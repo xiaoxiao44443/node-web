@@ -9,6 +9,7 @@ import './musicDetail.css';
 import { getWindowScrollY } from '../../../../tool/dom-js';
 import { store } from '../../../../tool/store';
 import DragHelper from '../../../../component/common/tool/DragHelper';
+import http from '../../../../tool/http';
 
 const showTopTip = (text, duration) => {
     const musicDetail = document.getElementsByClassName('music-detail')[0];
@@ -74,10 +75,11 @@ class MusicDetail extends Component {
             currentTime: 0,
             duration: -1,
             mode: 0, // 0:列表循环 1:随机播放 2:单曲循环,
-            audioIndex: 0,
+            nowMusic: 0, //当前音乐id
             list: [],
             errorCount: 0, //失败次数
-            maxErrorCount: 5  //最大失败次数，超过后不再重试
+            maxErrorCount: 5,  //最大失败次数，超过后不再重试,
+            adminMode: false
         }
     };
     componentDidMount(){
@@ -88,29 +90,32 @@ class MusicDetail extends Component {
             onDragMove: this.onDragMove,
             onDragEnd: this.onDragEnd
         });
-       this.getMusicInfo(this.props);
+       this.setMusicInfo(this.props);
         if (this.props.show) this.addEventLister();
     }
 
-    //从props中获取music
-    getMusicInfo = props => {
+    //根据props中重置music
+    setMusicInfo = props => {
         const { _music } = props;
         //播放列表为空才更新
-        if (_music && this.state.player.list.length == 0) {
+        if (_music && _music.list.length > 0 && this.state.player.list.length == 0) {
             const player = { ...this.state.player };
+            let nowMusic = _music.defaultMusic === undefined ? _music.list[0].id : _music.defaultMusic;
+            nowMusic = this.findMusicById(nowMusic, _music.list) ? nowMusic : _music.list[0].id;
             player.mode = _music.mode;
-            player.audioIndex = _music.audioIndex;
+            player.nowMusic = nowMusic;
             player.list = _music.list;
+            player.adminMode = _music.adminMode;
             this.setState({ player });
-            setTimeout(() => this.callChangeMusic(_music.audioIndex));
+            setTimeout(() => this.callChangeMusic(player.nowMusic));
         }
     };
     resizeCover = () => {
         const w = window.document.body.offsetWidth > 1400 ? 400 : window.document.body.offsetWidth * .65 + 100;
-        const ohterHeight = 75 + 35;
+        const otherHeight = 75 + 35;
         this.setState({
-            coverHeight: w < window.innerHeight - ohterHeight ? w : window.innerHeight - ohterHeight,
-            summaryTop: w < window.innerHeight - ohterHeight ? w : window.innerHeight - ohterHeight
+            coverHeight: w < window.innerHeight - otherHeight ? w : window.innerHeight - otherHeight,
+            summaryTop: w < window.innerHeight - otherHeight ? w : window.innerHeight - otherHeight
         });
     };
     onResize = () => {
@@ -149,7 +154,7 @@ class MusicDetail extends Component {
         this.setState({ init: false });
     };
     componentWillReceiveProps(nextProps){
-        this.getMusicInfo(nextProps);
+        this.setMusicInfo(nextProps);
         if (this.props.visible && !nextProps.visible) {
             this.back(false);
         }
@@ -285,10 +290,10 @@ class MusicDetail extends Component {
         this.removeEventListener();
         window.removeEventListener('resize', this.onResize);
     }
-    callChangeMusic = audioIndex => {
+    callChangeMusic = music_id => {
         if (this.props.onChangeMusic) {
-            const music = this.state.player.list[audioIndex || this.state.player.audioIndex];
-            this.props.onChangeMusic(music && music.cover);
+            const ret = this.findMusicById(music_id);
+            this.props.onChangeMusic(ret && ret.music.cover);
         }
     };
     bar2process = btnX => {
@@ -339,24 +344,28 @@ class MusicDetail extends Component {
     };
     beforeMusic = () => {
         const player = { ...this.state.player };
-        let audioIndex = player.audioIndex;
         const audio = this.refs.audio;
         const num = player.list.length;
         if (num == 1) return;
+
+        let audioIndex = this.findMusicIndex();
         audioIndex = audioIndex - 1 >=0 ? audioIndex - 1 : num - 1;
-        player.audioIndex = audioIndex;
-        audio.src = player.list[audioIndex].src;
+        const newMusic = player.list[audioIndex];
+
+        player.nowMusic = newMusic.id;
+        audio.src = newMusic.src;
         audio.autoplay = true;
-        this.callChangeMusic(audioIndex);
+        this.callChangeMusic(newMusic.id);
         this.setState({ player });
     };
     nextMusic = () => {
         //判断播放模式
         const player = { ...this.state.player };
-        let audioIndex = player.audioIndex;
         const audio = this.refs.audio;
         const num = player.list.length;
         if (num == 1) return;
+
+        let audioIndex = this.findMusicIndex();
         //0:列表循环 1:随机播放 2:单曲循环
         if (player.mode == 0 || player.mode == 2) {
             audioIndex = audioIndex + 1 <= num - 1 ? audioIndex + 1 : 0;
@@ -368,10 +377,12 @@ class MusicDetail extends Component {
             } while(newAudioIndex == audioIndex);
             audioIndex = newAudioIndex;
         } else return;
-        player.audioIndex = audioIndex;
-        audio.src = player.list[audioIndex].src;
+
+        const newMusic = player.list[audioIndex];
+        player.nowMusic = newMusic.id;
+        audio.src = newMusic.src;
         audio.autoplay = true;
-        this.callChangeMusic(audioIndex);
+        this.callChangeMusic(newMusic.id);
         this.setState({ player });
     };
     operOnClick = name => {
@@ -434,18 +445,89 @@ class MusicDetail extends Component {
         player.listBoxVisible = false;
         this.setState({ player });
     };
-    musicItemOnClick = audioIndex => {
-        const player = { ...this.state.player };
-        if (player.audioIndex == audioIndex) return;
-        player.audioIndex = audioIndex;
+    musicItemOnClick = music_id => {
+        let player = { ...this.state.player };
+        if (player.music_id == music_id) return;
+
+        //未找到指定音乐
+        const ret = this.findMusicById(music_id);
+        if (!ret) return;
+        const newMusic = ret.music;
+
+        player.nowMusic = music_id;
         const audio = this.refs.audio;
-        audio.src = player.list[audioIndex].src;
+        audio.src = newMusic.src;
         audio.autoplay = true;
-        this.callChangeMusic(audioIndex);
+        this.callChangeMusic(music_id);
         this.setState({ player });
     };
     toggleSummary = () => {
         this.setState({ summaryMini: !this.state.summaryMini });
+    };
+
+    //根据音乐id从音乐列表中返回音乐信息，失败返回false index索引
+    findMusicById = (id, musicList = false) => {
+        const _list = musicList ? musicList : this.state.player.list;
+        let music = false;
+        let i = 0;
+        for (; i< _list.length; i++) {
+            if (_list[i].id == id) {
+                music = { ..._list[i] };
+                break;
+            }
+        }
+        return music ? { index: i, music } : false;
+    };
+    //获取当前音乐索引
+    findMusicIndex = () => {
+        const ret = this.findMusicById(this.state.player.nowMusic);
+        return ret ? ret.index : 0;
+    };
+    //获取当前音乐信息
+    findMusic = () => {
+        const ret = this.findMusicById(this.state.player.nowMusic);
+        return ret && ret.music;
+    };
+    deleteMusic = async deleteMusicId => {
+        //管理员组才能删除
+        let player = { ...this.state.player };
+        const audio = this.refs.audio;
+        if (!this.findMusicById(deleteMusicId)) return;
+        const data = {
+            id: deleteMusicId
+        };
+
+        let res = await http.apiPost('/admin/music/delete', data);
+        if (res.code == -1) return;
+
+        //删除的是当前播放暂停当前音乐，重置播放进度
+        if (deleteMusicId == player.nowMusic) {
+            audio.pause();
+            audio.src = '';
+            this.process2bar(0);
+        }
+
+        //删除成功，重新获取音乐列表
+        res = await http.apiGet('/music/list');
+        if (res.code == -1) return;
+
+        const newMusicList  = res.data.list;
+        player.list = newMusicList;
+        //重新获取当前播放音乐索引
+        let ret = this.findMusicById(deleteMusicId, newMusicList);
+        if (ret) audioIndex = ret.index;
+        if (newMusicList.length < audioIndex + 1 ) audioIndex = 0;
+
+        player.audioIndex = audioIndex;
+        //删除的是当前播放的才需要重新开始下一首
+        if (deleteMusicId == player.nowMusic) {
+            const newMusic = newMusicList[audioIndex];
+            audio.src = newMusic.src;
+            audio.autoplay = true;
+            this.callChangeMusic(newMusic.id);
+        }
+        this.setState({ player });
+
     };
     render() {
         const { player, coverHeight, summaryMini, summaryTop } = this.state;
@@ -453,7 +535,7 @@ class MusicDetail extends Component {
         let precessBtnStyle = {
             left: player.btnX
         };
-        const audioInfo = player.list[player.audioIndex];
+        const audioInfo = this.findMusic();
         let cover, author, caption, audioSrc;
         if (audioInfo) {
             cover = audioInfo.cover;
@@ -469,10 +551,15 @@ class MusicDetail extends Component {
         let listBoxItem = [];
         if (player.listBoxVisible) {
             listBoxItem = player.list.map((val, index) => {
+                const deleteOnClick = e => {
+                    e.stopPropagation(); //阻止冒泡
+                    this.deleteMusic(val.id);
+                };
                 return (
-                    <div className={index == player.audioIndex ? 'list-item playing' : 'list-item'} onClick={() => this.musicItemOnClick(index)} key={index}>
+                    <div className={val.id == player.nowMusic ? 'list-item playing' : 'list-item'} onClick={() => this.musicItemOnClick(val.id)} key={index}>
                         <span className="music-caption">{val.caption}</span>
                         <span className="music-author">-{val.author}</span>
+                        {player.adminMode && <span className="music-delete" onClick={deleteOnClick}>╳</span>}
                     </div>
                 );
             });
