@@ -88,7 +88,7 @@ const navData = [
         icon: 'icon-cogs',
         name: '站点设置',
         link: '/admin/site-config'
-    },
+    }
 ];
 
 

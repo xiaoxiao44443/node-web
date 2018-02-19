@@ -14,7 +14,7 @@ html.admin body{
 #admin-header{
     width: 100%;
     height: 60px;
-    position: relative;
+    position: fixed;
     background: white;
     border-bottom: 1px solid #f1f2f7;
     padding: 0 15px;
@@ -64,14 +64,15 @@ html.admin body{
     display: inline-block;
 }
 .admin-side-nav{
-    min-height: 100%;
-    position: absolute;
+    height: 100%;
+    position: fixed;
     left: -180px;
     top: 0;
     width: 180px;
     background: #2a3542;
     padding-top: 60px;
     transition: left .5s ease;
+    overflow: hidden;
 }
 .admin.showSideNav .admin-side-nav{
     left: 0;
@@ -85,11 +86,15 @@ html.admin body{
     margin-bottom: 5px;
     margin-left: 10px;
     margin-right: 10px;
+    width: 160px;
     padding: 0;
 }
 .admin-side-nav ul.sidebar-menu {
     margin: 15px 0 0 0;
-    padding: 0;
+    width: 200px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .admin-side-nav ul.sidebar-menu .menu-li.active >a, .admin-side-nav ul.sidebar-menu li a.active, .admin-side-nav ul.sidebar-menu li a:hover, .admin-side-nav ul.sidebar-menu li a:focus {
@@ -183,9 +188,9 @@ html.admin body{
 }
 .admin-main{
     width: 100%;
-    padding: 20px 20px 20px 20px;
+    padding: 80px 20px 20px 20px;
     overflow: hidden;
-    min-height: calc(100vh - 60px);
+    min-height: 100vh;
     transition: padding-left .5s ease;
 }
 .admin.showSideNav .admin-main{
