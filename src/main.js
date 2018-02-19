@@ -54,6 +54,11 @@ class Root extends Component {
                     scroll2EleByHashID(location.hash);
                 }
             }
+
+            if(action === "PUSH" && location.hash===''){
+                this.props.$store.update({error: false});
+                window.scrollTo(0,0); //滚动条回到顶部
+            }
         });
     }
     componentDidMount(){
