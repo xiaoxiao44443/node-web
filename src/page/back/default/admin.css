@@ -188,10 +188,11 @@ html.admin body{
 }
 .admin-main{
     width: 100%;
-    padding: 80px 20px 20px 20px;
-    overflow: hidden;
-    min-height: 100vh;
+    padding: 20px;
     transition: padding-left .5s ease;
+    margin-top: 60px;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
 }
 .admin.showSideNav .admin-main{
     padding-left: 200px;
