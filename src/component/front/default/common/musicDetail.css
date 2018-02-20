@@ -136,7 +136,7 @@
     left: 0;
     top: 100vw;
     z-index: 199;
-    transition: top ease .5s;
+    transition: top cubic-bezier(0, 0, 0.2, 1) .2s;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
@@ -266,14 +266,14 @@
 .music-process-wrap .process-btn{
     position: absolute;
     z-index: 3;
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
     background: white;
     box-shadow: 0 0 0 3px rgba(228, 76, 101, 0.6);
     border-radius: 50%;
     top: 50%;
-    margin-top: -5px;
-    left: -5px;
+    margin-top: -6px;
+    left: -6px;
     cursor: pointer;
     -webkit-user-select: none;
     touch-action: none;
