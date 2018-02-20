@@ -71,7 +71,7 @@ class MusicDetail extends Component {
             touchStart: {},
             listBoxVisible: false,
             paused: true,
-            btnX: -8,
+            btnX: -5,
             currentTime: 0,
             duration: -1,
             mode: 0, // 0:列表循环 1:随机播放 2:单曲循环,
