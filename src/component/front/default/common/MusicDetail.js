@@ -207,6 +207,7 @@ class MusicDetail extends Component {
     };
     loadLrcList = () => {
         const music = this.findMusic();
+        if (!music || !music.lrc) return;
         const _array = music.lrc.split('\n');
         let lrcList = [];
         for (let i = 0; i < _array.length; i++) {
