@@ -309,32 +309,34 @@
     margin: 0 12px;
     position: relative;
 }
-.music-process-wrap .process-btn{
+.music-process-wrap .process-btn-wrap {
     position: absolute;
     z-index: 3;
+    width: 17px;
+    height: 17px;
+    top: 50%;
+    margin-top: -9px;
+    left: -9px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+.music-process-wrap .process-btn{
     width: 11px;
     height: 11px;
     background: white;
     box-shadow: 0 0 0 3px rgba(228, 76, 101, 0.6);
     border-radius: 50%;
-    top: 50%;
-    margin-top: -6px;
-    left: -6px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    touch-action: none;
+    pointer-events: none;
+    margin: 3px;
 }
 .music-process-wrap .process-btn-loading{
-    position: absolute;
-    z-index: 3;
     width: 16px;
     height: 16px;
     background: url('/static/images/default/loading.png') no-repeat;
     background-size: 100%;
-    top: 50%;
-    margin-top: -9px;
-    left: -8px;
     animation: rotateAlways 1s infinite;
+    pointer-events: none;
 }
 .music-process-wrap .process-inner{
     height: 2px;

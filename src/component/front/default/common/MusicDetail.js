@@ -59,7 +59,7 @@ class MusicDetail extends Component {
         onPause: PropTypes.func,
         show: PropTypes.bool
     };
-    btnW = 11;
+    btnW = 17;
     state = {
         coverHeight: 0,
         summaryTop: '',
@@ -627,22 +627,22 @@ class MusicDetail extends Component {
         const $cover = this.refs.cover;
         $cover['data-x'] = 0;
         const $coverStyle = $cover.style;
-        $coverStyle.transition = 'transform ease .5s';
+        $coverStyle.transition = 'transform ease .3s';
         $coverStyle.transform = '';
         this.setState({ coverScrollView: 'cover' });
         clearTimeout(this.scrollViewTimer);
-        this.scrollViewTimer = setTimeout(() => $coverStyle.transition = '', 500)
+        this.scrollViewTimer = setTimeout(() => $coverStyle.transition = '', 300)
     };
     //切换到歌词
     change2Lrc = () => {
         const $cover = this.refs.cover;
         $cover['data-x'] = - $cover.offsetWidth / 2;
         const $coverStyle = this.refs.cover.style;
-        $coverStyle.transition = 'transform ease .5s';
+        $coverStyle.transition = 'transform ease .3s';
         $coverStyle.transform = 'translate3d(-50%,0,0)';
         this.setState({ coverScrollView: 'lrc' });
         clearTimeout(this.scrollViewTimer);
-        this.scrollViewTimer = setTimeout(() => $coverStyle.transition = '', 500)
+        this.scrollViewTimer = setTimeout(() => $coverStyle.transition = '', 300)
     };
     render() {
         const { player, coverHeight, summaryMini, summaryTop, coverScrollView,
@@ -730,8 +730,9 @@ class MusicDetail extends Component {
                     <div className="music-process-wrap">
                         <div className="process-timer">{this.sec2time(player.currentTime)}</div>
                         <div ref="process_bar" className="process-bar">
-                            <div ref="process_btn" className={player.loading ? 'process-btn-loading' : 'process-btn'} style={precessBtnStyle}
-                                 {...this.DragHelper.props}/>
+                            <div ref="process_btn" className="process-btn-wrap" {...this.DragHelper.props} style={precessBtnStyle}>
+                                <div className={player.loading ? 'process-btn-loading' : 'process-btn'}/>
+                            </div>
                             <div className="process-inner" style={precessInnerStyle}/>
                             <div className="process-bg"/>
                         </div>
