@@ -97,14 +97,37 @@
     position: relative;
     height: 100%;
 }
-.cover-info .cover-img{
-    width: 62%;
+.cover-info .cover-scroll-view{
+    width: 200%;
     height: calc(100% - 3em);
-    margin: 0 auto;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+.cover-info .lrc-list{
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    color: white;
+    font-size: .9em;
+    padding: 0 3em;
+    padding-top: 10%;
+    transition: transform ease .5s;
+}
+.cover-info .lrc-list > p{
+    margin: .25em 0;
+    min-height: 1.25em;
+}
+.cover-info .lrc-list .now {
+    color: #ec7b99;
+}
+.cover-info .cover-img{
+    width: 50%;
+    height: 100%;
     text-align: center;
 }
 .cover-info .cover-img >img{
-    max-width: 100%;
+    max-width: 62%;
     max-height: 100%;
     border-radius: 5px;
 }
@@ -115,7 +138,7 @@
     font-size: 1.25em;
     position: relative;
 }
-.cover-info .caption .back-btn {
+.cover-info .caption .back-btn{
     position: absolute;
     left: .85em;
     top: 4px;
@@ -128,6 +151,27 @@
     z-index: 9;
     -webkit-user-select: none;
 }
+.cover-info .scroll-view-btns{
+    width: 100%;
+    height: 2em;
+    line-height: 2em;
+    text-align: center;
+}
+.cover-info .scroll-view-btns >span{
+    display: inline-block;
+    background-color: rgba(255,255,255,.5);
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    margin: 0 2px;
+    cursor: pointer;
+    -webkit-user-select: none;
+}
+.cover-info .scroll-view-btns >span.now-scroll{
+    width: 14px;
+    border-radius: 8px;
+    background-color: white;
+}
 .music-detail .music-summary{
     width: 100%;
     height: 100%;
@@ -136,6 +180,8 @@
     left: 0;
     top: 100vw;
     z-index: 199;
+    /*可开启浏览器硬件加速*/
+    transform: translate3d(0,0,0);
     transition: top cubic-bezier(0, 0, 0.2, 1) .2s;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -296,6 +342,7 @@
     width: 0;
     position: absolute;
     z-index: 2;
+    border-radius: 2px;
 }
 .music-process-wrap .process-bg{
     width: 100%;
@@ -303,6 +350,7 @@
     background-color: #eba8bb;
     position: absolute;
     z-index: 1;
+    border-radius: 2px;
 }
 .music-detail .music-list-box{
     width: 100%;
@@ -386,9 +434,20 @@
 
 .music-list-box-wrap .music-list .list-item.playing .music-caption{
     color: #e44c65;
+    padding-left: .75em;
 }
 .music-list-box-wrap .music-list .list-item.playing{
     color: #ff728a;
+    position: relative;
+}
+.music-list-box-wrap .music-list .list-item.playing::before{
+    content: "";
+    position: absolute;
+    left: -.5em;
+    top: 0;
+    width: 3px;
+    background-color: #e44c65;
+    height: 100%;
 }
 .music-list-box-wrap .btn-group{
     width: 100%;

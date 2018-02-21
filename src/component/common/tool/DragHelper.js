@@ -14,7 +14,7 @@ class DragHelper {
     };
     touch = false;
     mouseDown = false;
-    draggingIndex = 0; //鼠标弹起计数器
+    dragging = false;
     target = null;
     lastMovePos = false;
     recordStart = touch => {
@@ -23,7 +23,6 @@ class DragHelper {
             offsetX: touch.clientX - target.offsetLeft,
             offsetY: touch.clientY - target.offsetTop
         };
-        this.dragStartCallBack();
     };
     moveCalc = touch => {
         const start = this.start;
@@ -33,6 +32,8 @@ class DragHelper {
         let w = target.offsetWidth;
         let h = target.offsetHeight;
         this.lastMovePos = { x, y, w, h };
+        if (!this.dragging) this.dragStartCallBack();
+        this.dragging = true;
         this.moveCallBack({
             x, y, w, h
         });
@@ -47,7 +48,6 @@ class DragHelper {
                 e.preventDefault();
             }
         }
-        this.draggingIndex = 2; //鼠标弹起，用来判断是否触发click
         this.moveCalc(e, e.target);
     };
     onMouseUp =  e => {
@@ -62,28 +62,29 @@ class DragHelper {
         this.start = false;
         this.touch = false;
         this.mouseDown = false;
+        setTimeout(() => this.dragging = false);
         this.target = null;
-        this.dragEndCallBack(this.lastMovePos);
+        if (this.lastMovePos) {
+            this.dragEndCallBack(this.lastMovePos);
+        }
         this.lastMovePos = false;
     };
     props = {
         onMouseDown: e => {
             if (e.button !== 0) return; //只能左键点击
             this.mouseDown = true;
-            this.draggingIndex = 1;
-            this.target = e.target;
+            this.target = e.currentTarget;
             document.addEventListener('mousemove', this.onMouseMove);
             document.addEventListener('mouseup', this.onMouseUp);
             this.recordStart(e);
         },
         onMouseUp: e => {
-            this.draggingIndex = this.draggingIndex - 1;
             e.preventDefault();
             this.dragEnd();
             this.removeEventListener();
         },
         onTouchStart: e => {
-            this.target = e.target;
+            this.target = e.currentTarget;
             this.recordStart(e.targetTouches[0]);
         },
         onTouchMove: e => {

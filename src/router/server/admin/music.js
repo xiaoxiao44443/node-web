@@ -231,16 +231,16 @@ Request.get('/music/add', async(req, res, next) =>{
 Request.post('/net-music', async(req, res, next) => {
 
     let data = {
-        music_input: '',
-        music_filter: 'id',
-        music_type: 'netease'
+        input: '',
+        filter: 'id',
+        type: 'netease'
     };
     const header = {
         'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     };
     const net_music_id = req.body.net_music_id;
-    data.music_input = net_music_id;
+    data.input = net_music_id;
     const ret = await serverHttp.apiPost2('http://www.guqiankun.com/tools/music/?source=toolsindex', data, header);
     //移除http
     if (ret.code == 200) {
@@ -255,7 +255,8 @@ Request.post('/net-music', async(req, res, next) => {
             cover: removeHttp(music.pic.slice(0, music.pic.indexOf('?'))),
             caption: music.title,
             src: '/music/id' + net_music_id,
-            author: music.author
+            author: music.author,
+            lrc: music.lrc
         };
         res.json(returnSuc(music));
     } else {

@@ -13,16 +13,17 @@ import serverHttp from "../../tool/server-http";
 //网易云音乐解析
 Request.get('/id([0-9]+)', async(req, res, next) => {
     let data = {
-        music_input: '',
-        music_filter: 'id',
-        music_type: 'netease'
+        input: '',
+        filter: 'id',
+        type: 'netease',
+        page: 1
     };
     const header = {
         'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     };
     const music_id = req.params[0];
-    data.music_input = music_id;
+    data.input = music_id;
     const ret = await serverHttp.apiPost2('http://www.guqiankun.com/tools/music/?source=toolsindex', data, header);
     //移除http
     if (ret.code == 200) {

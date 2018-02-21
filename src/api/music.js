@@ -57,7 +57,8 @@ const editMusic = async (id, music) => {
             caption: music.caption,
             author: music.author,
             cover: music.cover,
-            src: music.src
+            src: music.src,
+            lrc: music.lrc
         };
         let { results } = await model.query(`UPDATE ?? SET ? WHERE id = ?`, [prefix + 'music', updates, id]);
         return Promise.resolve(results.affectedRows >=0);

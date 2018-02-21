@@ -34,7 +34,7 @@ class MusicWedgit extends Component {
         });
     };
     showMusicDetail = () => {
-        if (this.DragHelper.draggingIndex > 0) return;
+        if (this.DragHelper.dragging) return;
         this.setState({ showInit: true, showMusicDetail: true });
     };
     maskClick = () => {

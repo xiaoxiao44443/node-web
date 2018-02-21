@@ -59,19 +59,23 @@ class MusicDetail extends Component {
         onPause: PropTypes.func,
         show: PropTypes.bool
     };
+    btnW = 11;
     state = {
         coverHeight: 0,
         summaryTop: '',
         summaryMini: true,
         marginTop: 0,
         init: false,
+        coverScrollView: 'cover',
+        currentLrcIndex: -1,
+        lrcList: [],
         player: {
             loading: false,
             canPlay: false,
             touchStart: {},
             listBoxVisible: false,
             paused: true,
-            btnX: -6,
+            btnX: - Math.ceil(this.btnW / 2),
             currentTime: 0,
             duration: -1,
             mode: 0, // 0:列表循环 1:随机播放 2:单曲循环,
@@ -86,9 +90,14 @@ class MusicDetail extends Component {
         this.resizeCover();
         window.addEventListener('resize', this.onResize);
         this.DragHelper = new DragHelper({
-            onDragStart: this.onDragStart ,
+            onDragStart: this.onDragStart,
             onDragMove: this.onDragMove,
             onDragEnd: this.onDragEnd
+        });
+        this.DragHelper2 = new DragHelper({
+            onDragStart: this.onDragCoverStart,
+            onDragMove: this.onDragCoverMove,
+            onDragEnd: this.onDragCoverEnd,
         });
        this.setMusicInfo(this.props);
         if (this.props.show) this.addEventLister();
@@ -189,8 +198,59 @@ class MusicDetail extends Component {
         player.currentTime = 0;
         player.duration = -1; //显示'--:--'
         player.btnX = this.currentTime2btnX(0);
+        this.setState({
+            player,
+            currentLrcIndex: -1,
+            lrcList: []
+        });
+        this.loadLrcList();
+    };
+    loadLrcList = () => {
+        const music = this.findMusic();
+        const _array = music.lrc.split('\n');
+        let lrcList = [];
+        for (let i = 0; i < _array.length; i++) {
+            let match = _array[i].match(/\[\d+:\d{2}\.\d+\]/g);
+            if (match) {
+                let lrcTime;
+                //精确到毫秒
+                let sss = match[0].match(/\d+/g);
+                let m = parseInt(sss[0]);  //分
+                let s = parseInt(sss[1]);  //秒
+                let ms = parseInt(sss[2]); //毫秒
+                lrcTime = m * 60 + s + ms / 100;
+                lrcList.push({
+                    lrcTime,
+                    lrcText: _array[i].replace(/\[\d+:\d{2}\.\d+\]/g, '')
+                });
+            }
+        }
+        this.setState({ lrcList });
+    };
+    findLrcIndex = currentTime => {
+        const { lrcList } = this.state;
+        if (lrcList.length == 0) return;
+        const $lrcList = this.refs.lrcList;
+        const lastNode = $lrcList.childNodes[lrcList.length - 1];
+        const maxOffsetY = - lastNode.offsetTop - lastNode.offsetHeight + $lrcList.offsetHeight;
+        const coverHeight = this.refs.cover.offsetHeight;
+        for (let i = lrcList.length - 1; i >= 0; i--) {
+            if (lrcList[i].lrcTime < currentTime) {
+                //设置当前歌词
+                const node = $lrcList.childNodes[i];
+                node.className = 'now';
+                //跳到歌词 歌词列表最大向上偏移 offsetHeight
+                let top = coverHeight / 2 - node.offsetTop;
+                top = top < 0 ? top : 0;
+                top = top > maxOffsetY ? top : maxOffsetY;
+                $lrcList.style.transform = `translate3d(0,${top}px,0`;
+                this.setState({ currentLrcIndex: i });
+                return;
+            }
+        }
+        $lrcList.style.transform = '';
+        this.setState({ currentLrcIndex: -1 });
 
-        this.setState({ player });
     };
     onError = e => {
         const player = { ...this.state.player };
@@ -247,6 +307,7 @@ class MusicDetail extends Component {
         const audio = this.refs.audio;
         player.currentTime = audio.currentTime;
         this.setState({ player });
+        this.findLrcIndex(audio.currentTime);
         this.process2bar(audio.currentTime);
     };
     sec2time = second => {
@@ -315,7 +376,7 @@ class MusicDetail extends Component {
         const player = { ...this.state.player };
         const barWidth = this.refs.process_bar.offsetWidth;
         const w = this.refs.process_btn.offsetWidth;
-        return player.duration > 0 ? barWidth * currentTime / player.duration - w / 2 : - w / 2;
+        return player.duration > 0 ? barWidth * currentTime / player.duration - w / 2 : - Math.ceil(w / 2);
     };
     process2bar = currentTime => {
         const player = { ...this.state.player };
@@ -334,8 +395,8 @@ class MusicDetail extends Component {
         let player  = { ...this.state.player };
         if (player.duration == 0) return;
         const processW = this.refs.process_bar.offsetWidth;
-        x = x >= - parseInt(w / 2) ? x : - parseInt(w / 2);
-        if (x > processW - w / 2 ) x = processW - w / 2;
+        x = x >= - Math.ceil(w / 2) ? x : - Math.ceil(w / 2);
+        if (x > processW - Math.ceil(w / 2) ) x = processW - Math.ceil(w / 2);
         player.btnX = x;
         player.currentTime = this.btnX2CurrentTime(x);
         this.setState({
@@ -451,7 +512,7 @@ class MusicDetail extends Component {
     };
     musicItemOnClick = music_id => {
         let player = { ...this.state.player };
-        if (player.music_id == music_id) return;
+        if (player.nowMusic == music_id) return;
 
         //未找到指定音乐
         const ret = this.findMusicById(music_id);
@@ -533,11 +594,64 @@ class MusicDetail extends Component {
         this.setState({ player });
 
     };
+    onDragCoverStart = () => {
+        const $cover = this.refs.cover;
+        $cover['data-start'] = Date.now();
+    };
+    onDragCoverMove = ({ x, y, w, h }) => {
+        const $cover = this.refs.cover;
+        const $coverStyle = $cover.style;
+        x = x + (!isNaN($cover['data-x']) ? $cover['data-x'] : 0);
+        if (x > 0) x = '0';
+        if (x < - w / 2) x = - w / 2;
+        $coverStyle.transform = `translate3d(${x}px,0,0)`;
+    };
+    onDragCoverEnd = ({ x, y, w, h }) => {
+        const $cover = this.refs.cover;
+        const start = $cover['data-start'] > 0 ? $cover['data-start'] : 0;
+        const now = Date.now();
+        if (now - start <= 500 && x) {
+            if (x < -10) return this.change2Lrc();
+            if (x > 10) return this.change2Cover();
+        }
+        x = x + (!isNaN($cover['data-x']) ? $cover['data-x'] : 0);
+        if (x < - w / 4) {
+            this.change2Lrc();
+        } else {
+            this.change2Cover();
+        }
+    };
+    //切换到封面
+    change2Cover = () => {
+        const $cover = this.refs.cover;
+        $cover['data-x'] = 0;
+        const $coverStyle = $cover.style;
+        $coverStyle.transition = 'transform ease .5s';
+        $coverStyle.transform = '';
+        this.setState({ coverScrollView: 'cover' });
+        clearTimeout(this.scrollViewTimer);
+        this.scrollViewTimer = setTimeout(() => $coverStyle.transition = '', 500)
+    };
+    //切换到歌词
+    change2Lrc = () => {
+        const $cover = this.refs.cover;
+        $cover['data-x'] = - $cover.offsetWidth / 2;
+        const $coverStyle = this.refs.cover.style;
+        $coverStyle.transition = 'transform ease .5s';
+        $coverStyle.transform = 'translate3d(-50%,0,0)';
+        this.setState({ coverScrollView: 'lrc' });
+        clearTimeout(this.scrollViewTimer);
+        this.scrollViewTimer = setTimeout(() => $coverStyle.transition = '', 500)
+    };
     render() {
-        const { player, coverHeight, summaryMini, summaryTop } = this.state;
+        const { player, coverHeight, summaryMini, summaryTop, coverScrollView,
+            lrcList, currentLrcIndex } = this.state;
         const operOnClick = this.operOnClick;
         let precessBtnStyle = {
             left: player.btnX
+        };
+        let precessInnerStyle = {
+            width: player.btnX + Math.ceil(this.btnW / 2)
         };
         const audioInfo = this.findMusic();
         let cover, author, caption, audioSrc;
@@ -574,6 +688,10 @@ class MusicDetail extends Component {
         if (player.mode == 0) modeName = '列表循环';
         if (player.mode == 1) modeName = '随机播放';
         if (player.mode == 2) modeName = '单曲循环';
+
+        const lrcListItems = lrcList.map((val, index) => {
+            return <p className={index == currentLrcIndex ? 'now' : ''} key={index}>{val.lrcText}</p>;
+        });
         return (
             <div ref="music_detail" className="music-detail animated-fast slideInRight">
                 <div className="music-cover" style={{ height: coverHeight }}>
@@ -582,8 +700,18 @@ class MusicDetail extends Component {
                     </div>
                     <div className="cover-info">
                         <div className="caption">{caption}<span onClick={this.back} className="back-btn" /></div>
-                        <div className="cover-img">
-                            {cover && <img src={cover}/>}
+                        <div ref="cover" className="cover-scroll-view"
+                             {...this.DragHelper2.props}>
+                            <div className="cover-img">
+                                {cover && <img src={cover}/>}
+                            </div>
+                            <div ref="lrcList" className="lrc-list">
+                                {lrcListItems}
+                            </div>
+                        </div>
+                        <div className="scroll-view-btns">
+                            <span className={coverScrollView === 'cover' ? 'now-scroll' : ''} onClick={this.change2Cover}/>
+                            <span className={coverScrollView === 'lrc' ? 'now-scroll' : ''} onClick={this.change2Lrc} />
                         </div>
                     </div>
                 </div>
@@ -603,7 +731,7 @@ class MusicDetail extends Component {
                         <div ref="process_bar" className="process-bar">
                             <div ref="process_btn" className={player.loading ? 'process-btn-loading' : 'process-btn'} style={precessBtnStyle}
                                  {...this.DragHelper.props}/>
-                            <div className="process-inner"/>
+                            <div className="process-inner" style={precessInnerStyle}/>
                             <div className="process-bg"/>
                         </div>
                         <div className="process-timer">{this.sec2time(player.duration)}</div>

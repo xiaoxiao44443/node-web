@@ -12,6 +12,9 @@ import './musicEdit.css';
 const FormInput = props => {
     return <input className="admin-form-input" type="text" value={props.value} onChange={(event) => {props.onChange(props.name, event.target.value)}} />
 };
+const FormTextArea = props => {
+    return <textarea className="admin-form-textarea" value={props.value} onChange={(event) => {props.onChange(props.name, event.target.value)}} />
+};
 
 class MusicEdit extends PageComponent {
     constructor(props){
@@ -21,7 +24,8 @@ class MusicEdit extends PageComponent {
                 caption: '',
                 cover: '',
                 src: '',
-                author: ''
+                author: '',
+                lrc: ''
             },
             isDefault: false,
             net_music_analysis: false,
@@ -44,7 +48,7 @@ class MusicEdit extends PageComponent {
     };
     addMusic = async () => {
         if(this.state.loading) return;
-        const { cover, author, caption, src } = this.state.music;
+        const { cover, author, caption, src, lrc } = this.state.music;
         const { isDefault } = this.state;
         if (cover.length == 0){
             alert('请输入封面地址!');
@@ -67,7 +71,7 @@ class MusicEdit extends PageComponent {
         const data = {
             id: -1,
             music: {
-                cover, author, caption, src
+                cover, author, caption, src, lrc
             },
             isDefault
         };
@@ -88,7 +92,7 @@ class MusicEdit extends PageComponent {
     };
     saveMusic = async () => {
         if(this.state.loading) return;
-        const { cover, author, caption, src, id } = this.state.music;
+        const { cover, author, caption, src, lrc, id } = this.state.music;
         const { isDefault } = this.state;
         if(!id){
             alert('音乐数据出错,请刷新重试');
@@ -115,7 +119,7 @@ class MusicEdit extends PageComponent {
         const data = {
             id,
             music: {
-                cover, author, caption, src
+                cover, author, caption, src, lrc
             },
             isDefault
         };
@@ -165,7 +169,8 @@ class MusicEdit extends PageComponent {
                 cover: _music.cover,
                 src: _music.src,
                 author: _music.author,
-                caption: _music.caption
+                caption: _music.caption,
+                lrc: _music.lrc
             };
             if (this.state.music.id) music.id = this.state.music.id;
             this.setState({ music });
@@ -179,7 +184,7 @@ class MusicEdit extends PageComponent {
             return <Spin loading><div className="admin-music-edit"/></Spin>
         }
 
-        const { caption, cover, author, src, id } = this.state.music;
+        const { caption, cover, author, src, id, lrc } = this.state.music;
         const { net_music_id, net_music_analysis, isDefault } = this.state;
         const formInputOnChange = this.formInputOnChange;
         const formRadioOnchange = this.formRadioOnchange;
@@ -206,6 +211,8 @@ class MusicEdit extends PageComponent {
                     <h5>【封面】</h5>
                     <FormInput name="cover" value={cover} onChange={formInputOnChange} />
                     <img className="img-cover" src={cover}/>
+                    <h5>【歌词】</h5>
+                    <FormTextArea name="lrc" value={lrc} onChange={formInputOnChange} />
                     <h5>【默认音乐】</h5>
                     <label><input className="admin-form-radio" type="radio" name="sex" value="0" checked={isDefault == false} onChange={formRadioOnchange}/>否</label>
                     <label><input className="admin-form-radio" type="radio" name="sex" value="1" checked={isDefault == true} onChange={formRadioOnchange}/>是</label>
