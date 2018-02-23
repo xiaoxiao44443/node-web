@@ -219,7 +219,7 @@ class MusicDetail extends Component {
                 let m = parseInt(sss[0]);  //分
                 let s = parseInt(sss[1]);  //秒
                 let ms = parseInt(sss[2]); //毫秒
-                lrcTime = m * 60 + s + ms / 100;
+                lrcTime = m * 60 + s + ms / 1000;
                 lrcList.push({
                     lrcTime,
                     lrcText: _array[i].replace(/\[\d+:\d{2}\.\d+\]/g, '')
