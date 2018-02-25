@@ -581,6 +581,7 @@ class MusicDetail extends Component {
         player.list = newMusicList;
         //重新获取当前播放音乐索引
         let ret = this.findMusicById(deleteMusicId, newMusicList);
+        let audioIndex = 0;
         if (ret) audioIndex = ret.index;
         if (newMusicList.length < audioIndex + 1 ) audioIndex = 0;
 

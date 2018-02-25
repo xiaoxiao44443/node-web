@@ -27,7 +27,8 @@ const addMusic = async music => {
             author: music.author,
             cover: music.cover,
             src: music.src,
-            create_time: NOW_TIME,
+            lrc: music.lrc,
+            create_time: NOW_TIME
         };
         let { results } = await model.query(`INSERT INTO ?? SET ?`, [prefix + 'music', insert]);
         console.log(results);
