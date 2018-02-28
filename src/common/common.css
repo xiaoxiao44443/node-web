@@ -566,7 +566,7 @@ body.landing.is-loading:after {
 }
 .article-html pre >code{
     background-color: transparent;
-    display: inline-block;
+    display: block;
 }
 
 .article-html table{
