@@ -567,6 +567,7 @@ body.landing.is-loading:after {
 .article-html pre >code{
     background-color: transparent;
     display: block;
+    overflow-x: auto;
 }
 
 .article-html table{
