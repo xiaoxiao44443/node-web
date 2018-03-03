@@ -186,7 +186,7 @@ class BlogWrap extends Component {
     }
 }
 
-BlogWrap.PropTypes = {
+BlogWrap.propTypes = {
     newComments: PropTypes.array,
     friends: PropTypes.array
 };

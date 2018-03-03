@@ -88,7 +88,7 @@ Root.defaultProps = {
 const map = (state) => ({ error : state.error, notFound: state.notFound });
 
 Root = withRouter(store(Root, map));
-ReactDOM.render(
+ReactDOM.hydrate(
     <Provider>
         <Router>
             <Root/>

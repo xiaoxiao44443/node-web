@@ -340,10 +340,16 @@ class CommentItem extends Component {
     }
 }
 
-CommentItem.PropTypes = {
+CommentItem.propTypes = {
     replyBoxOnShow: PropTypes.func,
-    nowReplyBox: PropTypes.number,
-    user: PropTypes.object,
+    nowReplyBox: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.number,
+    ]),
+    user: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.object
+    ]),
     onDidMount: PropTypes.func
 };
 
@@ -631,9 +637,9 @@ class ArticleComment extends Component {
     }
 }
 
-ArticleComment.PropTypes = {
+ArticleComment.propTypes = {
     type: PropTypes.string.isRequired,
-    type_key: PropTypes.string,
+    type_key: PropTypes.any,
     hashCommentId: PropTypes.number,
     onDidMount: PropTypes.func
 };

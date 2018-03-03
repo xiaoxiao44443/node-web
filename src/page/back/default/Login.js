@@ -20,6 +20,9 @@ class Login extends PageComponent {
 
         this._setDefaultState(state);
     }
+    componentDidMount() {
+        this.user_name_input.focus();
+    }
     accountOnChange = event => {
         this.setState({
             account: event.target.value
@@ -85,7 +88,7 @@ class Login extends PageComponent {
                     <h1>欢迎主人~~~才怪///</h1>
                     <div className="admin-login-group">
                         <h4>主人你是谁？</h4>
-                        <input className="admin-form-input" type="text" onKeyDown={this.inputOnKeyDown} onChange={this.accountOnChange} value={account} />
+                        <input ref={input => this.user_name_input = input} className="admin-form-input" type="text" onKeyDown={this.inputOnKeyDown} onChange={this.accountOnChange} value={account} />
                         <h4>此山是我开,此树是我栽...快说口令！</h4>
                         <input className="admin-form-input" type="password" onKeyDown={this.inputOnKeyDown} onChange={this.passwordOnChange} value={password} />
                         <div className="text-right">
