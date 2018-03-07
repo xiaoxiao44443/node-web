@@ -53,7 +53,7 @@ const getPicPath = async pic => {
 };
 const savePic = async (pathname, type, author) => {
     try {
-        const NOW_TIME = parseInt(Date.now() / 1000);
+        const NOW_TIME = Math.round(Date.now() / 1000);
 
         if(Array.isArray(pathname)){
 

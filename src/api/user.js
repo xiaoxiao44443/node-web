@@ -16,7 +16,7 @@ const userLogin = async (account, password, group_id = 1) => {
     }
     let userInfo = results[0];
 
-    const NOW_TIME = parseInt(Date.now() / 1000);
+    const NOW_TIME = Math.round(Date.now() / 1000);
 
     userInfo.last_login_time = NOW_TIME;
     //保存用户信息
@@ -52,7 +52,7 @@ const tokenLogin = async (id, token) => {
         let model = new Model(false);
 
         const maxAge = cookieConfig.maxAge;
-        const NOW_TIME = parseInt(Date.now() / 1000);
+        const NOW_TIME = Math.round(Date.now() / 1000);
         const { results } = await model.query('SELECT * FROM ?? WHERE user_id = ? AND login_token = ? AND login_time >= ? LIMIT 1',
             [prefix + 'user_login', id, token, NOW_TIME - maxAge / 1000]);
         if(results.length > 0){
@@ -71,7 +71,7 @@ const tokenLogin = async (id, token) => {
 
 const addLoginToken = async id => {
     try {
-        const NOW_TIME = parseInt(Date.now() / 1000);
+        const NOW_TIME = Math.round(Date.now() / 1000);
         let model = new Model(false);
 
         //清除过期失效的token
@@ -110,7 +110,7 @@ const createWbUser = async user_info => {
     try {
         let model = new Model;
 
-        const NOW_TIME = parseInt(Date.now() / 1000);
+        const NOW_TIME = Math.round(Date.now() / 1000);
 
         const insert = {
             account: '',
@@ -168,7 +168,7 @@ const createZsUser = async user_info => {
     try {
         let model = new Model;
 
-        const NOW_TIME = parseInt(Date.now() / 1000);
+        const NOW_TIME = Math.round(Date.now() / 1000);
 
         const insert = {
             account: user_info.account,

@@ -139,7 +139,7 @@ Request.get('/login/weibo', async(req, res, next) => {
             redirect_uri: `${website_url}/login/weibo`
         };
         let ret;
-        const NOW_TIME = parseInt(Date.now() / 1000);
+        const NOW_TIME = Math.round(Date.now() / 1000);
         //获取access_token
 
         ret = await serverHttp.apiPost('https://api.weibo.com/oauth2/access_token', data);

@@ -187,7 +187,7 @@ const insert_music_config = {
     INSERT INTO ${prefix}config (id, name, value) VALUES
         (2, 'music', ${sqlString.escape(JSON.stringify(musicConfig))})`
 };
-const NOW_TIME = parseInt(Date.now() / 1000);
+const NOW_TIME = Math.round(Date.now() / 1000);
 const insert_motto = {
     desc: '默认格言数据',
     sql: `

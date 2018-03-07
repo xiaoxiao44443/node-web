@@ -131,7 +131,7 @@ const sendLimit = async user_id => {
         if(!commentConfig.enable) return Promise.resolve(true);
 
         const { interval, limitInterval, limit } = commentConfig;
-        const NOW_TIME = parseInt(Date.now() / 1000);
+        const NOW_TIME = Math.round(Date.now() / 1000);
 
         //时间间隔内发表量限制
         //间隔判断
