@@ -75,8 +75,9 @@ class VolumeControl extends Component {
         let percent = this.props.percent;
         percent = percent < 0 ? 0 : percent;
         percent = percent > 100 ? 100 : percent;
+        percent = Math.ceil(percent);
         this.setState({
-            btnX: this.percent2BtnX(this.props.percent),
+            btnX: this.percent2BtnX(percent),
             percent
         });
     }
@@ -97,7 +98,7 @@ class VolumeControl extends Component {
             percent: Math.ceil(_c * 100)
         });
 
-        if (this.props.onChangeVolume) this.props.onChangeVolume(_c);
+        if (this.props.onChangeVolume) this.props.onChangeVolume(_c.toFixed(2));
     };
     percent2BtnX = percent => {
         const processW = this.refs.volume_bar_wrap.offsetWidth;
@@ -108,7 +109,7 @@ class VolumeControl extends Component {
         return x;
     };
     shouldComponentUpdate(nextProps, nextState) {
-        return nextState.btnX != this.state.btnX;
+        return (nextState.btnX != this.state.btnX || nextState.percent != this.state.percent);
     }
     render() {
         const { btnX, percent } = this.state;
@@ -854,7 +855,7 @@ class MusicDetail extends Component {
                     <div className="music-list-box-wrap">
                         <div className="music-box-top">
                             <span>{modeName}</span>
-                            <VolumeControl onChangeVolume={this.changeVolume} percent={50}/>
+                            <VolumeControl onChangeVolume={this.changeVolume} percent={this.refs.audio.volume * 100}/>
                         </div>
                         <div className="music-list">
                             {listBoxItem}
