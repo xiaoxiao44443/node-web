@@ -386,6 +386,7 @@
     align-items: center;
     font-size: .85em;
     padding: 0 1em;
+    position: relative;
 }
 .music-list-box-wrap .music-list{
     width: 100%;
@@ -466,6 +467,51 @@
     display: block;
     -webkit-user-select: none;
     cursor: pointer;
+}
+
+.music-volume-control{
+    display: flex;
+    align-items: center;
+    font-size: .75em;
+    color: #8e98a0;
+    position: absolute;
+    right: 1em;
+}
+.music-volume-control .volume-bar-wrap{
+    width: 5em;
+    height: 6px;
+    background-color: #eba8bb;
+    border-radius: 6px;
+    position: relative;
+    margin: 0 10px;
+}
+.music-volume-control .volume-bar-inner{
+    width: 50%;
+    height: 6px;
+    background-color: #e44c65;
+    border-radius: 6px;
+    position: absolute;
+}
+.music-volume-control .volume-bar-btn{
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    background-color: white;
+    box-shadow: 0 0 3px #e44c65;
+    transition: box-shadow .3s;
+    cursor: pointer;
+    z-index: 1;
+    top: -4px;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+.music-volume-control .volume-bar-btn:hover{
+    box-shadow: 0 0 5px #e44c65;
+}
+.music-volume-control .volume-percent{
+    display: inline-block;
+    width: 3em;
 }
 
 @media screen and (min-width: 1400px){

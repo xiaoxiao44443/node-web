@@ -50,6 +50,87 @@ class TopTip extends Component {
     }
 }
 
+class VolumeControl extends Component {
+    constructor(props) {
+        super(props);
+        this.DragHelper = new DragHelper({
+            onDragStart: this.onDragStart,
+            onDragMove: this.onDragMove,
+            onDragEnd: this.onDragEnd
+        });
+    }
+    btnW = 14;
+    state = {
+        btnX: - Math.ceil(this.btnW / 2),
+        percent: 100
+    };
+    static propTypes = {
+        onChangeVolume: PropTypes.func,
+        percent: PropTypes.number
+    };
+    static defaultPropTypes = {
+        percent: 100
+    };
+    componentDidMount() {
+        let percent = this.props.percent;
+        percent = percent < 0 ? 0 : percent;
+        percent = percent > 100 ? 100 : percent;
+        this.setState({
+            btnX: this.percent2BtnX(this.props.percent),
+            percent
+        });
+    }
+    onDragStart = () => {};
+    onDragEnd = () => {};
+    onDragMove = ({ x, y, w, h }) => {
+        const processW = this.refs.volume_bar_wrap.offsetWidth;
+        x = x >= - Math.ceil(w / 2) ? x : - Math.ceil(w / 2);
+        if (x > processW - Math.ceil(w / 2) ) x = processW - Math.ceil(w / 2);
+
+
+        let _c = (x + w / 2) / processW;
+        _c = _c > 0 ? _c : 0;
+        _c = _c < 1 ? _c : 1;
+
+        this.setState({
+            btnX: x,
+            percent: Math.ceil(_c * 100)
+        });
+
+        if (this.props.onChangeVolume) this.props.onChangeVolume(_c);
+    };
+    percent2BtnX = percent => {
+        const processW = this.refs.volume_bar_wrap.offsetWidth;
+        let w = this.btnW;
+        let x = Math.ceil(processW * percent / 100) - Math.ceil(w / 2);
+        x = x >= - Math.ceil(w / 2) ? x : - Math.ceil(w / 2);
+        if (x > processW - Math.ceil(w / 2) ) x = processW - Math.ceil(w / 2);
+        return x;
+    };
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextState.btnX != this.state.btnX;
+    }
+    render() {
+        const { btnX, percent } = this.state;
+        const btnStyle = {
+            left: btnX
+        };
+        let barInnerStyle = {
+            width: btnX + Math.ceil(this.btnW / 2)
+        };
+        return(
+            <div className="music-volume-control">
+                <span className="volume-title">音量</span>
+                <div ref="volume_bar_wrap" className="volume-bar-wrap">
+                    <div ref="volume_bar_btn" className="volume-bar-btn" style={btnStyle} {...this.DragHelper.props} />
+                    <div className="volume-bar-inner" style={barInnerStyle}/>
+                </div>
+                <span className="volume-percent">{percent}%</span>
+            </div>
+        );
+    }
+}
+
 class MusicDetail extends Component {
     static propTypes = {
         close: PropTypes.func,
@@ -100,7 +181,7 @@ class MusicDetail extends Component {
             onDragEnd: this.onDragCoverEnd,
         });
        this.setMusicInfo(this.props);
-        if (this.props.show) this.addEventLister();
+        if (this.props.show) this.addEventListener();
     }
 
     //根据props中重置music
@@ -144,6 +225,7 @@ class MusicDetail extends Component {
         audio.addEventListener('durationchange', this.onDurationchange);
         audio.addEventListener('canplaythrough', this.onCanplaythrough);
         audio.addEventListener('error', this.onError);
+        audio.volume = .5;
         this.setState({ init: true });
     };
     removeEventListener = () => {
@@ -645,6 +727,11 @@ class MusicDetail extends Component {
         clearTimeout(this.scrollViewTimer);
         this.scrollViewTimer = setTimeout(() => $coverStyle.transition = '', 300)
     };
+    //调节音量
+    changeVolume = _c => {
+        const audio = this.refs.audio;
+        audio.volume = _c;
+    };
     render() {
         const { player, coverHeight, summaryMini, summaryTop, coverScrollView,
             lrcList, currentLrcIndex } = this.state;
@@ -727,7 +814,7 @@ class MusicDetail extends Component {
                     </div>
                 </div>
                 <div className="music-oper">
-                    <audio ref="audio" src={audioSrc} controls={false} autoPlay={true}/>
+                    <audio ref="audio" src={audioSrc} controls={false} autoPlay={true} />
                     <div className="music-process-wrap">
                         <div className="process-timer">{this.sec2time(player.currentTime)}</div>
                         <div ref="process_bar" className="process-bar">
@@ -767,6 +854,7 @@ class MusicDetail extends Component {
                     <div className="music-list-box-wrap">
                         <div className="music-box-top">
                             <span>{modeName}</span>
+                            <VolumeControl onChangeVolume={this.changeVolume} percent={50}/>
                         </div>
                         <div className="music-list">
                             {listBoxItem}
