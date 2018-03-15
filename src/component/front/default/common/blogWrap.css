@@ -202,12 +202,12 @@
         overflow: hidden;
     }
     .blog-group nav ul li{
-        width: 50%;
+        width: 25%;
         float: left;
     }
     .blog-group nav a{
         display: inline-block;
-        font-size: 1.5em;
+        font-size: 1em;
     }
     .blog-group nav a{
         color: white;

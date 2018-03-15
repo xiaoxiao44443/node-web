@@ -43,6 +43,9 @@ class BlogWrap extends Component {
                 case 'article':
                     link = `/blog/ad${val.type_key}#comment-${val.id}`;
                     break;
+                case 'message-board':
+                    link = `/message-board/#comment-${val.id}`;
+                    break;
             }
             newCommentList.push(
                 <p style={{width: '100%'}} key={val.id}>
@@ -123,6 +126,8 @@ class BlogWrap extends Component {
                                 <ul>
                                     <li><NavLink exact to="/" activeClassName="hover">首页</NavLink></li>
                                     <li><NavLink exact to="/blog" activeClassName="hover" onClick={this.showGroupPanel}>博客</NavLink></li>
+                                    <li><NavLink exact to="/message-board" activeClassName="hover">友言</NavLink></li>
+                                    <li><NavLink exact to="/about" activeClassName="hover">关于</NavLink></li>
                                 </ul>
                             </nav>
                         </div>

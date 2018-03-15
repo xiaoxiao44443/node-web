@@ -1,0 +1,26 @@
+.message-board .message-board-wrap{
+    overflow: hidden;
+    padding: 5em 3em;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.message-board .blog-group{
+    display: none;
+}
+.message-board-wrap .title{
+    text-align: center;
+}
+
+@media screen and (max-width: 736px){
+    .message-board .message-board-wrap {
+        width: 100%;
+        overflow: hidden;
+        padding: 2em 1em;
+    }
+    .message-board .title >h2{
+        font-size: 1em;
+    }
+}

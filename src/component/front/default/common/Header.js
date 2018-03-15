@@ -18,6 +18,8 @@ class Header extends Component {
                             <ul>
                                 <li><NavLink exact to="/" activeClassName="hover">首页</NavLink></li>
                                 <li><NavLink exact to="/blog" activeClassName="hover">博客</NavLink></li>
+                                <li id="message-board-link"><NavLink exact to="/message-board" activeClassName="hover">友言</NavLink></li>
+                                <li id="about-link"><NavLink exact to="/about" activeClassName="hover">关于</NavLink></li>
                             </ul>
                         </nav>
                     </div>

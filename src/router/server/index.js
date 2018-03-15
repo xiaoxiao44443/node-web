@@ -26,6 +26,20 @@ const getMusicInfo = async () => {
     return musicInfo;
 };
 
+//博客导航信息
+const getBlogNavInfo = async () => {
+    //最新评论5条
+    let newComments = await commentApi.newCommentList();
+
+    //今日格言
+    let { text:motto } = await mottoApi.todayMotto();
+
+    //友情链接
+    let friends = await friendApi.queryAllFriend();
+
+    return { newComments, motto, friends };
+};
+
 //api/pic
 Request.get('/api/pic([0-9]+)', async(req, res, next) => {
     try {
@@ -142,16 +156,10 @@ Request.get('/blog', async(req, res, next) => {
         //初始化页面数据 获取文章列表数据
         let articles = await articleApi.queryArticle();
 
-        //最新评论5条
-        let newComments = await commentApi.newCommentList();
+        //博客导航信息
+        let blogNavInfo = await getBlogNavInfo();
 
-        //今日格言
-        let { text:motto } = await mottoApi.todayMotto();
-
-        //友情链接
-        let friends = await friendApi.queryAllFriend();
-
-        const state  = { articles: articles, newComments: newComments, motto: motto, friends: friends };
+        const state  = { articles: articles, ...blogNavInfo };
 
         //音乐盒信息
         const musicInfo = await getMusicInfo();
@@ -204,19 +212,71 @@ Request.get('/blog/ad([0-9]+)', async(req, res, next) => {
         let article = await articleApi.getArticle(ad);
         if(!article) return next();
 
-        //最新评论5条
-        let newComments = await commentApi.newCommentList();
+        //博客导航信息
+        let blogNavInfo = await getBlogNavInfo();
 
-        //今日格言
-        let { text:motto } = await mottoApi.todayMotto();
-
-        //友情链接
-        let friends = await friendApi.queryAllFriend();
-
-        const state  = { article: article,  newComments: newComments, motto: motto, friends: friends };
+        const state  = { article: article,  ...blogNavInfo };
 
         //网站标题是文章标题
         const title = `${site_name} | ${article.title}`;
+
+        //音乐盒信息
+        const musicInfo = await getMusicInfo();
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title, false, musicInfo));
+        }else{
+            resRender(req, res, title, state, 'index', musicInfo);
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//message-board
+Request.get('/message-board', async(req, res, next) => {
+    try {
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name}`;
+
+        //初始化页面数据
+
+        //博客导航信息
+        let blogNavInfo = await getBlogNavInfo();
+
+        const state = { ...blogNavInfo };
+
+        //音乐盒信息
+        const musicInfo = await getMusicInfo();
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title, false, musicInfo));
+        }else{
+            resRender(req, res, title, state, 'index', musicInfo);
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
+//message-board
+Request.get('/about', async(req, res, next) => {
+    try {
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name}`;
+
+        //初始化页面数据
+
+        //博客导航信息
+        let blogNavInfo = await getBlogNavInfo();
+
+        const state = { ...blogNavInfo };
 
         //音乐盒信息
         const musicInfo = await getMusicInfo();

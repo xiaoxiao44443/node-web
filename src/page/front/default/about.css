@@ -1,0 +1,30 @@
+.about .about-wrap{
+    overflow: hidden;
+    padding: 5em 3em;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.about .blog-group{
+    display: none;
+}
+.about-wrap .title{
+    text-align: center;
+    width: 100%;
+}
+.about-wrap .title img {
+    max-width: 100%;
+}
+
+@media screen and (max-width: 736px){
+    .about .about-wrap {
+        width: 100%;
+        overflow: hidden;
+        padding: 2em 1em;
+    }
+    .about-wrap .title >h2{
+        font-size: 1em;
+    }
+}

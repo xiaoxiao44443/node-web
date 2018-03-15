@@ -12,6 +12,8 @@ import Error from '../../page/front/default/Error';
 import NotFound from '../../component/common/Status/NotFound';
 import MessageJump from '../../page/front/default/MessageJump';
 import MusicWedgit from '../../component/front/default/common/Music';
+import MessageBoard from '../../page/front/default/MessageBoard';
+import About from '../../page/front/default/About';
 
 //后台页面
 import Admin from '../../page/back/default/Admin';
@@ -43,6 +45,8 @@ const Routes = (isError = false, is404 = false) => {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/blog" component={Blog} />
                         <Route exact path="/blog/ad([0-9]+)" component={ArticleDetail} />
+                        <Route exact path="/message-board" component={MessageBoard} />
+                        <Route exact path="/about" component={About} />
                     </Switch>
                     <MusicWedgit/>
                 </div>

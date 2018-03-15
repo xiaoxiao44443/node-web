@@ -131,3 +131,9 @@
         font-weight: normal;
     }
 }
+
+@media screen and (max-width: 360px){
+    #header #message-board-link, #header #about-link {
+        display: none;
+    }
+}
