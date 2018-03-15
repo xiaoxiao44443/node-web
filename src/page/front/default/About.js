@@ -6,6 +6,7 @@ import './about.css';
 
 import BlogWrap from '../../../component/front/default/common/BlogWrap';
 import PageComponent from '../../../component/common/base/PageComponent';
+import { maxWidthPoint } from '../../../enum';
 
 class About extends PageComponent {
     constructor(props){
@@ -16,11 +17,19 @@ class About extends PageComponent {
         };
         this._setDefaultState(state);
     }
+    componentDidUpdate(){
+        if(this.refs.aboutWrap){
+            const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
+            if(maxWidth > maxWidthPoint.medium){
+                this.refs.aboutWrap.className = 'about-wrap bounceInUp animated';
+            }
+        }
+    }
     render(){
         const { newComments, motto, friends } = this.state;
         return (
             <BlogWrap className="about" newComments={newComments} motto={motto} friends={friends}>
-                <div className="about-wrap">
+                <div ref="aboutWrap" className="about-wrap">
                     <div className="title">
                         <a href="/static/images/default/about/66213344_p0.png" target="_blank">
                             <img src="/static/images/default/about/66213344_p0_1.png" />

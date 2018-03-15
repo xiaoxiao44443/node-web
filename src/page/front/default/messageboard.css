@@ -1,3 +1,6 @@
+.message-board .message-board-ani{
+    width: 100%;
+}
 .message-board .message-board-wrap{
     overflow: hidden;
     padding: 5em 3em;

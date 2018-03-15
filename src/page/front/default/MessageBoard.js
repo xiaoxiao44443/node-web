@@ -8,6 +8,7 @@ import BlogWrap from '../../../component/front/default/common/BlogWrap';
 import PageComponent from '../../../component/common/base/PageComponent';
 import ArticleComment from '../../../component/front/default/common/ArticleComment';
 import { scroll2ElementByClassName, scroll2EleByHashID } from '../../../tool/dom-js';
+import { maxWidthPoint } from '../../../enum';
 
 class MessageBoard extends PageComponent {
     constructor(props){
@@ -18,6 +19,14 @@ class MessageBoard extends PageComponent {
         };
         this._setDefaultState(state);
     }
+    componentDidUpdate(){
+        if(this.refs.messageBoardAni){
+            const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
+            if(maxWidth > maxWidthPoint.medium){
+                this.refs.messageBoardAni.className = 'message-board-ani bounceInUp animated';
+            }
+        }
+    }
     scroll2Hash = () => {
         //跳转到指定哈希值元素
         if (this.props.location.hash === '') return;
@@ -27,13 +36,15 @@ class MessageBoard extends PageComponent {
         const { newComments, motto, friends } = this.state;
         return (
             <BlogWrap className="message-board" newComments={newComments} motto={motto} friends={friends}>
-                <div className="message-board-wrap">
-                    <div className="title">
-                        <h2>这里是留言板~</h2>
+                <div ref="messageBoardAni" className="message-board-ani">
+                    <div className="message-board-wrap">
+                        <div className="title">
+                            <h2>这里是留言板~</h2>
+                        </div>
                     </div>
+                    <ArticleComment type="message-board" type_key={1}
+                                    hashCommentHash={this.props.location.hash} onDidMount={this.scroll2Hash} />
                 </div>
-                <ArticleComment type="message-board" type_key={1}
-                                hashCommentHash={this.props.location.hash} onDidMount={this.scroll2Hash} />
             </BlogWrap>
         );
     }
