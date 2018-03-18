@@ -136,7 +136,8 @@ const createWbUser = async user_info => {
             account_type: 100,
             weibo_access_token: user_info.weibo_access_token,
             weibo_uid: user_info.weibo_uid,
-            last_login_time: NOW_TIME
+            last_login_time: NOW_TIME,
+            oauth2_last_update_time: 0
         };
         let { results } = await model.query('INSERT INTO ?? SET ?', [prefix + 'user', insert]);
         return Promise.resolve(results.affectedRows >0);
@@ -155,6 +156,7 @@ const updateWbUser = async user_info => {
             profile_url: user_info.profile_url,
             sex: user_info.sex,
             weibo_access_token: user_info.weibo_access_token,
+            oauth2_last_update_time: NOW_TIME
         };
         let { results } = await model.query('UPDATE ?? SET ? WHERE weibo_uid = ?', [prefix + 'user', update, user_info.weibo_uid]);
         return Promise.resolve(results.affectedRows >=0);
@@ -194,7 +196,8 @@ const createZsUser = async user_info => {
             account_type: 101,
             weibo_access_token: '',
             weibo_uid: '',
-            last_login_time: NOW_TIME
+            last_login_time: NOW_TIME,
+            oauth2_last_update_time: 0
         };
         let { results } = await model.query('INSERT INTO ?? SET ?', [prefix + 'user', insert]);
         return Promise.resolve(results.affectedRows >0);
@@ -210,6 +213,7 @@ const updateZsUser = async user_info => {
         let update = {
             head: user_info.head,
             sex: user_info.sex,
+            oauth2_last_update_time: NOW_TIME
         };
         let { results } = await model.query('UPDATE ?? SET ? WHERE account = ? AND account_type = 101', [prefix + 'user', update, user_info.account]);
         return Promise.resolve(results.affectedRows >=0);

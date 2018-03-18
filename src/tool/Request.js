@@ -35,23 +35,26 @@ class _Request {
                         profile_url: userInfo.profile_url
                     };
                     if(userInfo.account_type == 100){
-                        //获取微博用户信息
-                        try {
-                            let result = await serverHttp.apiGet(`https://api.weibo.com/2/users/show.json?access_token=${userInfo.weibo_access_token}&uid=${userInfo.weibo_uid}`);
-                            const user_info = {
-                                weibo_uid: result.id,
-                                nickname: result.name,
-                                head: result.avatar_large,
-                                sex: {m:1 ,f: 0, n: 2}[result.gender],
-                                profile_url: result.profile_url,
-                                weibo_access_token: userInfo.weibo_access_token,
+                        const NOW_TIME = Math.round(Date.now() / 1000);
+                        if (userInfo.oauth2_last_update_time < NOW_TIME - 3600 * 2) {
+                            //获取微博用户信息 最少间隔2钟头更新一次
+                            try {
+                                let result = await serverHttp.apiGet(`https://api.weibo.com/2/users/show.json?access_token=${userInfo.weibo_access_token}&uid=${userInfo.weibo_uid}`);
+                                const user_info = {
+                                    weibo_uid: result.id,
+                                    nickname: result.name,
+                                    head: result.avatar_large,
+                                    sex: {m:1 ,f: 0, n: 2}[result.gender],
+                                    profile_url: result.profile_url,
+                                    weibo_access_token: userInfo.weibo_access_token,
 
-                            };
-                            await userApi.updateWbUser(user_info);
-                        }catch (err){
-                            //失败 清除cookies
-                            this.USER = {};
-                            res.clearCookie('id').clearCookie('token');
+                                };
+                                await userApi.updateWbUser(user_info);
+                            }catch (err){
+                                //失败 清除cookies
+                                this.USER = {};
+                                res.clearCookie('id').clearCookie('token');
+                            }
                         }
                     }
                 }else{
