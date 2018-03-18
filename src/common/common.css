@@ -477,11 +477,14 @@ body.landing.is-loading:after {
     padding: .6em 1.2em;
     margin: 0 0 1.2em;
     font-size: 1em;
-    line-height: 1;
+    line-height: 2;
     border-left: .3em solid #eee;
 }
 .article-html blockquote p{
     margin: 0 0 .6em;
+}
+.article-html blockquote p:last-child{
+    margin: 0;
 }
 .article-html h1{
     font-size: 1.8em;
@@ -525,6 +528,7 @@ body.landing.is-loading:after {
 .article-html ul li {
     padding-left: 0;
     list-style-type: inherit;
+    line-height: 2;
 }
 .article-html ul ul, .article-html ol ul {
     list-style-type: circle;
@@ -535,6 +539,9 @@ body.landing.is-loading:after {
 }
 .article-html ol ol ul, .article-html ol ul ul, .article-html ul ol ul, .article-html ul ul ul {
     list-style-type: square;
+}
+.article-html ol li {
+    line-height: 2;
 }
 .article-html ol p, .article-html li p {
     margin: 0 0 .6em;
@@ -571,7 +578,7 @@ body.landing.is-loading:after {
 }
 
 .article-html table{
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 1.2em;
@@ -580,24 +587,25 @@ body.landing.is-loading:after {
     border-top: 0;
 }
 .article-html table>tbody>tr:nth-of-type(odd) {
-    background-color: #f9f9f9;
+    background-color: white;
 }
 .article-html table>tbody>tr:nth-of-type(even) {
-    background-color: #edf7f7;
+    background-color: white;
 }
 .article-html table>tbody>tr>td, .article-html table>tbody>tr>th, .article-html table>tfoot>tr>td, .article-html table>tfoot>tr>th, .article-html table>thead>tr>td, .article-html table>thead>tr>th {
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
 }
 .article-html table>thead>tr>th {
-    border-bottom-width: 2px;
+    border-bottom-width: 1px;
+    background: #f3f3f3;
 }
 .table>thead>tr>th {
     vertical-align: bottom;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 1px solid #eee;
 }
 .article-html table>thead>tr>th {
     vertical-align: bottom;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 1px solid #eee;
 }
 .article-html th {
     text-align: left;
@@ -606,10 +614,10 @@ body.landing.is-loading:after {
     padding: 0;
 }
 .article-html table>tbody>tr>td, .article-html table>tbody>tr>th, .article-html table>tfoot>tr>td, .article-html table>tfoot>tr>th, .article-html table>thead>tr>td, .article-html table>thead>tr>th {
-    padding: .5em;
+    padding: .85em 1.7em;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #eee;
 }
 .article-html a{
     color: #e44c65;
@@ -662,6 +670,9 @@ body.landing.is-loading:after {
     }
     .article-html >p{
         line-height: 1.8em;
+    }
+    .article-html blockquote{
+        padding: .4em 1.2em
     }
     .article-html p, .article-html ol p, .article-html li p {
         margin: 0 0 .6em;
