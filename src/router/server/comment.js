@@ -9,6 +9,7 @@ import RequestModel, {
 import articleApi from '../../api/article';
 const Request = new RequestModel;
 import commentApi from '../../api/comment';
+import mailTool from '../../tool/mail';
 
 /**
  * 评论指评论文章 回复指回复评论
@@ -99,6 +100,13 @@ Request.post('/send', async(req, res, next) => {
                         await articleApi.articleCommentsAdd(type_key);
                     }
 
+                    //发送邮件通知博主
+                    try {
+                        mailTool.sendReplyMall(ret);
+                    } catch (err) {
+                        console.log(err.message);
+                    }
+
                     return res.json(returnSuc('发表成功~'));
                 }else{
                     return res.json(returnErr('发表失败,不知道为什么~'));
@@ -129,6 +137,14 @@ Request.post('/reply', async(req, res, next) => {
                 //发表回复
                 ret = await commentApi.reply(comment_id, reply_id, uid,content);
                 if(ret){
+
+                    //发送邮件通知评论者
+                    try {
+                        mailTool.sendReplyMall(ret);
+                    } catch (err) {
+                        console.log(err.message);
+                    }
+
                     return res.json(returnSuc('发表成功~'));
                 }else{
                     return res.json(returnErr('发表失败,不知道为什么~'));

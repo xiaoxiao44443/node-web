@@ -571,6 +571,32 @@ class ArticleComment extends Component {
             nowReplyBox: id
         });
     };
+    emailOnChange = e => {
+        const { user } = this.state;
+        user.email = e.target.value;
+        this.setState({ user });
+    };
+    emailOnBlur = async () => {
+        //保存email
+        const email = this.state.user.email;
+        if (email !== '') {
+            const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if (!reg.test(email)) {
+                alert('邮箱不能乱填哦~');
+                return;
+            }
+        }
+        const data = { email };
+        const res = await http.apiPost('/user/update-email', data);
+        if (res.code !== 0) {
+            if(res.data == '请先登录~'){
+                //跳到授权登录
+                alert(res.data);
+            }else{
+                alert(res.data);
+            }
+        }
+    };
     render(){
         const { comments, showCommentBox, commentContextInput, maxContentNum, loading, nowReplyBox, user, findComment } = this.state;
         const commentList = this.state.comments.list.map(val => {
@@ -586,6 +612,12 @@ class ArticleComment extends Component {
                 <div className="comment-title">
                     <h3 className="multi-border-hl">
                         <span>发表评论</span>
+                        { user &&
+                            <div className="email">e-mail:<input value={user.email}
+                                                                 placeholder="邮箱地址可以收到回复~"
+                                                                 maxLength="48"
+                                                                 onBlur={this.emailOnBlur}
+                                                                 onChange={this.emailOnChange} /><i className="border"/></div>}
                     </h3>
                 </div>
                 <div className={ 'comment-box' + (!showCommentBox ? ' min' : '')}>

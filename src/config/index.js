@@ -39,11 +39,28 @@ const wbApp = {
     client_secret: ''
 };
 
+const mailConfig = {
+    owner: '422291344@qq.com',
+    owner_nickname: '、这不科学'
+};
+
+const smtpConfig = {
+    host: 'smtp.exmail.qq.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: '',
+        pass: ''
+    }
+};
+
 export {
     path,
     database,
     dbConfig,
     cookieConfig,
     commentConfig,
-    wbApp
+    wbApp,
+    smtpConfig,
+    mailConfig
 };

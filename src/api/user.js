@@ -94,6 +94,17 @@ const addLoginToken = async id => {
     }
 };
 
+const getUserInfo = async user_id => {
+    try {
+        let model = new Model;
+
+        const { results } = await model.query('SELECT * FROM ?? WHERE id = ? LIMIT 1', [prefix + 'user', user_id]);
+        return Promise.resolve(results.length == 1 ? results[0] : false);
+    }catch (err){
+        return Promise.resolve(err);
+    }
+};
+
 const getWbUserInfo = async weibo_uid => {
 
     try {
@@ -211,12 +222,12 @@ const updateUser = async (user_id, user_info) => {
     try {
         let model;
         //是否有修改密码
-        let update = {
-            nickname: user_info.nickname,
-            head: user_info.head,
-            sex: user_info.sex,
-            email: user_info.email
-        };
+        let update = {};
+        if ('nickname' in user_info) update.nickname = user_info.nickname;
+        if ('head' in user_info) update.head = user_info.head;
+        if ('sex' in user_info) update.sex = user_info.sex;
+        if ('email' in user_info) update.email = user_info.email;
+
         if (user_info.psw2 && user_info.psw1) {
             const psw = userPassword(user_info.psw1); //旧密码
             model = new Model;
@@ -244,7 +255,8 @@ const Api = {
     createZsUser,
     updateZsUser,
     addLoginToken,
-    updateUser
+    updateUser,
+    getUserInfo
 };
 
 export default Api;

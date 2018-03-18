@@ -32,6 +32,41 @@
     padding: .3em;
     display: inline-block;
 }
+.article-comment-wrap .multi-border-hl .email {
+    text-transform: none;
+    float: right;
+    position: relative;
+    margin-right: 1em;
+    padding: 2px 0;
+    font-size: .85em;
+}
+.article-comment-wrap .multi-border-hl .email input {
+    width: 12rem;
+    border: none;
+    outline: none;
+    text-align: center;
+    margin-left: .5em;
+    color: #bbb;
+    font-weight: 300;
+    font-size: .85em;
+}
+.article-comment-wrap .multi-border-hl .email .border {
+    position: absolute;
+    height: 1px;
+    width: 12rem;
+    background: black;
+    right: 0;
+    bottom: 0;
+    transition: transform ease .3s;
+    display: block;
+    transform: scale(0);
+}
+.article-comment-wrap .multi-border-hl .email input:focus {
+    color: black;
+}
+.article-comment-wrap .multi-border-hl .email input:focus + .border {
+    transform: scale(1);
+}
 .article-comment-wrap .comment-box{
     width: 100%;
     padding: .5em 1em;
@@ -239,6 +274,12 @@
     .article-comment-wrap{
         width: 90%;
     }
+    .article-comment-wrap .multi-border-hl .email input {
+        width: 10rem;
+    }
+    .article-comment-wrap .multi-border-hl .email .border {
+        width: 10rem;
+    }
 }
 @media screen and (min-width: 736px){
     .article-comment-wrap .user-head{
@@ -266,6 +307,14 @@
         margin: 0;
         padding: .3em 0;
         border-bottom: 2px solid #eee;
+    }
+
+    .article-comment-wrap .multi-border-hl .email input {
+        width: 8rem;
+        font-size: .85em;
+    }
+    .article-comment-wrap .multi-border-hl .email .border {
+        width: 8rem;
     }
 
     .article-comment-wrap .comment-box{

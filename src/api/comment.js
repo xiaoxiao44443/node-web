@@ -116,7 +116,7 @@ const send = async (type, type_key, user_id, content) => {
             stick: 0
         };
         let { results } = await model.query('INSERT INTO ?? SET ?', [prefix + 'comment', insert]);
-        return Promise.resolve(results.affectedRows >0);
+        return Promise.resolve(results.affectedRows >0 ? results.insertId : false);
 
     }catch (err){
         return Promise.reject(err);
@@ -183,7 +183,7 @@ const reply = async (comment_id, reply_id, user_id, content) => {
         model = new Model;
         ret = await model.query('INSERT INTO ?? SET ?', [prefix + 'comment', insert]);
         results = ret.results;
-        return Promise.resolve(results.affectedRows >0);
+        return Promise.resolve(results.affectedRows >0 ? results.insertId : false);
 
     }catch (err){
         return Promise.reject(err);
@@ -256,12 +256,23 @@ const queryByComment = async (id, commentSize = 10, replySize = 5 ) => {
     }
 };
 
+//获取回复信息
+const getCommentInfo = async comment_id => {
+    try {
+        let model = new Model;
+        let { results } = await model.query(`SELECT * FROM ?? WHERE id = ? AND status = 0 LIMIT 1`, [prefix + 'comment', comment_id]);
+        return Promise.resolve(results.length == 0 ? false : results[0]);
+    } catch (err) {
+        return Promise.reject(err);
+    }
+};
+
 export default {
     query,
     queryReply,
     send,
     reply,
-    deleteComment,
+    getCommentInfo,
     sendLimit,
     newCommentList,
     queryByComment
