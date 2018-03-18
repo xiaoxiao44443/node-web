@@ -149,6 +149,7 @@ const createWbUser = async user_info => {
 const updateWbUser = async user_info => {
     try {
         let model = new Model;
+        const NOW_TIME = Math.round(Date.now() / 1000);
 
         let update = {
             nickname: user_info.nickname,
@@ -209,6 +210,7 @@ const createZsUser = async user_info => {
 const updateZsUser = async user_info => {
     try {
         let model = new Model;
+        const NOW_TIME = Math.round(Date.now() / 1000);
 
         let update = {
             head: user_info.head,
