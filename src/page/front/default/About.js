@@ -34,6 +34,7 @@ class About extends PageComponent {
                         <a href="/static/images/default/about/66213344_p0.png" target="_blank">
                             <img src="/static/images/default/about/66213344_p0_1.png" />
                         </a>
+                        <p>QQ:422291344</p>
                         <p>更多介绍暂无~</p>
                     </div>
                 </div>
