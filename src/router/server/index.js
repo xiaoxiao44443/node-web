@@ -240,7 +240,7 @@ Request.get('/message-board', async(req, res, next) => {
         //获取网站配置
         const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
-        const title = `${site_name}`;
+        const title = `${site_name} | 友言`;
 
         //初始化页面数据
 
@@ -269,7 +269,7 @@ Request.get('/about', async(req, res, next) => {
         //获取网站配置
         const websiteConfig = Request.websiteConfig;
         const site_name = websiteConfig.site_name.value;
-        const title = `${site_name}`;
+        const title = `${site_name} | 关于`;
 
         //初始化页面数据
 
