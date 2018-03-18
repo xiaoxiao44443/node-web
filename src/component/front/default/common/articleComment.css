@@ -59,13 +59,13 @@
     bottom: 0;
     transition: transform ease .3s;
     display: block;
-    transform: scale(0);
+    transform: scale3d(0,1,1)
 }
 .article-comment-wrap .multi-border-hl .email input:focus {
     color: black;
 }
 .article-comment-wrap .multi-border-hl .email input:focus + .border {
-    transform: scale(1);
+    transform: scale3d(1,1,1);
 }
 .article-comment-wrap .comment-box{
     width: 100%;
