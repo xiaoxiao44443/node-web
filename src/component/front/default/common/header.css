@@ -131,8 +131,17 @@
         font-weight: normal;
     }
 }
-
+@media screen and (max-width: 736px){
+    #header nav ul li {
+        margin-left: 0;
+        padding-left: .3em;
+    }
+}
 @media screen and (max-width: 360px){
+    #header nav ul li {
+        margin-left: 1em;
+        padding-left: .5em;
+    }
     #header #message-board-link, #header #about-link {
         display: none;
     }
