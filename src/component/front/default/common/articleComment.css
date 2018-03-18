@@ -52,7 +52,7 @@
 }
 .article-comment-wrap .multi-border-hl .email .border {
     position: absolute;
-    height: 1px;
+    height: .5px;
     width: 12rem;
     background: black;
     right: 0;
