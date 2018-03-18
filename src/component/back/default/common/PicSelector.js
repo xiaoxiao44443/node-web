@@ -107,6 +107,7 @@ class PicSelector extends Component {
             if(res.code == 0){
                 //清空预上传图片
                 this.setState({
+                    preUploadSelected: [],
                     preUploadPics: []
                 });
                 alert('上传成功');
