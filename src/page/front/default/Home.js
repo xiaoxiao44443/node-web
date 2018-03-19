@@ -12,7 +12,7 @@ class Home extends PageComponent{
         const backGroundImg = '/static/images/default/main-banner.jpg';
         return (
             <div className="main-wrap home">
-                <Header backGroundImg={backGroundImg} />
+                <Header backGroundImg={backGroundImg} vertical="top" />
                 <section id="main-banner" style={{background: `url(${backGroundImg}) no-repeat center top`,
                     backgroundSize: "cover"}}>
                     <div className="layer">

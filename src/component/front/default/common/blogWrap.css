@@ -8,16 +8,19 @@
     }
 }
 .blog #header .nav .nav-bg{
-    height: 32em;
+    height: 5em;
     overflow: hidden;
 }
 .blog-banner{
     width: 100%;
-    height: 32em;
+    height: 35em;
     overflow: hidden;
     position: relative;
     box-shadow: rgba(0,0,0,0.2) 0 1px 5px;
     border-bottom: 1px solid #e44c65;
+    background: no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 .blog-banner >.layer{
     width: 100%;
@@ -39,10 +42,9 @@
 .blog-wrap{
     width: 100%;
     min-height: 20vh;
-    background: #f3f3f3;
     overflow: hidden;
     padding: 4em 10em;
-    font-weight: 300;
+    /*font-weight: 300;*/
 }
 .blog-wrap .blog-group{
     width: 40%;
@@ -54,28 +56,25 @@
 }
 .recommend-item{
     width: 100%;
-    background: black;
+    background: rgba(255,255,255,.85);
     border-radius: 4px;
-    padding: 2px;
-    transition: .5s;
+    border: 2px solid black;
     position: relative;
     overflow: hidden;
     margin-bottom: 5em;
 }
 .recommend-item .recommend-item-inner{
     width: 100%;
-    border-radius: 2px;
-    background: white;
 }
 .recommend-item .recommend-item-container{
     padding: 15px 45px 15px 15px;
 }
 .recommend-item .recommend-item-more{
     position: absolute;
-    right: 2px;
-    bottom: 2px;
+    right: 0;
+    bottom: 0;
+    top: 0;
     background: #333;
-    top: 2px;
     width: 30px;
     padding: 0 9px;
     color: #fff;
@@ -170,28 +169,32 @@
     .blog-banner{
         margin-top: 44px;
         height: 12em;
+        background-attachment: inherit;
     }
     .blog-wrap{
         padding: 0;
     }
     .main-wrap.blog.group-panel-visible{
-        position: fixed;
+
     }
     .main-wrap.blog .blog-group{
         z-index: 1999;
         width: calc(100% - 5em);
         background: #181920;
         display: block;
-        right: calc(-100% + 5em);
-        transition: all .5s ease;
+        transform: translate3d(calc(100% + 5em),0,0);
+        transition: transform .5s ease;
         position: fixed;
         top: 0;
         overflow-y: auto;
         height: 100%;
         -webkit-overflow-scrolling: touch;
     }
+    .main-wrap.blog .bounceInRight{
+        animation-name: none;
+    }
     .main-wrap.blog.group-panel-visible .blog-group{
-        right: 0;
+        transform: translate3d(5em,0,0);
         top: 0;
     }
     .blog-group nav{
@@ -218,6 +221,17 @@
     }
     .recommend-item{
         margin-bottom: 1em;
+        background-color: black;
+        padding: 2px;
+    }
+    .recommend-item .recommend-item-inner {
+        border-radius: 2px;
+        background: white;
+    }
+    .recommend-item .recommend-item-more {
+        right: 2px;
+        bottom: 2px;
+        top: 2px;
     }
     .recommend-item .recommend-item-header{
         padding-bottom: 10px;

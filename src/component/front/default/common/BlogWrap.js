@@ -21,18 +21,28 @@ class BlogWrap extends Component {
 
         this.state = {
             groupPanelVisible: false,
-            marginTop: 0,
             newCommentList: this.getCommentList()
         };
         this.showGroupPanel = this.showGroupPanel.bind(this);
     }
     componentDidMount(){
+        window.addEventListener('resize', this.onResize);
+
+    }
+    componentWillUnmount(){
+        window.removeEventListener('resize', this.onResize);
+    }
+    onResize = () => {
         const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
 
         //小屏幕只显示2条最新评论
         let newCommentList = maxWidth < maxWidthPoint.medium ? this.getCommentList(2) : this.getCommentList();
         this.setState({newCommentList});
-    }
+        if(this.refs.blogGroup){
+            this.refs.blogGroup.className = 'blog-group' + (maxWidth > maxWidthPoint.medium ? ' bounceInRight animated' : '');
+        }
+
+    };
     getCommentList(count = false, props = false){
         const { newComments } = props ? props : this.props;
         let newCommentList = [];
@@ -55,17 +65,6 @@ class BlogWrap extends Component {
         });
         return newCommentList;
     }
-    componentDidUpdate(prevProps, prevState){
-        if(prevState.groupPanelVisible && !this.state.groupPanelVisible){
-            //groupPanel关闭已渲染完毕
-            window.scrollTo(0, - this.state.marginTop);
-        }
-        const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
-        if(this.refs.blogGroup){
-            this.refs.blogGroup.className = 'blog-group' + (maxWidth > maxWidthPoint.medium ? ' bounceInRight animated' : '');
-        }
-
-    }
     componentWillReceiveProps(nextProps){
         const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
         //小屏幕只显示2条最新评论
@@ -73,10 +72,16 @@ class BlogWrap extends Component {
         this.setState({newCommentList});
     }
     showGroupPanel(){
+        const mainWrap = this.mainWrap;
         if(!this.state.groupPanelVisible){
-            this.setState({
-                marginTop:  - getWindowScrollY()
-            });
+            const marginTop = - getWindowScrollY();
+            mainWrap.style.position = 'fixed';
+            mainWrap.style.marginTop = marginTop + 'px';
+            this.marginTop = marginTop;
+        } else {
+            mainWrap.style.position = '';
+            mainWrap.style.marginTop = '';
+            window.scrollTo(0, - this.marginTop);
         }
         this.setState({
             groupPanelVisible: !this.state.groupPanelVisible
@@ -85,7 +90,7 @@ class BlogWrap extends Component {
     }
     render(){
 
-        const backGroundImg = this.props.backGroundImg || '/static/images/default/blog-banner.jpg';
+        const bannerImg = this.props.bannerImg || '/static/images/default/blog-banner.jpg';
         const className = this.props.className || '';
 
         const { motto } = this.props;
@@ -104,17 +109,15 @@ class BlogWrap extends Component {
         });
 
         return (
-            <div className={mainWrapClass} style={
-                groupPanelVisible ? {marginTop: this.state.marginTop}  : null}
+            <div ref={div => this.mainWrap = div} className={mainWrapClass}
             >
-                <Header backGroundImg={backGroundImg} >
+                <Header backGroundImg={bannerImg} >
                     <div id="titleBar">
                         <a href="javascript:void(0);" className="toggleGroupPanel" onClick={this.showGroupPanel} />
                         <span className="title"><a href="/">LOLILI</a></span>
                     </div>
                 </Header>
-                <section className="blog-banner" style={{background: `url(${backGroundImg}) no-repeat center top`,
-                    backgroundSize: "cover"}}>
+                <section className="blog-banner" style={{backgroundImage: `url(${bannerImg})`}}>
                     <div className="layer" />
                     <div className="bg-mask" />
                 </section>

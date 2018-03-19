@@ -114,7 +114,7 @@ class Blog extends PageComponent {
 
     }
     render(){
-        const backGroundImg = '/static/images/default/blog-banner.jpg';
+        const bannerImg = '/static/images/default/blog-banners/blog.jpg';
         const { articles } = this.state;
         const articleList = articles.map((val) => {
             return <Article data={val} key={val.id}/>
@@ -123,7 +123,7 @@ class Blog extends PageComponent {
         const loadingMoreArticleTip = !loadingMoreArticle ? (!noMoreArticle ? '加载更多' :'已经到底了//~~') : '努力加载中//~~';
         const loadMore = <div className="load-more"><a href="javascript:void(0);" onClick={this.loadMoreArticle}>{loadingMoreArticleTip}</a></div>;
         return (
-            <BlogWrap backGroundImg={backGroundImg} newComments={newComments} motto={motto} friends={friends}>
+            <BlogWrap bannerImg={bannerImg} newComments={newComments} motto={motto} friends={friends}>
                 <div className="article-list">
                     {
                         articleList.length == 0 ? loadMore :

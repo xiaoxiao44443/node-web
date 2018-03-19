@@ -9,6 +9,7 @@ import './header.css';
 class Header extends Component {
     render(){
         const { backGroundImg } = this.props;
+        const vertical = this.props.vertical || 'center';
         return (
             <header id="header">
                 <div className="nav">
@@ -24,7 +25,7 @@ class Header extends Component {
                         </nav>
                     </div>
                     {
-                        backGroundImg ? <div className="nav-bg" style={{background: `url(${backGroundImg}) no-repeat center top`,
+                        backGroundImg ? <div className="nav-bg" style={{background: `url(${backGroundImg}) no-repeat center ${vertical} fixed`,
                         backgroundSize: "cover"}}/>:
                         <div className="nav-bg"/>
                     }

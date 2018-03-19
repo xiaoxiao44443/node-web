@@ -39,6 +39,7 @@ class ArticleDetail extends PageComponent {
     };
     render(){
         const { article, newComments, motto, friends } = this.state;
+        const bannerImg = '/static/images/default/blog-banners/blog.jpg';
 
         let articleContent;
         if(article){
@@ -62,7 +63,7 @@ class ArticleDetail extends PageComponent {
                 </div>
         }
         return (
-            <BlogWrap className="article-detail" newComments={newComments} motto={motto} friends={friends}>
+            <BlogWrap className="article-detail" bannerImg={bannerImg} newComments={newComments} motto={motto} friends={friends}>
                 <div className="article-detail-wrap">
                     {article === null ?
                     <div className="notFound">

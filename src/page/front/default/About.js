@@ -27,8 +27,9 @@ class About extends PageComponent {
     }
     render(){
         const { newComments, motto, friends } = this.state;
+        const bannerImg = '/static/images/default/blog-banners/about.jpg';
         return (
-            <BlogWrap className="about" newComments={newComments} motto={motto} friends={friends}>
+            <BlogWrap className="about" bannerImg={bannerImg} newComments={newComments} motto={motto} friends={friends}>
                 <div ref="aboutWrap" className="about-wrap">
                     <div className="title">
                         <a href="/static/images/default/about/66213344_p0.png" target="_blank">
