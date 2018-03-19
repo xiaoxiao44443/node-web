@@ -30,8 +30,8 @@ const commentConfig = {
     interval: 5000, //回复间隔5秒
     interval_msg: '回复过快，请不要再5秒内连续回复',
     limitInterval: 1000*3600, //判断1小时
-    limit: 100, //1小时最多发表100条
-    limitInterval_msg: '1小时内最多发表100条回复哦~'
+    limit: 60, //1小时最多发表60条
+    limitInterval_msg: '1小时内最多发表60条回复哦~'
 };
 
 const wbApp = {
