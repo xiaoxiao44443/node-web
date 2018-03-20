@@ -35,8 +35,11 @@ class MessageBoard extends PageComponent {
     render(){
         const { newComments, motto, friends } = this.state;
         const bannerImg = '/static/images/default/blog-banners/message-board.jpg';
+        const bannerImgThumbnail = '/static/images/default/blog-banners/message-board-thumbnail.jpg';
         return (
-            <BlogWrap className="message-board" bannerImg={bannerImg} newComments={newComments} motto={motto} friends={friends}>
+            <BlogWrap className="message-board" bannerImg={bannerImg} bannerImgThumbnail={bannerImgThumbnail}
+                      bannerTitle="有朋自远方来 不亦说乎？"
+                      newComments={newComments} motto={motto} friends={friends}>
                 <div ref="messageBoardAni" className="message-board-ani">
                     <div className="message-board-wrap">
                         <div className="title">

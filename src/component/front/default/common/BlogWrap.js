@@ -21,15 +21,20 @@ class BlogWrap extends Component {
 
         this.state = {
             groupPanelVisible: false,
+            groupPanelClosing: false,
+            bannerLoaded: false,
+            bannerAniOver: false,
             newCommentList: this.getCommentList()
         };
         this.showGroupPanel = this.showGroupPanel.bind(this);
     }
     componentDidMount(){
+        this._isMounted = true;
         window.addEventListener('resize', this.onResize);
-
+        this.bannerLoad();
     }
     componentWillUnmount(){
+        this._isMounted = false;
         window.removeEventListener('resize', this.onResize);
     }
     onResize = () => {
@@ -82,45 +87,88 @@ class BlogWrap extends Component {
             mainWrap.style.position = '';
             mainWrap.style.marginTop = '';
             window.scrollTo(0, - this.marginTop);
+            clearTimeout(this.t);
+            this.t = setTimeout(() => {
+                if (this._isMounted) this.setState({ groupPanelClosing: false });
+            }, 1000);
         }
         this.setState({
-            groupPanelVisible: !this.state.groupPanelVisible
+            groupPanelVisible: !this.state.groupPanelVisible,
+            groupPanelClosing: this.state.groupPanelVisible
         });
 
     }
+    //banner模糊加载
+    bannerLoad = () => {
+        const bannerImg = this.props.bannerImg;
+        const img = new Image();
+        img.src = bannerImg;
+        img.onload = this.bannerLoaded;
+    };
+    bannerLoaded = () => {
+        if (this._isMounted) this.setState({bannerLoaded: true});
+        setTimeout(() => {
+            if (this._isMounted) this.setState({bannerAniOver: true});
+        }, 1500);
+    };
     render(){
-
-        const bannerImg = this.props.bannerImg || '/static/images/default/blog-banner.jpg';
-        const className = this.props.className || '';
+        const { bannerImg, bannerImgThumbnail, className, bannerTitle} = this.props;
+        const { bannerLoaded, bannerAniOver } = this.state;
 
         const { motto } = this.props;
         const { friends } = this.props;
 
-        const { groupPanelVisible, newCommentList } = this.state;
+        const { groupPanelVisible, groupPanelClosing, newCommentList } = this.state;
         const mainWrapClass = classNames({
             'main-wrap': true,
             blog: true,
             [className]: true,
-            'group-panel-visible':groupPanelVisible
+            'group-panel-visible':groupPanelVisible,
+            'group-panel-closing': groupPanelClosing
         });
 
         const blogGroupClass = classNames({
             'blog-group': true
         });
 
+        let bannerBlurStyle = {
+            backgroundImage: `url(${bannerImgThumbnail})`
+        };
+
+        let bannerStyle = {
+            backgroundImage: bannerLoaded ? `url(${bannerImg})` : `url(${bannerImgThumbnail})`
+        };
+
+        const headerBackGroundImg = bannerLoaded ? bannerImg : bannerImgThumbnail;
+
+        const bannerBlurClass = classNames({
+            'blog-banner': true,
+            'loading': true,
+            'blur-fade-out': bannerLoaded
+        });
+
+        const bannerClass = classNames({
+            'blog-banner': true
+        });
+
         return (
             <div ref={div => this.mainWrap = div} className={mainWrapClass}
             >
-                <Header backGroundImg={bannerImg} >
+                <Header backGroundImg={headerBackGroundImg} >
                     <div id="titleBar">
                         <a href="javascript:void(0);" className="toggleGroupPanel" onClick={this.showGroupPanel} />
                         <span className="title"><a href="/">LOLILI</a></span>
                     </div>
                 </Header>
-                <section className="blog-banner" style={{backgroundImage: `url(${bannerImg})`}}>
-                    <div className="layer" />
-                    <div className="bg-mask" />
-                </section>
+                <div className="blog-banner-wrap">
+                    <div className="mask-layer">
+                        <div className="layer fadeIn animated" >
+                            <p>{bannerTitle}</p>
+                        </div>
+                    </div>
+                    {<div className={bannerBlurClass} style={bannerBlurStyle}/>}
+                    <section className={bannerClass} style={bannerStyle}/>
+                </div>
                 <section className="blog-wrap">
                     {this.props.children}
                     <div className={blogGroupClass} ref="blogGroup">
@@ -196,12 +244,20 @@ class BlogWrap extends Component {
 
 BlogWrap.propTypes = {
     newComments: PropTypes.array,
-    friends: PropTypes.array
+    friends: PropTypes.array,
+    bannerImg: PropTypes.string,
+    bannerImgThumbnail: PropTypes.string,
+    className: PropTypes.string,
+    bannerTitle: PropTypes.string
 };
 
 BlogWrap.defaultProps = {
     newComments: [],
-    friends: []
+    friends: [],
+    bannerImg: '/static/images/default/blog-banner.jpg',
+    bannerImgThumbnail: '/static/images/default/banner-thumbnail.jpg',
+    className: '',
+    bannerTitle: ''
 };
 
 export default BlogWrap;

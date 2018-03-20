@@ -7,13 +7,54 @@
         transform: rotate(2deg);
     }
 }
+@keyframes blurFadeOut {
+    0% {
+        filter: blur(10px);
+        opacity: 1;
+    }
+    100% {
+        filter: blur(0);
+        opacity: 0;
+    }
+}
 .blog #header .nav .nav-bg{
     height: 5em;
     overflow: hidden;
 }
-.blog-banner{
+.blog-banner-wrap{
     width: 100%;
     height: 35em;
+    position: relative;
+}
+.blog-banner-wrap .mask-layer{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    background: rgba(0,0,0,0.1);
+}
+.blog-banner-wrap .mask-layer >.layer{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    z-index: 10;
+    color: white;
+    font-size: 2em;
+    font-weight: 300;
+    text-shadow: 3px 3px 15px rgba(0,0,0,.2);
+    padding: 0 10%;
+    line-height: 1.5;
+}
+.blog-banner{
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     position: relative;
     box-shadow: rgba(0,0,0,0.2) 0 1px 5px;
@@ -21,22 +62,17 @@
     background: no-repeat center center;
     background-size: cover;
     background-attachment: fixed;
+    background-color: #202020;
 }
-.blog-banner >.layer{
-    width: 100%;
-    height: 100%;
+.blog-banner.loading{
+    filter: blur(5px);
     position: absolute;
-    top: 0;
-    z-index: 10;
+    z-index: 1;
 }
-.blog-banner >.bg-mask{
-    position: absolute;
-    top: 0;
-    z-index: 5;
-    background: rgba(0,0,0,0.1);
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+.blog-banner.loading.blur-fade-out{
+    filter: blur(0);
+    opacity: 0;
+    animation: blurFadeOut 1.5s ease;
 }
 
 .blog-wrap{
@@ -133,13 +169,16 @@
     .blog #header .nav .nav-bg{
         height: 22em;
     }
-    .blog-banner{
+    .blog-banner-wrap{
         height: 22em;
+    }
+    .blog-banner-wrap .mask-layer >.layer{
+        font-size: 1.8em;
     }
     .blog-wrap{
         padding: 4em 3em;
     }
-    .recommend-item .recommend-item-main {
+    .recommend-item .recommend-item-main{
         min-height: 8em;
     }
 
@@ -149,8 +188,11 @@
     .blog #header .nav .nav-bg{
         height: 18em;
     }
-    .blog-banner{
+    .blog-banner-wrap{
         height: 18em;
+    }
+    .blog-banner-wrap .mask-layer >.layer{
+        font-size: 1.5em;
     }
     .blog-wrap{
         padding: 0;
@@ -187,9 +229,14 @@
     .blog #header .nav .nav-bg{
         height: 12em;
     }
-    .blog-banner{
+    .blog-banner-wrap{
         margin-top: 44px;
         height: 12em;
+    }
+    .blog-banner-wrap .mask-layer >.layer{
+        font-size: 1.25em;
+    }
+    .blog-banner{
         background-attachment: inherit;
     }
     .blog-wrap{
