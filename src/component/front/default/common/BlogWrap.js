@@ -32,6 +32,7 @@ class BlogWrap extends Component {
         this._isMounted = true;
         window.addEventListener('resize', this.onResize);
         this.bannerLoad();
+        this.onResize();
     }
     componentWillUnmount(){
         this._isMounted = false;
