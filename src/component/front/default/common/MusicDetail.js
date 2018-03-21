@@ -779,9 +779,11 @@ class MusicDetail extends Component {
         if (player.mode == 1) modeName = '随机播放';
         if (player.mode == 2) modeName = '单曲循环';
 
-        const lrcListItems = lrcList.map((val, index) => {
-            return <p className={index == currentLrcIndex ? 'now' : ''} key={index}>{val.lrcText}</p>;
-        });
+        const lrcListItems = lrcList.length > 0 ?
+            lrcList.map((val, index) => {
+                return <p className={index == currentLrcIndex ? 'now' : ''} key={index}>{val.lrcText}</p>;
+            }):
+            <p>无歌词</p>;
         return (
             <div ref="music_detail" className="music-detail animated-fast slideInRight">
                 <div className="music-cover" style={{ height: coverHeight }}>

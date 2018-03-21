@@ -11,6 +11,7 @@ import { maxWidthPoint } from '../../../enum';
 import markdown from '../../../tool/markdown';
 import ArticleComment from '../../../component/front/default/common/ArticleComment';
 import { scroll2ElementByClassName, scroll2EleByHashID } from '../../../tool/dom-js';
+import PicViewer from '../../../component/common/tool/PicViewer';
 
 class ArticleDetail extends PageComponent {
     constructor(props){
@@ -25,7 +26,13 @@ class ArticleDetail extends PageComponent {
         if(this.refs.articleWrap){
             const maxWidth = typeof window === 'undefined' ? false : window.document.body.offsetWidth;
             this.refs.articleWrap.className = maxWidth > maxWidthPoint.medium ? 'bounceInUp animated' : '';
+            if (!this.PicViewer) {
+                this.PicViewer = new PicViewer(this.articleContent);
+            }
         }
+    }
+    componentWillUnmount(){
+        if (this.PicViewer) this.PicViewer.destroy();
     }
     onUpdate = () => {
         //从其他页面跳转过来滚动到内容部分 没有哈希值才跳转到内容部分
@@ -59,7 +66,7 @@ class ArticleDetail extends PageComponent {
                         <span>阅读({article.views})</span>
                         <span>评论({article.comments})</span>
                     </div>
-                    <div className="article-content article-html" dangerouslySetInnerHTML={{__html: article_detail}} />
+                    <div ref={div => this.articleContent = div} className="article-content article-html" dangerouslySetInnerHTML={{__html: article_detail}} />
                 </div>
         }
         return (

@@ -8,14 +8,22 @@ import BlogWrap from '../../../component/front/default/common/BlogWrap';
 import PageComponent from '../../../component/common/base/PageComponent';
 import { maxWidthPoint } from '../../../enum';
 
+import PicViewer from '../../../component/common/tool/PicViewer';
+
 class About extends PageComponent {
     constructor(props){
         super(props);
 
         const state = {
-
+            picViewerVisible: false
         };
         this._setDefaultState(state);
+    }
+    componentDidMount(){
+        this.PicViewer =  new PicViewer(this.refs.aboutWrap);
+    }
+    componentWillUnmount(){
+        this.PicViewer.destroy();
     }
     componentDidUpdate(){
         if(this.refs.aboutWrap){
@@ -35,9 +43,7 @@ class About extends PageComponent {
                       newComments={newComments} motto={motto} friends={friends}>
                 <div ref="aboutWrap" className="about-wrap">
                     <div className="title">
-                        <a href="/static/images/default/about/66213344_p0.png" target="_blank">
-                            <img src="/static/images/default/about/66213344_p0_1.png" />
-                        </a>
+                        <img src="/static/images/default/about/66213344_p0_1.png" data-ori="/static/images/default/about/66213344_p0.png" />
                         <p>QQ:422291344</p>
                         <p>更多介绍暂无~</p>
                     </div>

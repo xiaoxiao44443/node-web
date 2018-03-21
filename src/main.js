@@ -64,7 +64,11 @@ class Root extends Component {
     componentDidMount(){
         if(this.props.notFound || this.props.error) return;
         if(window.document.readyState && window.document.readyState !== 'complete'){
-            window.onload = () => window.document.getElementsByTagName('body')[0].className = 'landing';
+            window.onload = () => {
+                const $el = window.document.getElementsByTagName('body')[0];
+                $el.className = 'landing';
+                setTimeout(() => $el.className = "", 1500);
+            }
         }else{
             window.document.getElementsByTagName('body')[0].className = 'landing';
         }
