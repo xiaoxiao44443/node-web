@@ -41,13 +41,23 @@ class About extends PageComponent {
             <BlogWrap className="about" bannerImg={bannerImg} bannerImgThumbnail={bannerImgThumbnail}
                       bannerTitle="let us go！！"
                       newComments={newComments} motto={motto} friends={friends}>
-                <div ref="aboutWrap" className="about-wrap">
-                    <div className="title">
-                        <img src="/static/images/default/about/66213344_p0_1.png" data-ori="/static/images/default/about/66213344_p0.png" />
-                        <p>QQ:422291344</p>
-                        <p>更多介绍暂无~</p>
-                    </div>
-                </div>
+                <section ref="aboutWrap" className="about-wrap">
+                    <section className="about-content">
+                        <div className="mini-banner">
+                            <img src="/static/images/default/about/7a73e73cb6f0488dad7beafcd4b9a445_th.jpg" data-ori="/static/images/default/about/7a73e73cb6f0488dad7beafcd4b9a445_th01.jpg" />
+                        </div>
+                        <div className="about-me">
+                            <h2>关于本博客：</h2>
+                            <p>本博客由我完全从零打造，功能并不是很完善，但会逐步完善。</p>
+                            <br/>
+                            <h2>关于我：</h2>
+                            <p>一名喜欢动漫、小说、二次元并对技术乐此不疲的90后。</p>
+                            <p>画画、写作、网站...什么都想搞，什么都懒的弄...</p>
+                            <p>有需要联系的可以留言，会在第一时间收到并回复。</p>
+                            <p>联系方式: QQ422291344</p>
+                        </div>
+                    </section>
+                </section>
             </BlogWrap>
         );
     }

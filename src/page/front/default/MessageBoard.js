@@ -42,9 +42,13 @@ class MessageBoard extends PageComponent {
                       newComments={newComments} motto={motto} friends={friends}>
                 <div ref="messageBoardAni" className="message-board-ani">
                     <div className="message-board-wrap">
-                        <div className="title">
-                            <h2>这里是留言板~</h2>
-                        </div>
+                        <section className="message-board-content">
+                            <article>
+                                <h2>各位大佬好：</h2>
+                                <p>这里是还拥有梦想的一个小小博客~</p>
+                                <p>如有问题或是想和我交流，欢迎留言！ (╭￣3￣)╭♡</p>
+                            </article>
+                        </section>
                     </div>
                     <ArticleComment type="message-board" type_key={1}
                                     hashCommentHash={this.props.location.hash} onDidMount={this.scroll2Hash} />

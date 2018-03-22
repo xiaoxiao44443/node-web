@@ -6,15 +6,24 @@
     background: rgba(255,255,255,.85);
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-
 .about .blog-group{
     display: none;
 }
-.about-wrap .title{
-    text-align: center;
-    width: 100%;
+.about-wrap .about-content{
+    display: flex;
 }
-.about-wrap .title img {
+.about-wrap .about-content h2{
+    font-size: 1.2em;
+    font-weight: 500;
+}
+.about-wrap .about-content .mini-banner{
+    width: 30%;
+}
+.about-wrap .about-content .about-me{
+    width: 70%;
+    padding: 0 2em;
+}
+.about-wrap .about-content .mini-banner img{
     max-width: 100%;
 }
 
@@ -22,9 +31,30 @@
     .about .about-wrap {
         width: 100%;
         overflow: hidden;
-        padding: 2em 1em;
+        padding: 1em 1em;
     }
-    .about-wrap .title >h2{
+    .about-wrap .about-content h2{
         font-size: 1em;
+    }
+    .about-wrap .about-content p{
+        width: 100%;
+        font-size: .85em;
+        margin: .3em 0;
+        line-height: 2;
+    }
+    .about-wrap .about-content{
+        display: block;
+    }
+    .about-wrap .about-content .mini-banner{
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1em;
+    }
+    .about-wrap .about-content .mini-banner img{
+        max-width: 80%;
+    }
+    .about-wrap .about-content .about-me{
+        width: 100%;
+        padding: 0 .5em;
     }
 }

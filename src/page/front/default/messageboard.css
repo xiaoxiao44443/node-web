@@ -3,7 +3,7 @@
 }
 .message-board .message-board-wrap{
     overflow: hidden;
-    padding: 5em 3em;
+    padding: 2em 1.5em;
     max-width: 1200px;
     margin: 0 auto;
     background: rgba(255,255,255,.85);
@@ -13,17 +13,27 @@
 .message-board .blog-group{
     display: none;
 }
-.message-board-wrap .title{
-    text-align: center;
+.message-board-wrap .message-board-content{
+    width: 100%;
+}
+.message-board-wrap .message-board-content h2{
+    font-size: 1.2em;
+    font-weight: 500;
 }
 
 @media screen and (max-width: 736px){
     .message-board .message-board-wrap {
         width: 100%;
         overflow: hidden;
-        padding: 2em 1em;
+        padding: 1em 1em;
     }
-    .message-board .title >h2{
+    .message-board-wrap .message-board-content h2{
         font-size: 1em;
+    }
+    .message-board-wrap .message-board-content p{
+        width: 100%;
+        font-size: .85em;
+        margin: .3em 0;
+        line-height: 2;
     }
 }
