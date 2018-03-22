@@ -30,16 +30,19 @@ class PicViewer {
             };
 
             ReactDOM.render(
-                <PicViewerInner imageOri={oriSrc} imageSrc={src} imageSize={size} el={this.picViewer}/>,
+                <PicViewerInner imageOri={oriSrc} imageSrc={src} imageSize={size} el={this.picViewer} imgNode={image}/>,
                 this.picViewer
             );
         }
     };
     destroy = () => {
         this.el.removeEventListener('click', this.showPicViewer);
-        if (this.picViewer) {
+        const $body = document.getElementsByTagName('body')[0];
+        if ($body.contains(this.picViewer)){
             document.getElementsByTagName('body')[0].removeChild(this.picViewer);
         }
+        delete this.el;
+        delete this.picViewer;
     }
 }
 
@@ -53,7 +56,8 @@ class PicViewerInner extends Component {
         scaleOut: false
     };
     componentDidMount() {
-        this.calcSize();
+        this.props.imgNode.style.visibility = 'hidden';
+        this.setState(this.calcSize());
         this.loadPic();
         this.props.el.addEventListener('click', this.close);
         window.addEventListener('scroll', this.close);
@@ -66,14 +70,27 @@ class PicViewerInner extends Component {
         if (image.complete === false) {
             image.onload = this.loadPicOver;
         } else {
+            this.calcMaxSize({
+                w: image.width,
+                h: image.height
+            });
             this.setState({
                 loading: false,
                 loadOver:true
             });
             this.scaleShow();
         }
+
+        return {
+            w: image.width,
+            h: image.height
+        };
     };
-    loadPicOver = () => {
+    loadPicOver = e => {
+        this.calcMaxSize({
+            w: e.target.width,
+            h: e.target.height
+        });
         this.setState({
             loading: false,
             loadOver:true
@@ -88,8 +105,9 @@ class PicViewerInner extends Component {
         const bounding = picViewer.getBoundingClientRect();
 
         const scale = imageSize.w / imageSize.h;
-        const _nw = h * scale > w ? w : parseInt(h * scale);
-        const _nh = parseInt(_nw / scale);
+        let _nw = h * scale > w ? w : parseInt(h * scale);
+        let _nh = parseInt(_nw / scale);
+
         const maxSize = {
             w: _nw,
             h: _nh,
@@ -98,9 +116,29 @@ class PicViewerInner extends Component {
         };
 
         if (imageSize.w <= w && imageSize.h <= h) {
-            this.setState({ picInit: imageSize, maxSize });
+            return { picInit: imageSize, maxSize };
         } else {
-            this.setState({ picInit: maxSize, maxSize });
+            return { picInit: maxSize, maxSize };
+        }
+    };
+    //不超过原始图大小
+    calcMaxSize = orImageSize => {
+        let { maxSize } = this.calcSize();
+        if (maxSize.w > orImageSize.w ) {
+            const picViewer = this.picViewer;
+            const w = picViewer.offsetWidth;
+            const h = picViewer.offsetHeight;
+            const bounding = this.picViewer.getBoundingClientRect();
+            const
+            maxSize = {
+                w: orImageSize.w,
+                h: orImageSize.h,
+                x: (w - orImageSize.w) / 2 + bounding.x,
+                y: (h - orImageSize.h) / 2 + bounding.y
+
+            };
+
+            this.setState({ maxSize });
         }
     };
     close = e => {
@@ -112,6 +150,7 @@ class PicViewerInner extends Component {
             const el = this.props.el;
             el.removeEventListener('click', el);
             document.getElementsByTagName('body')[0].removeChild(el);
+            this.props.imgNode.style.visibility = '';
         }, 500);
         return false;
     };
@@ -155,6 +194,7 @@ class PicViewerInner extends Component {
         };
 
         const imgSrc = loadOver ? imageOri: imageSrc;
+
         if (loadOver) {
             const scale = picInit.w / maxSize.w;
 
@@ -187,7 +227,8 @@ PicViewerInner.propTypes = {
     imageSrc: PropTypes.string.isRequired,
     imageSize: PropTypes.object.isRequired,
     visible: PropTypes.bool,
-    el: PropTypes.object.isRequired
+    el: PropTypes.object.isRequired,
+    imgNode: PropTypes.object.isRequired
 };
 PicViewerInner.defaultProps = {
     visible: true
