@@ -37,6 +37,7 @@ class PicViewer {
     };
     destroy = () => {
         this.el.removeEventListener('click', this.showPicViewer);
+        document.getElementsByTagName('body')[0].removeChild(this.el);
     }
 }
 

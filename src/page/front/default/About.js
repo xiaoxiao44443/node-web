@@ -52,5 +52,4 @@ class About extends PageComponent {
         );
     }
 }
-
 export default PageComponent.withStore(About);

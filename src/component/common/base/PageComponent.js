@@ -13,6 +13,14 @@ class PageComponent extends Component {
         super(props);
         const url = props.match.url;
         this._defaultState = {};
+        const componentDidMount = this.componentDidMount ? this.componentDidMount.bind(this) : () => {};
+
+        //父类调用componentDidMount 同时调用子类componentDidMount
+        this.componentDidMount = () => {
+            this._pageInit();
+            componentDidMount();
+        };
+
         this.state = {
             _pageLoadOver: false
         };
@@ -33,9 +41,6 @@ class PageComponent extends Component {
             }
         }
 
-    }
-    componentDidMount(){
-        this._pageInit();
     }
     //必须用在constructor中
     _setDefaultState(state){
