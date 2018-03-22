@@ -19,9 +19,9 @@ class PicViewer {
             const src = image.src;
             const oriSrc = image.getAttribute('data-ori') || src;
             const bounding = image.getBoundingClientRect();
-            this.el = this.el = document.createElement('div');
-            this.el.className = 'pic-viewer';
-            document.getElementsByTagName('body')[0].appendChild(this.el);
+            this.picViewer = this.el = document.createElement('div');
+            this.picViewer.className = 'pic-viewer';
+            document.getElementsByTagName('body')[0].appendChild(this.picViewer);
             const size = {
                 w: image.offsetWidth,
                 h: image.offsetHeight,
@@ -30,14 +30,16 @@ class PicViewer {
             };
 
             ReactDOM.render(
-                <PicViewerInner imageOri={oriSrc} imageSrc={src} imageSize={size} el={this.el}/>,
-                this.el
+                <PicViewerInner imageOri={oriSrc} imageSrc={src} imageSize={size} el={this.picViewer}/>,
+                this.picViewer
             );
         }
     };
     destroy = () => {
         this.el.removeEventListener('click', this.showPicViewer);
-        document.getElementsByTagName('body')[0].removeChild(this.el);
+        if (this.picViewer) {
+            document.getElementsByTagName('body')[0].removeChild(this.picViewer);
+        }
     }
 }
 
