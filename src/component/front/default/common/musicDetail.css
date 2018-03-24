@@ -134,9 +134,14 @@
 .cover-info .caption{
     text-align: center;
     color: white;
+    margin: 0 auto;
     margin-bottom: .85em;
     font-size: 1.25em;
     position: relative;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    padding: 0 3em;
 }
 .cover-info .caption .back-btn{
     position: absolute;
