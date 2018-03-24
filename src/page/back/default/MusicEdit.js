@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import http from '../../../tool/http';
 import Spin from '../../../component/common/tool/Spin';
 import './musicEdit.css';
+import PicSelector from '../../../component/back/default/common/PicSelector';
 
 const FormInput = props => {
     return <input className="admin-form-input" type="text" value={props.value} onChange={(event) => {props.onChange(props.name, event.target.value)}} />
@@ -29,7 +30,8 @@ class MusicEdit extends PageComponent {
             },
             isDefault: false,
             net_music_analysis: false,
-            net_music_id: ''
+            net_music_id: '',
+            showSelectPicModal: false
         };
         this._setDefaultState(state);
     }
@@ -179,6 +181,27 @@ class MusicEdit extends PageComponent {
             alert(res.data);
         }
     };
+    showSelectPicModel = () => {
+        this.setState({
+            showSelectPicModal: true
+        });
+    };
+    closeSelectPicModel = () => {
+        this.setState({
+            showSelectPicModal: false
+        });
+    };
+    setMusicCover = id => {
+        if(isNaN(id)) {
+            alert('错误的图片');
+            return;
+        }
+        let music = {...this.state.music};
+        music.cover = `/api/pic${id}`;
+        this.setState({
+            music
+        });
+    };
     render() {
         if(!this.state._pageLoadOver){
             return <Spin loading><div className="admin-music-edit"/></Spin>
@@ -210,7 +233,10 @@ class MusicEdit extends PageComponent {
                     <FormInput name="src" value={src} onChange={formInputOnChange} />
                     <h5>【封面】</h5>
                     <FormInput name="cover" value={cover} onChange={formInputOnChange} />
-                    <img className="img-cover" src={cover}/>
+                    <div className="music-cover" onClick={this.showSelectPicModel}>
+                        {cover.length > 0 && <img className="img-cover" src={cover}/>}
+                    </div>
+                    <PicSelector show={this.state.showSelectPicModal} onClose={this.closeSelectPicModel} picType={3} onConfirm={this.setMusicCover} />
                     <h5>【歌词】</h5>
                     <FormTextArea name="lrc" value={lrc} onChange={formInputOnChange} />
                     <h5>【默认音乐】</h5>

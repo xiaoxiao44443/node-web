@@ -8,7 +8,7 @@ import pictureApi from '../api/picture';
 
 const fileFilter = (req, file, cb) => {
     const type = parseInt(req.body.type);
-    if ([pictureApi.picType.blog, pictureApi.picType.friend].indexOf(type) == -1) {
+    if (pictureApi.checkPicType(type) === false) {
         cb(new Error('错误的图片上传类型'));
     } else {
         cb(null, true)
@@ -23,6 +23,9 @@ const destination = (req, file, cb) => {
     }
     if (type == pictureApi.picType.friend) {
         destination = './public/upload/images/friend/' + moment().format('YYYY/MM/DD');
+    }
+    if (type == pictureApi.picType.music) {
+        destination = './public/upload/images/music/' + moment().format('YYYY/MM/DD');
     }
     mkdirp(destination, err => {
         if (err) {

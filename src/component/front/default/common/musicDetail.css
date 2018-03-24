@@ -127,8 +127,8 @@
     text-align: center;
 }
 .cover-info .cover-img >img{
-    max-width: 62%;
-    max-height: 100%;
+    max-width: 80%;
+    height: 100%;
     border-radius: 5px;
 }
 .cover-info .caption{

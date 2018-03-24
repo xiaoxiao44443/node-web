@@ -56,7 +56,7 @@ Request.post('/edit/uploaded-pics', async(req, res, next) => {
         if(Request.REQUEST_JSON){
             //初始化数据
             const type = parseInt(req.body.type);
-            if ([1, 2].indexOf(type) == -1) {
+            if (pictureApi.checkPicType(type) === false) {
                 res.json(returnErr('图片类型错误'));
                 return;
             }

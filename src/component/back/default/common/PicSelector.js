@@ -234,7 +234,7 @@ class PicSelector extends Component {
     }
 }
 
-PicSelector.PropTypes = {
+PicSelector.propTypes = {
     selectPic: PropTypes.func,
     show: PropTypes.bool,
     onClose: PropTypes.func,

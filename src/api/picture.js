@@ -10,7 +10,15 @@ import sqlString from '../tool/utils/sqlstring';
 
 const picType = {
     blog: 1,
-    friend: 2
+    friend: 2,
+    music: 3
+};
+//根据图片id返回类型
+const checkPicType = type => {
+    for (let p in picType) {
+        if (type == picType[p]) return 'p';
+    }
+    return false;
 };
 
 const picSizeLimit = {
@@ -168,6 +176,7 @@ export  default {
     getPicPath,
     savePic,
     picType,
+    checkPicType,
     picSizeLimit,
     compress,
     getPicsByType,
