@@ -753,8 +753,7 @@ class MusicDetail extends Component {
         }
         const style = {
             backgroundImage: cover ? `url(${cover})` : '',
-            backgroundPosition: 'center',
-            backgroundSize: '200%'
+                backgroundPosition: 'center center'
         };
         let listBoxItem = [];
         if (player.listBoxVisible) {

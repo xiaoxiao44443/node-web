@@ -79,15 +79,12 @@
 }
 .info-blurbg{
     position: absolute;
-    background-size: 100%;
-    background-position: center;
-    width: 110%;
-    height: 100%;
-    top: 50%;
-    left: 50%;
-    margin: -215px -55%;
+    left: -40px;top: -40px;
+    width: calc(100% + 80px);
+    height: calc(100% + 80px);
     z-index: 10;
     background-repeat: no-repeat;
+    background-size: 100%;
     filter: blur(40px);
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);
 }
