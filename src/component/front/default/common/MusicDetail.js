@@ -227,6 +227,7 @@ class MusicDetail extends Component {
         audio.addEventListener('canplaythrough', this.onCanplaythrough);
         audio.addEventListener('error', this.onError);
         audio.volume = .5;
+        this.canModifyVolume = audio.volume == .5;
         this.setState({ init: true });
     };
     removeEventListener = () => {
@@ -327,7 +328,7 @@ class MusicDetail extends Component {
                 let top = coverHeight / 2 - node.offsetTop;
                 top = top < 0 ? top : 0;
                 top = top > maxOffsetY ? top : maxOffsetY;
-                $lrcList.style.transform = `translate3d(0,${top}px,0`;
+                $lrcList.style.transform = `translate3d(0,${top}px,0)`;
                 this.setState({ currentLrcIndex: i });
                 return;
             }
@@ -436,6 +437,7 @@ class MusicDetail extends Component {
         window.removeEventListener('resize', this.onResize);
     }
     callChangeMusic = music_id => {
+        if (this.refs.lrcList) this.refs.lrcList.style.transform = `translate3d(0,0,0)`;
         if (this.props.onChangeMusic) {
             const ret = this.findMusicById(music_id);
             this.props.onChangeMusic(ret && ret.music.cover);
@@ -608,7 +610,7 @@ class MusicDetail extends Component {
         audio.src = newMusic.src;
         audio.autoplay = true;
         this.callChangeMusic(music_id);
-        this.setState({ player });
+            this.setState({ player });
     };
     toggleSummary = () => {
         this.setState({ summaryMini: !this.state.summaryMini });
@@ -856,7 +858,7 @@ class MusicDetail extends Component {
                     <div className="music-list-box-wrap">
                         <div className="music-box-top">
                             <span>{modeName}</span>
-                            <VolumeControl onChangeVolume={this.changeVolume} percent={this.refs.audio.volume * 100}/>
+                            {this.canModifyVolume && <VolumeControl onChangeVolume={this.changeVolume} percent={this.refs.audio.volume * 100}/>}
                         </div>
                         <div className="music-list">
                             {listBoxItem}
