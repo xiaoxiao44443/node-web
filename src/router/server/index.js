@@ -72,8 +72,16 @@ Request.get('/api/pic([0-9]+)', async(req, res, next) => {
                     } catch (err) {
                         //
                     }
+                    let buffer = image.resize(w, h);
                     if (metadata) {
-                        const buffer = await image.resize(w, h).toBuffer();
+                        if (metadata.format == 'jpeg') {
+                            buffer = await buffer.jpeg({ progressive: true }).toBuffer();
+                        }
+                        else if (metadata.format == 'png') {
+                            buffer = await buffer.png({ progressive: true }).toBuffer();
+                        } else {
+                            buffer = await buffer.toBuffer();
+                        }
                         res.setHeader('Content-Type', `image/${metadata.format}`);
                         res.send(buffer);
                     } else {
