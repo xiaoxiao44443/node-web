@@ -67,7 +67,7 @@ class Root extends Component {
             window.onload = () => {
                 const $el = window.document.getElementsByTagName('body')[0];
                 $el.className = 'landing';
-                setTimeout(() => $el.className = "", 1500);
+                setTimeout(() => $el.className = "", 250);
             }
         }else{
             window.document.getElementsByTagName('body')[0].className = 'landing';
