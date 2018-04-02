@@ -54,6 +54,8 @@ Request.post('/music/delete', async(req, res, next) =>{
 
         if(Request.REQUEST_JSON){
 
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
+
             const id = req.body.id;
             if(id <= 0) return res.json(returnErr('音乐id错误'));
 
@@ -76,6 +78,8 @@ Request.post('/music/mode', async(req, res, next) => {
     try {
 
         if(Request.REQUEST_JSON){
+
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
 
             const mode = parseInt(req.body.mode);
             if([0,1,2].indexOf(mode) == -1) return res.json(returnErr('音乐模式错误'));
@@ -102,6 +106,8 @@ Request.post('/music/default', async(req, res, next) => {
     try {
 
         if(Request.REQUEST_JSON){
+
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
 
             const id = parseInt(req.body.id);
             if(id <= 0) return res.json(returnErr('音乐id错误'));
@@ -159,6 +165,8 @@ Request.post('/music/edit', async(req, res, next) =>{
     try {
 
         if(Request.REQUEST_JSON){
+
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
 
             const id = req.body.id;
             const music = req.body.music;
@@ -296,6 +304,8 @@ Request.post('/music/config', async(req, res, next) => {
     try {
 
         if(Request.REQUEST_JSON){
+
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
 
             const musicConfig = await configApi.music();
             const newMusicConfig = req.body.musicConfig;

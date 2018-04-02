@@ -17,6 +17,9 @@ const stateFilter = AdminStateFilter(Request);
 Request.post('/edit/upload-img', async(req, res, next) => {
 
     try{
+
+        if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
+
         (new uploader.imageUpload)(req, res, async err => {
             if(err){
                 res.send(returnErr(err.message));
@@ -73,6 +76,9 @@ Request.post('/edit/uploaded-pics', async(req, res, next) => {
 Request.post('/edit/delete-pic', async(req, res, next) => {
 
     try {
+
+        if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
+
         //获取网站配置
         if(Request.REQUEST_JSON){
             //初始化数据

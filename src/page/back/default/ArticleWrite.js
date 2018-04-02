@@ -139,7 +139,7 @@ class ArticleWrite extends PageComponent {
             if(res.code == 0){
                 alert('保存成功~');
             }else{
-                alert('服务器返回异常');
+                alert(res.data);
             }
         });
     };

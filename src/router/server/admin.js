@@ -24,9 +24,9 @@ Request.use(async(req, res, next) => {
 
     try {
         if(req.method == 'GET'){
-            if(!Request.USER.id || Request.USER.group_id !== 1) return res.redirect('/login');
+            if(!Request.USER.id || [1, 2].indexOf(Request.USER.group_id ) == -1) return res.redirect('/login');
         }else if(req.method == 'POST'){
-            if(!Request.USER.id || Request.USER.group_id !== 1) return res.json(returnErr('请先登录~', '请先登录~', '/login'));
+            if(!Request.USER.id || [1, 2].indexOf(Request.USER.group_id ) == -1) return res.json(returnErr('请先登录~', '请先登录~', '/login'));
         }
         next();
     }catch (ex){

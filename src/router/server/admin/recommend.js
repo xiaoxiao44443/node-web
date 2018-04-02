@@ -44,6 +44,8 @@ Request.post('/recommend', async(req, res, next) => {
 
         if(Request.REQUEST_JSON){
 
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
+
             const recommend = req.body.recommend;
 
             let motto = recommend.motto;

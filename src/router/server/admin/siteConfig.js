@@ -48,6 +48,8 @@ Request.post('/site-config', async(req, res, next) => {
 
         if(Request.REQUEST_JSON){
 
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
+
             const newWebsiteConfig = req.body.websiteConfig;
 
             let _websiteConfig = {};

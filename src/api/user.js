@@ -6,10 +6,10 @@ const prefix = dbConfig.prefix;
 import Model from '../tool/Model';
 import { createUserToken, userPassword } from '../tool/userToken';
 
-const userLogin = async (account, password, group_id = 1) => {
+const userLogin = async (account, password, group_id = [1, 2]) => {
     let model = new Model;
     const psw = userPassword(password);
-    const { results } = await model.query('SELECT * FROM ?? WHERE account = ? AND password = ? AND group_id = ? LIMIT 1', [prefix + 'user', account, psw, group_id]);
+    const { results } = await model.query('SELECT * FROM ?? WHERE account = ? AND password = ? AND group_id in (?) LIMIT 1', [prefix + 'user', account, psw, group_id]);
 
     if(results.length == 0){
         return Promise.resolve( false );

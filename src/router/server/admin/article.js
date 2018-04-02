@@ -90,6 +90,8 @@ Request.post('/article/edit', async(req, res, next) =>{
             const ad = req.body.ad;
             const article = req.body.article;
 
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
+
             if(ad>0){
                 //保存文章
                 let ret = await articleApi.saveArticle(ad, article);
@@ -113,6 +115,8 @@ Request.post('/article/delete', async(req, res, next) =>{
     try {
 
         if(Request.REQUEST_JSON){
+
+            if (Request.USER.group_id != 1) return res.json(returnErr('你所在的用户组无权进行此操作'));
 
             const ad = req.body.ad;
             if(ad <= 0) return res.json(returnErr('文章id错误'));

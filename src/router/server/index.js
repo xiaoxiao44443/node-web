@@ -19,7 +19,7 @@ import friendApi from '../../api/friend';
 //音乐盒信息
 const getMusicInfo = async () => {
     const musicInfo = await musicApi.getMusicInfo();
-    if(Request.USER.id && ([1,2].indexOf(Request.USER.group_id) > -1)) {
+    if(Request.USER.id && ([1].indexOf(Request.USER.group_id) > -1)) {
         //用于前台判断是否显示音乐盒的操作
         musicInfo._music.adminMode = true;
     }
