@@ -2,6 +2,6 @@
 *.DS_Store
 .DS_Store
 /node_modules
-/dist
-/public/dist
+/public/static/dist
+/public/upload
 package-lock.json
