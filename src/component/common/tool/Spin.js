@@ -19,6 +19,7 @@ class Spin extends Component {
             if(delay == 0){
                 this.state.show = true;
             }else{
+                if (typeof window === 'undefined') return;
                 this.timer = window.setTimeout(() => {
                     if(!this.timer) return;
                     this.timer = false;

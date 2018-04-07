@@ -6,6 +6,7 @@ import configApi from '../api/config';
 import serverRender from './server-render';
 import userApi from '../api/user';
 import serverHttp from './server-http';
+import he from 'he';
 
 class _Request {
     constructor(){
@@ -99,6 +100,30 @@ class _Request {
     }
 }
 
+//html转义
+const escape = (target) => {
+    if (Array.isArray(target)) {
+        let ret = [];
+        for (let p of target) {
+            ret.push(escape(p));
+        }
+        return ret;
+    }
+    else if (typeof target === 'object') {
+        let ret = {};
+        for (let p in target) {
+            ret[p] = escape(target[p]);
+        }
+        return ret;
+    }
+    else if (typeof target == 'string') {
+        return he.escape(target)
+    }
+    else {
+        return target;
+    }
+};
+
 export const returnSuc = (data, title, url, other) =>{
     let ret = {code:0, data};
     if(title) ret.title = title;
@@ -117,6 +142,6 @@ export const resRender = (req, res, title, state, template, otherStore) => {
     const _page = initPageState(req.originalUrl, state);
     const store = { ...otherStore, _page };
     const { app } = serverRender(req.originalUrl, store);
-    res.render(template, {title: title, app: app, init: JSON.stringify(store)});
+    res.render(template, {title: title, app: app, init: JSON.stringify(escape(store))});
 };
 export default _Request;

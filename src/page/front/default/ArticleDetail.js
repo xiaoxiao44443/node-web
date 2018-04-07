@@ -18,7 +18,8 @@ class ArticleDetail extends PageComponent {
         super(props);
 
         const state = {
-            article: null
+            article: null,
+            src: '<audio id="music_ad14" src="/music/id532777446" autoPlay controls="controls" loop></audio>'
         };
         this._setDefaultState(state);
     }
@@ -66,7 +67,7 @@ class ArticleDetail extends PageComponent {
                         <span>阅读({article.views})</span>
                         <span>评论({article.comments})</span>
                     </div>
-                    <div ref={div => this.articleContent = div} className="article-content article-html" dangerouslySetInnerHTML={{__html: article_detail}} />
+                    <div ref={div => this.articleContent = div} className="article-content article-html" suppressHydrationWarning dangerouslySetInnerHTML={{__html: article_detail}} />
                 </div>
         }
         return (

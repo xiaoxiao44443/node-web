@@ -3,6 +3,31 @@
  */
 import React, { createElement, Children } from 'react';
 import PropTypes from 'prop-types';
+import he from 'he';
+
+//取消转义html
+const unescape = (target) => {
+    if (Array.isArray(target)) {
+        let ret = [];
+        for (let p of target) {
+            ret.push(unescape(p));
+        }
+        return ret;
+    }
+    else if (typeof target === 'object') {
+        let ret = {};
+        for (let p in target) {
+            ret[p] = unescape(target[p]);
+        }
+        return ret;
+    }
+    else if (typeof target == 'string') {
+        return he.unescape(target)
+    }
+    else {
+        return target;
+    }
+};
 let stores = {};
 class Provider extends React.Component {
     //改变全局stores
@@ -30,7 +55,7 @@ class Provider extends React.Component {
     constructor(props, context){
         super(props, context);
         if(typeof window !== 'undefined' && typeof window.__data_init__ === 'object'){
-            stores = window.__data_init__;
+            stores = unescape(window.__data_init__);
 
             delete window.__data_init__;
         }
