@@ -25,8 +25,7 @@ class Header extends Component {
                         </nav>
                     </div>
                     {
-                        backGroundImg ? <div className="nav-bg" style={{background: `url(${backGroundImg}) no-repeat center ${vertical} fixed`,
-                        backgroundSize: "cover"}}/>:
+                        backGroundImg ? <div className="nav-bg" style={{background: `url(${backGroundImg}) no-repeat center ${vertical} / cover fixed`}}/>:
                         <div className="nav-bg"/>
                     }
 
