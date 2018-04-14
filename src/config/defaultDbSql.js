@@ -19,7 +19,7 @@ const article = {
         tags varchar(256) NOT NULL COMMENT '文章标签',
         views int(11) NOT NULL COMMENT '阅读次数',
         comments int(11) NOT NULL COMMENT '评论次数',
-        categroy int(11) NOT NULL COMMENT '文章分类',
+        category int(11) NOT NULL COMMENT '文章分类',
         create_time bigint(11) NOT NULL COMMENT '创建时间',
         edit_time bigint(11) NOT NULL COMMENT '编辑时间',
         status tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态 0整除 -1删除',

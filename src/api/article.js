@@ -20,7 +20,7 @@ const queryArticle = async option => {
 
     let page = `${(p - 1)*size},${size}`;
 
-    let { results } = await model.query(`SELECT id,title,summary,main_img,tags,views,comments,categroy,create_time,edit_time,stick FROM ?? WHERE status = 0 ORDER BY create_time desc,stick desc LIMIT ${page}`, [prefix + 'article']);
+    let { results } = await model.query(`SELECT id,title,summary,main_img,tags,views,comments,category,create_time,edit_time,stick FROM ?? WHERE status = 0 ORDER BY create_time desc,stick desc LIMIT ${page}`, [prefix + 'article']);
     return Promise.resolve(results);
 };
 
@@ -61,7 +61,7 @@ const saveArticle = async (id, article) => {
         summary: article.summary,
         main_img: article.main_img ? article.main_img : 0,
         edit_time: Math.round(Date.now() / 1000),
-        categroy: article.categroy,
+        category: article.category,
         stick: article.stick,
         tags: article.tags
     };
@@ -82,7 +82,7 @@ const publishArticle = async article => {
         tags: article.tags,
         views: 0,
         comments: 0,
-        categroy: 0,
+        category: 0,
         create_time: NOW_TIME,
         edit_time: NOW_TIME,
         status: 0,

@@ -168,7 +168,7 @@ class ArticleWrite extends PageComponent {
             text: article.text,
             main_img: article.main_img,
             tags: '',
-            categroy: 0,
+            category: 0,
             stick:0
         };
 
