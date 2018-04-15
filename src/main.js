@@ -1,7 +1,7 @@
 /**
  * Created by xiao on 2017/3/8.
  */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Router from 'react-router-dom/BrowserRouter';
@@ -9,15 +9,23 @@ import Routes from './router/client/index';
 import './common/nprogress.css';
 import './common/common.css';
 import './common/animate.css';
-import { Provider, store } from "./tool/store";
-import { withRouter } from 'react-router-dom';
-import Easing from './component/common/tool/ease-sential';
-import { scroll2EleByHashID } from './tool/dom-js';
-import { maxWidthPoint } from './enum';
+import {Provider, store} from "./tool/store";
+import {withRouter} from 'react-router-dom';
+import {scroll2EleByHashID} from './tool/dom-js';
 
 class Root extends Component {
     constructor(props){
         super(props);
+        //检测浏览器是否支持passive
+        window.supportsPassiveOption = false;
+        try {
+            let opts = Object.defineProperty({}, 'passive', {
+                get: function() {
+                    window.supportsPassiveOption = true;
+                }
+            });
+            window.addEventListener('test', null, opts);
+        } catch (e) {}
         this.unlisten = this.props.history.listen((location, action) => {
             //判断viewport
             if(location.pathname.indexOf('/admin') == 0){

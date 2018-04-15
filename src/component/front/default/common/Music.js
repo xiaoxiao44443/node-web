@@ -21,6 +21,15 @@ class MusicWedgit extends Component {
         musicCover: '',
         pause: true
     };
+    componentDidMount() {
+        if (window.supportsPassiveOption) document.addEventListener('touchmove', this.preventDocumentTouchMove, {passive: false});
+    }
+    componentWillUnmount() {
+        if (window.supportsPassiveOption) document.removeEventListener('touchmove', this.preventDocumentTouchMove);
+    }
+    preventDocumentTouchMove = e => {
+        if (this.DragHelper.touch) e.preventDefault();
+    };
     onDragMove = ({ x, y, w, h }) => {
         let windowWidth = window.document.body.offsetWidth;
         let windowHeight =  window.innerHeight;

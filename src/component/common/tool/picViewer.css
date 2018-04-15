@@ -49,6 +49,7 @@
     align-items: center;
     padding: 3em;
     animation: colorFadeIn .5s ease;
+    touch-action: none;
 }
 .pic-viewer .loading-container {
     position: absolute;

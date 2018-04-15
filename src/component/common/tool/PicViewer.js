@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './picViewer.css';
 import classNames from 'classnames';
+import {getWindowScrollY} from '../../../tool/dom-js';
 
 class PicViewer {
     constructor($el) {
@@ -55,15 +56,16 @@ class PicViewerInner extends Component {
         scaleShow: false,
         scaleOut: false
     };
+    scrollY = false;
     componentDidMount() {
         this.props.imgNode.style.visibility = 'hidden';
         this.setState(this.calcSize());
         this.loadPic();
+        this.props.el.addEventListener('touchmove', this.close, false);
         this.props.el.addEventListener('click', this.close);
-        window.addEventListener('scroll', this.close);
+        this.scrollY = getWindowScrollY();
         window.addEventListener('mousewheel', this.close);
     }
-
     loadPic = () => {
         let image = new Image();
         image.src = this.props.imageOri;
@@ -144,15 +146,19 @@ class PicViewerInner extends Component {
     close = e => {
         if (e)  e.preventDefault();
         if (this.t) return false;
+        window.scrollTo(0, this.scrollY);
         this.scaleOut();
         this.t = setTimeout(() => {
-            window.removeEventListener('mousewheel', this.close);
-            const el = this.props.el;
-            el.removeEventListener('click', el);
-            document.getElementsByTagName('body')[0].removeChild(el);
+            this.removeAllEventListener();
+            document.getElementsByTagName('body')[0].removeChild(this.props.el);
             this.props.imgNode.style.visibility = '';
         }, 500);
         return false;
+    };
+    removeAllEventListener = () => {
+        document.removeEventListener('touchmove', this.close, false);
+        window.removeEventListener('mousewheel', this.close);
+        this.props.el.removeEventListener('click', this.close);
     };
     componentWillReceiveProps(nextProps) {
         if (!nextProps.visible && this.props.visible) {

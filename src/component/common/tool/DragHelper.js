@@ -85,6 +85,7 @@ class DragHelper {
         },
         onTouchStart: e => {
             this.target = e.currentTarget;
+            this.touch = true;
             this.recordStart(e.targetTouches[0]);
         },
         onTouchMove: e => {
