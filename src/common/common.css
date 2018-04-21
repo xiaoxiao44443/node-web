@@ -465,6 +465,9 @@ body.landing.is-loading:after {
     }
 }
 
+.article-html {
+    word-break: break-word;
+}
 .article-html blockquote {
     padding: .6em 1.2em;
     margin: 0 0 1.2em;
