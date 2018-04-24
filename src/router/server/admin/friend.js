@@ -133,6 +133,38 @@ Request.post('/friend/delete', async(req, res, next) =>{
     }
 });
 
+//添加友联
+Request.get('/friend/add', async(req, res, next) =>{
+    try {
+        const ad = req.params[0];
+
+        //获取网站配置
+        const websiteConfig = Request.websiteConfig;
+        const site_name = websiteConfig.site_name.value;
+        const title = `${site_name} | 后台管理`;
+
+        //初始化页面数据 获取友联数据
+        let friend = {
+            friend_name: '',
+            blog_name: '',
+            blog_url: '',
+            blog_motto: '',
+            friend_head: '',
+            display_order: 0
+        };
+        const state  = stateFilter({ friend: friend });
+
+        if(Request.REQUEST_JSON){
+            res.json(returnSuc(state, title));
+        }else{
+            resRender(req, res, title, state, 'admin');
+        }
+
+    }catch (ex){
+        next(ex);
+    }
+});
+
 //admin/friend 都默认调到friend/list
 Request.get('/friend*', async(req, res, next) => {
     res.redirect('/admin/friend/list');

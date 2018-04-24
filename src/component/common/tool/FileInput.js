@@ -16,6 +16,7 @@ class FileInput extends React.Component {
         files = files.filter(function (file) {
             return /image/i.test(file.type)
         });
+        this.refs.fileInput.value = '';
         this.props.onChange(files, event)
     };
     render() {
