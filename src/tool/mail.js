@@ -127,7 +127,14 @@ const sendReplyMall = async (comment_id) => {
 
         } else {
             //文章评论的回复或留言板留言的回复
-            commentInfo = await commentApi.getCommentInfo(target_comment_id);
+            //2种情况 对评论的回复 对回复的回复
+            if (reply_id == 0) {
+                //对评论的回复
+                commentInfo = await commentApi.getCommentInfo(target_comment_id);
+            } else {
+                //对回复的回复
+                commentInfo = await commentApi.getCommentInfo(reply_id);
+            }
             if (!commentInfo) return Promise.reject(new Error(`该回复目标id${pr_comment_id}不存在或已删除`));
             //回复from--
             const replyUserInfo = await getUserInfo(reply_uid, false);
@@ -171,7 +178,7 @@ const sendReplyMall = async (comment_id) => {
 
         return Promise.resolve('已发送~');
     } catch (err) {
-        return Promise.reject(new Error('发送失败'));
+        return Promise.reject(err);
     }
 
 };

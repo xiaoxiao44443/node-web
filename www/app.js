@@ -54,7 +54,7 @@ app.use((err, req, res, next) => {
         res.status(500).send('Something broke!');
     }else{
         let accept = req.header('accept');
-        let REQUEST_JSON = accept.indexOf('application/json')!==-1;
+        let REQUEST_JSON = accept ? accept.indexOf('application/json')!==-1 : false;
         if(REQUEST_JSON){
             res.status(500).json(returnErr(err.message));
         }else{
