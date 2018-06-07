@@ -13,6 +13,7 @@ import music from '../src/router/server/music';
 import login from '../src/router/server/login';
 import serverRender from '../src/tool/server-render';
 import { returnErr } from '../src/tool/Request';
+import mottoApi from "../src/api/motto";
 
 let app = express();
 app.use(compression());
@@ -40,6 +41,8 @@ app.use('/comment', comment);
 app.use('/user', user);
 app.use('/music', music);
 
+//每日自动同步一言
+mottoApi.autoSyncMotto();
 
 //404页面处理
 app.use((req, res, next) => {

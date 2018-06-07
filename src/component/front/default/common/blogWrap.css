@@ -157,6 +157,9 @@
     line-height: 1.75em;
     max-height: 3.5em;
 }
+.recommend-item .recommend-item-main.motto p{
+    max-height: 5.25em;
+}
 .main-wrap .main-mask{
     width: 100%;
     height: 100%;
@@ -325,5 +328,11 @@
         line-height: 1.5em;
         overflow: hidden;
         max-height: 3em;
+    }
+    .recommend-item .recommend-item-main.motto p{
+        font-size: .85em;
+        line-height: 1.5em;
+        overflow: hidden;
+        max-height: 6em;
     }
 }

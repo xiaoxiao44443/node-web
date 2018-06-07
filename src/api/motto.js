@@ -4,6 +4,8 @@
 import { dbConfig } from '../config';
 const prefix = dbConfig.prefix;
 import Model from '../tool/Model';
+import serverHttp from '../tool/server-http';
+import moment from 'moment';
 
 const todayMotto = async () => {
     try {
@@ -29,7 +31,41 @@ const editTodayMotto = async motto => {
     }
 };
 
+const autoSyncMotto = () => {
+    let date = new Date();
+    let last_sync_date = '';
+    //一天只执行一次
+    return setTimeout( async () => {
+        if (date.getHours() == 0 && date.getMinutes() == 0 && last_sync_date != date.getDate()) {
+            last_sync_date = date.getDate();
+            try {
+                await syncMotto();
+                console.log('每日同步格言成功 ' + moment().format('YYYY-MM-DD HH:mm'));
+            } catch (e) {
+                console.log('每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
+            }
+    }
+    }, 1000);
+};
+
+//同步一言
+const syncMotto = async () => {
+    try {
+        let ret = await serverHttp.apiGet('https://v1.hitokoto.cn/?c=a');
+        const motto = ret.hitokoto;
+        ret = await editTodayMotto(motto);
+        if (ret) {
+            return Promise.resolve('更新格言成功');
+        } else {
+            return Promise.reject('更新格言失败');
+        }
+    } catch (err) {
+        return Promise.reject(err);
+    }
+};
+
 export  default {
     todayMotto,
-    editTodayMotto
+    editTodayMotto,
+    autoSyncMotto
 }

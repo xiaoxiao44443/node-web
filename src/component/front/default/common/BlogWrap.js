@@ -190,7 +190,7 @@ class BlogWrap extends Component {
                                         <span className="name">本日の格言</span>
                                         <div className="story-intro">博主闪亮登场！</div>
                                     </div>
-                                    <div className="recommend-item-main">
+                                    <div className="recommend-item-main motto">
                                         <p dangerouslySetInnerHTML={{__html: motto}} />
                                     </div>
                                     <span className="recommend-item-more">

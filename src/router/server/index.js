@@ -300,5 +300,10 @@ Request.get('/about', async(req, res, next) => {
     }
 });
 
+Request.get('/test', async(req, res, next) => {
+    mottoApi.autoSyncMotto();
+    res.send('1324');
+});
+
 
 export default Request.router;
