@@ -86,7 +86,7 @@ const user = {
         weibo_access_token varchar(64) NOT NULL DEFAULT '' COMMENT '微博access_token',
         weibo_uid varchar(20) NOT NULL DEFAULT '',
         last_login_time bigint(11) NOT NULL COMMENT '上次登录时间',
-        oauth2_last_update_time bigint(11) NOT NULL DEFAULT '0' COMMENT '三方登录上次信息更新时间,
+        oauth2_last_update_time bigint(11) NOT NULL DEFAULT '0' COMMENT '三方登录上次信息更新时间',
         PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表'`
 };
@@ -180,7 +180,7 @@ const insert_website_config = {
 };
 const musicConfig = {
     mode: {name: '播放模式', value: '0'},
-    defaultMusic: {name: '默认音乐', value: 0}
+    default_music: {name: '默认音乐', value: 0}
 };
 const insert_music_config = {
     desc: '音乐配置数据',
