@@ -34,8 +34,9 @@ const editTodayMotto = async motto => {
 const autoSyncMotto = () => {
     let date = new Date();
     let last_sync_date = '';
+    console.log('开启格言同步');
     //一天只执行一次
-    return setTimeout( async () => {
+    return setInterval( async () => {
         if (date.getHours() == 0 && date.getMinutes() == 0 && last_sync_date != date.getDate()) {
             last_sync_date = date.getDate();
             try {
