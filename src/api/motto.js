@@ -53,7 +53,7 @@ const autoSyncMotto = () => {
 const syncMotto = async () => {
     try {
         let ret = await serverHttp.apiGet('https://v1.hitokoto.cn/?c=a');
-        const motto = ret.hitokoto;
+        const motto = ret.hitokoto + `<br><span>by《${ret.from}》</span>`;
         ret = await editTodayMotto(motto);
         if (ret) {
             return Promise.resolve('更新格言成功');
