@@ -158,7 +158,12 @@
     max-height: 3.5em;
 }
 .recommend-item .recommend-item-main.motto p{
-    max-height: 5.25em;
+    max-height: none;
+}
+.recommend-item .recommend-item-main.motto p >span{
+    display: inline-block;
+    text-align: right;
+    width: 100%;
 }
 .main-wrap .main-mask{
     width: 100%;
@@ -324,15 +329,15 @@
         min-height: 5em;
     }
     .recommend-item .recommend-item-main p{
-        font-size: .85em;
+        font-size: .75em;
         line-height: 1.5em;
         overflow: hidden;
         max-height: 3em;
     }
     .recommend-item .recommend-item-main.motto p{
-        font-size: .85em;
+        font-size: .75em;
         line-height: 1.5em;
         overflow: hidden;
-        max-height: 6em;
+        max-height: none;
     }
 }
