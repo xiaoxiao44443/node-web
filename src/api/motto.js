@@ -32,11 +32,11 @@ const editTodayMotto = async motto => {
 };
 
 const autoSyncMotto = () => {
-    let date = new Date();
     let last_sync_date = '';
-    console.log('开启格言同步');
+    console.log('开启格言同步 ' + moment().format('YYYY-MM-DD HH:mm'));
     //一天只执行一次
     return setInterval( async () => {
+        let date = new Date();
         if (date.getHours() == 0 && date.getMinutes() == 0 && last_sync_date != date.getDate()) {
             last_sync_date = date.getDate();
             try {

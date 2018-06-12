@@ -12,7 +12,7 @@ const apiMethods = {
                 method: 'get'
             }).then((response) => {
                 resolve(response.data);
-            }, (response) => {
+            }).catch((response) => {
                 reject(response);
             })
         })
