@@ -159,6 +159,7 @@
 }
 .recommend-item .recommend-item-main.motto p{
     max-height: none;
+    width: 100%;
 }
 .recommend-item .recommend-item-main.motto p >span{
     display: inline-block;
