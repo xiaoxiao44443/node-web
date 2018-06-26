@@ -33,7 +33,7 @@ const editTodayMotto = async motto => {
 
 const autoSyncMotto = () => {
     let last_sync_date = '';
-    console.log('开启格言同步 ' + moment().format('YYYY-MM-DD HH:mm'));
+    console.log('\n开启格言同步 ' + moment().format('YYYY-MM-DD HH:mm'));
     //一天只执行一次
     return setInterval( async () => {
         let date = new Date();
@@ -41,9 +41,9 @@ const autoSyncMotto = () => {
             last_sync_date = date.getDate();
             try {
                 await syncMotto();
-                console.log('每日同步格言成功 ' + moment().format('YYYY-MM-DD HH:mm'));
+                console.log('\n每日同步格言成功 ' + moment().format('YYYY-MM-DD HH:mm'));
             } catch (e) {
-                console.log('每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
+                console.log('\n每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
             }
     }
     }, 1000);
