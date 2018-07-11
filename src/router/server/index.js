@@ -214,7 +214,13 @@ Request.get('/blog/ad([0-9]+)', async(req, res, next) => {
         const site_name = websiteConfig.site_name.value;
 
         //文章阅读次数+1
-        await articleApi.articleViewAdd(ad);
+        let _AD_VIEWS = req.cookies._AD_VIEWS || [];
+        _AD_VIEWS = _AD_VIEWS.length == 0 ? _AD_VIEWS : _AD_VIEWS.split(',');
+        if (_AD_VIEWS.indexOf(ad.toString()) == -1) {
+            await articleApi.articleViewAdd(ad);
+            _AD_VIEWS.push(ad);
+            res.cookie('_AD_VIEWS',_AD_VIEWS.join(','), {})
+        }
 
         //初始化页面数据 获取文章数据
         let article = await articleApi.getArticle(ad);
@@ -299,11 +305,5 @@ Request.get('/about', async(req, res, next) => {
         next(ex);
     }
 });
-
-Request.get('/test', async(req, res, next) => {
-    mottoApi.autoSyncMotto();
-    res.send('1324');
-});
-
 
 export default Request.router;
