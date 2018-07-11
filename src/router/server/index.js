@@ -219,7 +219,7 @@ Request.get('/blog/ad([0-9]+)', async(req, res, next) => {
         if (_AD_VIEWS.indexOf(ad.toString()) == -1) {
             await articleApi.articleViewAdd(ad);
             _AD_VIEWS.push(ad);
-            res.cookie('_AD_VIEWS',_AD_VIEWS.join(','), {})
+            res.cookie('_AD_VIEWS',_AD_VIEWS.join(','), {});
         }
 
         //初始化页面数据 获取文章数据
