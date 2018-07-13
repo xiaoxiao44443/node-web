@@ -36,7 +36,7 @@ Request.get('/logout',async(req, res, next) => {
         }else{
             if(Request.USER.id){
                 //登录才清理cookies
-                res.clearCookie('id').clearCookie('token').clear('_AD_VIEWS');
+                res.clearCookie('id').clearCookie('token').clearCookie('_AD_VIEWS');
 
             }
             const referer = req.headers.referer || defaultUrl;
