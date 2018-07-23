@@ -577,6 +577,7 @@ body.landing.is-loading:after {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 1.2em;
+    word-break: normal;
 }
 .article-html table>caption+thead>tr:first-child>td, .article-html table>caption+thead>tr:first-child>th, .article-html table>colgroup+thead>tr:first-child>td, .article-html table>colgroup+thead>tr:first-child>th, .article-html table>thead:first-child>tr:first-child>td, .article-html table>thead:first-child>tr:first-child>th {
     border-top: 0;
