@@ -51,6 +51,7 @@ class DragHelper {
         this.moveCalc(e, e.target);
     };
     onMouseUp =  e => {
+        console.log(e);
         this.removeEventListener();
         this.dragEnd();
     };
@@ -74,6 +75,12 @@ class DragHelper {
             if (e.button !== 0) return; //只能左键点击
             this.mouseDown = true;
             this.target = e.currentTarget;
+            if (e.cancelable) {
+                // 判断默认行为是否已经被禁用
+                if (!e.defaultPrevented) {
+                    e.preventDefault();
+                }
+            }
             document.addEventListener('mousemove', this.onMouseMove);
             document.addEventListener('mouseup', this.onMouseUp);
             this.recordStart(e);
@@ -91,7 +98,7 @@ class DragHelper {
         onTouchMove: e => {
             const start = this.start;
             if (!start) return;
-            if (e.cancelable) {
+            if (e.cancelable && !window.supportsPassiveOption) {
                 // 判断默认行为是否已经被禁用
                 if (!e.defaultPrevented) {
                     e.preventDefault();
