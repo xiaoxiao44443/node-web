@@ -27,7 +27,7 @@ const addMusic = async music => {
             author: music.author,
             cover: music.cover,
             src: music.src,
-            lrc: music.lrc,
+            lrc: music.lrc || '',
             create_time: NOW_TIME
         };
         let { results } = await model.query(`INSERT INTO ?? SET ?`, [prefix + 'music', insert]);
@@ -59,7 +59,7 @@ const editMusic = async (id, music) => {
             author: music.author,
             cover: music.cover,
             src: music.src,
-            lrc: music.lrc
+            lrc: music.lrc || ''
         };
         let { results } = await model.query(`UPDATE ?? SET ? WHERE id = ?`, [prefix + 'music', updates, id]);
         return Promise.resolve(results.affectedRows >=0);

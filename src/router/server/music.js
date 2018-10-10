@@ -29,11 +29,18 @@ Request.get('/id([0-9]+)', async(req, res, next) => {
     if (ret.code == 200) {
         let url = ret.data[0].url;
         if (!url) {
-            //未解析到音乐地址，使用2号解析 http://i.oppsu.cn/link/
-            url = 'http://i.oppsu.cn/link/' + music_id + '.mp3';
+            //未解析到音乐地址，使用3号方案 http://music.163.com/song/media/outer/url?id=.mp3
+            url = 'http://music.163.com/song/media/outer/url?id=' + music_id + '.mp3';
+            //未解析到音乐地址，使用2号解析 http://i.oppsu.cn/link/  已经403了
+            // url = 'http://i.oppsu.cn/link/' + music_id + '.mp3';
         } else {
             url = url.substring(0,7)== 'http://' ? url.substring(5) : url;
         }
+        res.redirect(url);
+    }
+    if (ret.code == 404) {
+        //未解析到音乐地址，使用3号方案 http://music.163.com/song/media/outer/url?id=.mp3
+        let url = 'http://music.163.com/song/media/outer/url?id=' + music_id + '.mp3';
         res.redirect(url);
     }
 });

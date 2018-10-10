@@ -151,6 +151,7 @@ const music = {
         author varchar(128) NOT NULL COMMENT '作者',
         cover varchar(256) NOT NULL COMMENT '封面地址',
         src varchar(256) NOT NULL COMMENT '音乐源地址',
+        lrc text NOT NULL COMMENT '音乐歌词',
         create_time bigint(11) NOT NULL COMMENT '添加时间',
         PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='音乐表'`
