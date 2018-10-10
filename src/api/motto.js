@@ -35,7 +35,7 @@ const autoSyncMotto = () => {
     let last_sync_date = '';
     console.log('\n开启格言同步 ' + moment().format('YYYY-MM-DD HH:mm'));
     //一天只执行一次
-    return setInterval( async () => {
+    const task = async () => {
         let date = new Date();
         if (date.getHours() == 0 && date.getMinutes() == 0 && last_sync_date != date.getDate()) {
             last_sync_date = date.getDate();
@@ -45,7 +45,27 @@ const autoSyncMotto = () => {
             } catch (e) {
                 console.log('\n每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
             }
-    }
+        }
+        return setTimeout(task, 1000);
+    };
+    return task();
+};
+
+const _autoSyncMotto = () => {
+    let last_sync_date = '';
+    console.log('\n开启格言同步 ' + moment().format('YYYY-MM-DD HH:mm'));
+    //一天只执行一次
+    return setInterval(async () => {
+        let date = new Date();
+        if (date.getHours() == 0 && date.getMinutes() == 0 && last_sync_date != date.getDate()) {
+            last_sync_date = date.getDate();
+            try {
+                await syncMotto();
+                console.log('\n每日同步格言成功 ' + moment().format('YYYY-MM-DD HH:mm'));
+            } catch (e) {
+                console.log('\n每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
+            }
+        }
     }, 1000);
 };
 
