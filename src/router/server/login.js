@@ -243,8 +243,8 @@ Request.get('/login/zslm', async(req, res, next) => {
         const user_info = {
             account: oajson.msg.name,
             nickname: oajson.msg.name,
-            head: oajson.msg.userimg,
-            sex: [0, 2, 1][oajson.msg.sex]
+            head: oajson.msg.userimg || '',
+            sex: oajson.msg.sex ? [0, 2, 1][oajson.msg.sex] : 0
         };
 
         let ret;
