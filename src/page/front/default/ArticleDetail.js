@@ -19,7 +19,7 @@ class ArticleDetail extends PageComponent {
 
         const state = {
             article: null,
-            src: '<audio id="music_ad14" src="/music/id532777446" autoPlay controls="controls" loop></audio>'
+            src: ''
         };
         this._setDefaultState(state);
     }
@@ -52,6 +52,7 @@ class ArticleDetail extends PageComponent {
         let articleContent;
         if(article){
             const article_detail = markdown.render(article.text);
+            console.log(article_detail)
             const publishTime = moment(article.create_time*1000).format('YYYY-MM-DD HH:mm');
             articleContent =
                 <div ref="articleWrap">

@@ -31,42 +31,56 @@ const editTodayMotto = async motto => {
     }
 };
 
-const autoSyncMotto = () => {
+const _autoSyncMotto = () => {
     let last_sync_date = '';
+    const EventEmitter = require('events');
+    class MoEmitter extends EventEmitter {}
+    const moEmitter = new MoEmitter();
+    moEmitter.on('syncMotto', async () => {
+        try {
+            await syncMotto();
+            console.log('\n每日同步格言成功 ' + moment().format('YYYY-MM-DD HH:mm'));
+        } catch (e) {
+            console.log('\n每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
+        }
+    });
     console.log('\n开启格言同步 ' + moment().format('YYYY-MM-DD HH:mm'));
     //一天只执行一次
     const task = async () => {
         let date = new Date();
         if (date.getHours() == 0 && date.getMinutes() == 0 && last_sync_date != date.getDate()) {
             last_sync_date = date.getDate();
-            try {
-                await syncMotto();
-                console.log('\n每日同步格言成功 ' + moment().format('YYYY-MM-DD HH:mm'));
-            } catch (e) {
-                console.log('\n每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
-            }
+            moEmitter.emit('syncMotto');
         }
         return setTimeout(task, 1000);
     };
     return task();
 };
 
-const _autoSyncMotto = () => {
+const autoSyncMotto = () => {
     let last_sync_date = '';
+    const EventEmitter = require('events');
+    class MoEmitter extends EventEmitter {}
+    const moEmitter = new MoEmitter();
+    moEmitter.on('syncMotto', async () => {
+        try {
+            await syncMotto();
+            console.log('\n每日同步格言成功 ' + moment().format('YYYY-MM-DD HH:mm'));
+        } catch (e) {
+            console.log('\n每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
+            console.log(e)
+        }
+    });
     console.log('\n开启格言同步 ' + moment().format('YYYY-MM-DD HH:mm'));
     //一天只执行一次
-    return setInterval(async () => {
+    let interval = async () => {
         let date = new Date();
         if (date.getHours() == 0 && date.getMinutes() == 0 && last_sync_date != date.getDate()) {
             last_sync_date = date.getDate();
-            try {
-                await syncMotto();
-                console.log('\n每日同步格言成功 ' + moment().format('YYYY-MM-DD HH:mm'));
-            } catch (e) {
-                console.log('\n每日同步格言失败 ' + moment().format('YYYY-MM-DD HH:mm'));
-            }
+            moEmitter.emit('syncMotto');
         }
-    }, 1000);
+    };
+    return setInterval(interval, 1000);
 };
 
 //同步一言

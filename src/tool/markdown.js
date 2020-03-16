@@ -17,9 +17,11 @@ const aliases = {
     'js': 'jsx',
     'html': 'markup',
     'sh': 'bash',
-    'flow': 'jsx'
+    'flow': 'jsx',
+    'php': 'clike'
 };
-
+//修复刷新页面部分未高亮问题，原因为prismjs自动重复渲染
+Prism.highlightAllUnder = null;
 const highlight = (str, lang) => {
     if (!lang) {
         return str

@@ -102,27 +102,27 @@ Request.get('/api/pic([0-9]+)', async(req, res, next) => {
 
 Request.router.get('/config', async(req, res, next) => {
     next();
-    try {
-        const socket = function(msg){console.log(msg)};
-        const { createTable, insert }  = defaultDbSql;
-        let model = new Model(false);
-        for (let i = 0; i < createTable.length; i++){
-            socket(`正在创建${createTable[i].desc}...`);
-            await model.query(createTable[i].sql);
-        }
-        await model.startTrans();
-        for(let i = 0; i < insert.length; i++){
-            socket(`正在初始化${insert[i].desc}...`);
-            await model.query(insert[i].sql);
-        }
-        await model.commit();
-        await model.end();
-        socket('初始化成功');
-
-        res.send('初始化成功');
-    }catch (ex){
-        next(ex);
-    }
+    // try {
+    //     const socket = function(msg){console.log(msg)};
+    //     const { createTable, insert }  = defaultDbSql;
+    //     let model = new Model(false);
+    //     for (let i = 0; i < createTable.length; i++){
+    //         socket(`正在创建${createTable[i].desc}...`);
+    //         await model.query(createTable[i].sql);
+    //     }
+    //     await model.startTrans();
+    //     for(let i = 0; i < insert.length; i++){
+    //         socket(`正在初始化${insert[i].desc}...`);
+    //         await model.query(insert[i].sql);
+    //     }
+    //     await model.commit();
+    //     await model.end();
+    //     socket('初始化成功');
+    //
+    //     res.send('初始化成功');
+    // }catch (ex){
+    //     next(ex);
+    // }
 });
 
 //index
