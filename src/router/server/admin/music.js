@@ -238,6 +238,57 @@ Request.get('/music/add', async(req, res, next) =>{
 //网易云音乐解析admin
 Request.post('/net-music', async(req, res, next) => {
 
+    const header = {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+    };
+    const net_music_id = req.body.net_music_id;
+
+    let data = {
+        ids: net_music_id
+    };
+
+    const apiUrl = 'http://106.13.144.122:4000';
+    try {
+        let ret = await serverHttp.apiPost2(apiUrl + '/song/detail', data, header);
+
+        //移除http与https
+        const removeHttp = (url) => {
+            if (!url) return '';
+            return url.substring(0,7)== 'http://' ? url.substring(5) : (url.substring(0,8)== 'https://' ? url.substring(6) : url);
+        };
+
+        let music = ret.songs[0];
+        let author = music.ar.map(val => val.name);
+        music = {
+            cover: removeHttp(music.al.picUrl),
+            caption: music.name,
+            src: '/music/id' + net_music_id,
+            author: author.join(','),
+            lrc: ''
+        };
+
+        //获取歌词
+        try {
+            let data = {
+                id: net_music_id
+            };
+            ret = await serverHttp.apiPost2(apiUrl + '/lyric', data, header);
+            if (!ret.uncollected) {
+                music.lrc = ret.lrc.lyric.replace(/\[by:(.*)\]\n/, '');
+            }
+        } catch (e) {
+
+        }
+        res.json(returnSuc(music));
+    } catch (e) {
+        res.json(returnErr('解析失败!'));
+    }
+});
+
+//网易云音乐解析admin（旧）
+/*Request.post('/net-music', async(req, res, next) => {
+
     let data = {
         input: '',
         filter: 'id',
@@ -270,7 +321,7 @@ Request.post('/net-music', async(req, res, next) => {
     } else {
         res.json(returnErr('解析失败!'));
     }
-});
+});*/
 
 //admin/music/config
 Request.get('/music/config', async(req, res, next) => {
