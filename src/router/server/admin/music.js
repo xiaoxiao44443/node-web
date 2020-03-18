@@ -245,12 +245,12 @@ Request.post('/net-music', async(req, res, next) => {
     const net_music_id = req.body.net_music_id;
 
     let data = {
-        ids: net_music_id
+
     };
 
     const apiUrl = 'http://106.13.144.122:4000';
     try {
-        let ret = await serverHttp.apiPost2(apiUrl + '/song/detail', data, header);
+        let ret = await serverHttp.apiPost2(apiUrl + '/song/detail?ids=' + net_music_id, data, header);
 
         //移除http与https
         const removeHttp = (url) => {
@@ -271,9 +271,9 @@ Request.post('/net-music', async(req, res, next) => {
         //获取歌词
         try {
             let data = {
-                id: net_music_id
+
             };
-            ret = await serverHttp.apiPost2(apiUrl + '/lyric', data, header);
+            ret = await serverHttp.apiPost2(apiUrl + '/lyric?id=' + net_music_id, data, header);
             if (!ret.uncollected) {
                 music.lrc = ret.lrc.lyric.replace(/\[by:(.*)\]\n/, '');
             }
