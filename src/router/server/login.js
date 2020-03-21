@@ -242,7 +242,7 @@ Request.get('/login/zslm', async(req, res, next) => {
 
         const user_info = {
             account: oajson.msg.name,
-            nickname: oajson.msg.name,
+            nickname: oajson.msg.username,
             head: oajson.msg.userimg || '',
             sex: oajson.msg.sex ? [0, 2, 1][oajson.msg.sex] : 0
         };
