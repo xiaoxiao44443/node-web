@@ -221,8 +221,9 @@ const queryByComment = async (id, commentSize = 10, replySize = 5 ) => {
             //这是评论，计算评论在第几页
             const comment_id = comment.id;
             const type_key = comment.type_key;
+            const type = comment.type;
             //统计评论数
-            let { results: count_comment_res } = await model.query(`SELECT COUNT(*) AS lo_count FROM ?? WHERE type_key = ? AND comment_id = 0 AND status = 0 AND id <= ?`, [prefix + 'comment', type_key, comment_id]);
+            let { results: count_comment_res } = await model.query(`SELECT COUNT(*) AS lo_count FROM ?? WHERE type = ? AND type_key = ? AND comment_id = 0 AND status = 0 AND id <= ?`, [prefix + 'comment', type, type_key, comment_id]);
             const comment_count = count_comment_res[0]['lo_count'];
             //计算页数
             const comment_page = Math.ceil(comment_count / commentSize);
@@ -239,8 +240,9 @@ const queryByComment = async (id, commentSize = 10, replySize = 5 ) => {
             }
             comment = results[0];
             const type_key = comment.type_key;
+            const type = comment.type;
             //统计在该评论前的评论数
-            let { results: count_comment_res } = await model.query(`SELECT COUNT(*) AS lo_count FROM ?? WHERE type_key = ? AND comment_id = 0 AND status = 0 AND id <= ?`, [prefix + 'comment', type_key, comment_id]);
+            let { results: count_comment_res } = await model.query(`SELECT COUNT(*) AS lo_count FROM ?? WHERE type = ? AND type_key = ? AND comment_id = 0 AND status = 0 AND id <= ?`, [prefix + 'comment', type, type_key, comment_id]);
             const comment_count = count_comment_res[0]['lo_count'];
             //统计在该回复前的回复数
             let { results: count_reply_res } = await model.query(`SELECT COUNT(*) AS lo_count FROM ?? WHERE type_key = ? AND comment_id = ? AND status = 0 AND id <= ?`, [prefix + 'comment', type_key, comment_id, reply_id]);

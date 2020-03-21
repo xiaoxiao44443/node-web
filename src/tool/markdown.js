@@ -21,8 +21,8 @@ const aliases = {
     'php': 'clike'
 };
 //修复刷新页面部分未高亮问题，原因为prismjs自动重复渲染
-Prism.highlightAllUnder = null;
-Prism.highlightAll = null;
+Prism.highlightAllUnder = () => {};
+Prism.highlightAll = () => {};
 const highlight = (str, lang) => {
     if (!lang) {
         return str
