@@ -213,6 +213,7 @@ const updateZsUser = async user_info => {
         const NOW_TIME = Math.round(Date.now() / 1000);
 
         let update = {
+            nickname: user_info.nickname,
             head: user_info.head,
             sex: user_info.sex,
             oauth2_last_update_time: NOW_TIME
