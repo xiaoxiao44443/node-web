@@ -17,7 +17,7 @@ class _Request {
         let RequestBefore = async(req, res, next) => {
             try {
                 let accept = req.header('accept');
-                this.REQUEST_JSON = accept.indexOf('application/json') !== -1;
+                this.REQUEST_JSON = (accept && accept.indexOf('application/json') !== -1) || false;
                 //获取网站配置
                 this.websiteConfig = await configApi.website();
 

@@ -40,7 +40,6 @@
     "mkdirp": "^0.5.1",
     "moment": "^2.21.0",
     "multer": "^1.3.0",
-    "mysql": "github:mysqljs/mysql",
     "nodemailer": "^4.6.3",
     "nprogress": "^0.2.0",
     "prismjs": "^1.11.0",
